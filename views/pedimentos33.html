@@ -1,0 +1,101 @@
+<h4>Pedimentos CFDI 3.3 <button ng-click="modalPedimento33()" class="btn-trasnparent" ><i class="fa fa-question-circle fa-2x"></i></button> </h4>
+<div class="row">
+<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+    <div class="form-group">
+        <div class="input-group">
+            <span class="input-group-addon"><i class="fa fa-rocket" aria-hidden="true"></i> No. Patente</span>
+             <input ng-change="limitPatente()" placeholder="4 digitos del numero de patente" type="text" class="form-control" ng-model="pedimento.patente" />
+        </div>
+    </div>
+</div>
+<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12" style="position:relative">
+    <div class="form-group">
+        <div class="input-group">
+            <span style="cursor:pointer"  class="input-group-addon"><i class="fa fa-search" aria-hidden="true"></i> Aduana</span>
+             <input ng-change="resetSearchAduana()"  placeholder="Buscar aduana"  type="text" class="form-control" ng-model="search.aduana" />
+        </div>
+    </div>
+    
+    <ul class="list-group list-claveprod list-aduanas">
+        
+        <li style="color:black;cursor:pointer" ng-if="pedimento.aduana==null&&search.aduana!=''"  ng-click="selectAduana(a)" class="list-group-item" ng-repeat="a in aduanas | filter:search.aduana as results">
+            {{a.nombre}}
+        </li>
+        <li ng-if="results.length==0"><label>Sin resultados</label></li>
+        
+        <li style="background-color:#3498db;color:white;" ng-if="pedimento.aduana!=null"  class="list-group-item" >{{pedimento.aduana.nombre}}</li>
+
+    </ul>
+    
+</div>
+
+
+</div>
+<div class="row">
+    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+        <div class="form-group">
+            <div class="input-group">
+                <span class="input-group-addon"><i class="fa fa-calendar" aria-hidden="true"></i> Año de Validación</span>
+                 <input ng-change="limitAnoValidacion()" type="text" class="form-control" ng-model="pedimento.ano_validacion" />
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+        <div class="input-group">
+                <span class="input-group-addon"><i class="fa fa-hashtag" aria-hidden="true"></i> Num. Progresiva de aduana</span>
+                <input  ng-change="limitNumProgresiva()" type="text" class="form-control" ng-model="pedimento.num_progresiva" />
+
+            </div>
+    </div>
+    <div class="col-lg-5 col-md-5 col-sm-5 col-xs-10">
+            <div class="input-group">
+                    <span class="input-group-addon"><i class="fa fa-calendar" aria-hidden="true"></i>Año del pedimento</span>
+                    <input ng-change="limitAnoNumProgresiva()" type="text" class="form-control" ng-model="pedimento.ano_num_progresiva" />
+    
+                </div>
+        </div>
+        <div class="col-lg-1 col-md-1 col-sm-1 col-xs-2">
+            <button ng-click="modalAnoPedimiento()" class="btn-trasnparent"><i class="fa fa-question-circle fa-2x"></i></button>
+        </div>
+</div>
+<div class="row" style="margin-top:22px;">
+    <div class="col-xs-12">
+            <button ng-click="agregarPedimento()" class="btn btn-lg c_Accept" ng-class="{'btn-primary':accion==0,'btn-success':accion==1}"><i class="fa" ng-class="{'fa-plus':accion==0,'fa-check':accion==1}"></i> {{(accion==0)?'Agregar':'Modificar'}}</button>
+        
+    </div>
+</div>
+<div class="row" style="margin-top:22px;">
+    <div class="col-xs-12">
+        
+        <div class="table-responsive">
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>Patente</th>
+                        <th>Año de Validación</th>
+                        <th>Aduana</th>
+                        <th>Número de pedimento</th>
+                        <th>Opciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="p in pedimentos">
+                        <td>{{p.patente}}</td>
+                        <td>{{p.ano_validacion}}</td>
+                        <td>{{p.aduana.nombre}}</td>
+                        <td>{{p.ano_validacion}}  {{p.aduana.codigo}}  {{p.patente}}  {{p.ano_num_progresiva}}{{p.num_progresiva}}</td>
+                        <td><div class="btn-group">
+                        <button class="btn btn-primary" ng-click="modPedimento($index)"><i class="fa fa-cog"></i></button>    
+                        <button class="btn btn-danger" ng-click="eliminarPedimento(p)"><i class="fa fa-times"></i></button>    
+                        
+                    </div></td>
+                        
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        
+    </div>
+</div>

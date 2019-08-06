@@ -1,0 +1,199 @@
+<div id = "i_content"> 
+    <h3>Historial de facturas</h3>
+    
+    <div class="row">
+        <div class="col-xs-12">
+                <p>Por Fecha</p>
+        </div>
+    </div>
+
+   <div class = "row">  
+       <div class="col-sm-6">
+           <input ng-model="filtros.fechaDesde" id="dateFrom" class="form-control c_input" type="date">
+       </div> 
+       <div class="col-sm-6">
+           <input ng-model="filtros.fechaHasta"  id="dateTo" class="form-control c_input" type="date">
+       </div> 
+   </div> <!-- Row Fecha-->
+
+    <div class="row" style="margin-top:10px;">
+        <div class="col-sm-12">
+            <p>Por Monto</p>
+        </div>
+    </div>
+
+   <div class = "row c_inputForm">
+       <div class="col-sm-6">
+           <input ng-model="filtros.montoDesde" id="inputAmountFrom" placeholder="desde" class="form-control c_input" type="number">
+       </div> 
+       <div class="col-sm-6">
+           <input ng-model="filtros.montoHasta" id="inputAmountTo" placeholder="hasta" class="form-control c_input" type="number">
+       </div>
+    </div> 
+
+    <div class="row">
+        <div class="col-xs-12">
+            <button ng-click="search()" type="button" id="btnSearch" class="btn c_button c_faSize c_Accept"><i class="fa fa-search" aria-hidden="true"></i></button>
+        </div>
+    </div>
+   <!-- Row Monto-->
+   
+   <div class = "row c_inputForm" style="margin-top:20px;">
+       <h4>Búsqueda Personalizada</h4>   
+     <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12"></div>      
+       <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12" id="i_inputFormMargin">
+           <input ng-model="filtros.q" placeholder="Nombre, RFC..." id="inputSearch" class="form-control c_input" type="text">
+       </div>
+       <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12"></div>
+
+   </div> <!-- Busqueda Personalizada -->
+
+   <div class="btn-group btn-group-lg" id ="i_containerEstadoTimbrePill" role="group" aria-label="...">
+  <button ng-click="mostarTimbradas()" type="button" id = "i_estadoTimbrePillTimbradas" class="btn btn-default"><i class="fa fa-bell" style = "font-size:20px;" aria-hidden="true"></i></button>
+  <button ng-click="mostratGuardadas()" type="button" id = "i_estadoTimbrePillGuardadas" class="btn btn-default"><i class="fa fa-exclamation"  style = "font-size:20px;" aria-hidden="true"></i></button>
+       <button ng-click="mostrarCanceladas()" type="button" id="i_estadoTimbrePillCanceladas" class="btn btn-default">
+           <i class="fa fa-times" style="font-size:20px;" aria-hidden="true"></i>
+       </button>
+       <button ng-click="reset()" type="button" style="border-radius: 0 6px 6px 0;" id="i_estadoTimbrePillDeshacer" class="btn btn-default">
+           <i class="fa fa-refresh" style="font-size:20px;" aria-hidden="true"></i>
+       </button>
+  <button type="button" class="btn" style="background-color:transparent; border:none; font-size:25px;"><i class="fa fa-question-circle" data-toggle= "modal"  data-target="#i_modalPill" aria-hidden="true"></i></button>
+  </div>
+
+     <div class="row c_inputForm" style="margin-top:20px;">
+         <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+             <button ng-click="excelExport()" id="i_btnExportarExcel" class="btn c_Accept c_faSize"><i style="margin-right:5px;" class="fa fa-file-excel-o"></i> Excel </button>
+             <button type="button" class="btn" style="background-color:transparent; border:none; font-size:25px;"><i class="fa fa-question-circle" data-toggle="modal" data-target="#i_modalExcelInfo" aria-hidden="true"></i></button>
+         </div>
+         <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+             <h4>Exportación masíva de xml y pdf</h4>
+             <div class="btn-group">
+                 <button ng-click="exportacionMasiva()" id="btnExportarMas" class="btn c_Accept c_faSize"><i class="fa fa-file-excel-o" aria-hidden="true"></i> Exportar Ahora</button>
+               
+             </div>
+
+         </div>
+     </div>
+
+   <div class = "row">
+     <div class = "col-xs-12">
+       <h3>Folios</h3>
+       <hr>
+     </div> 
+   
+   </div> <!-- Folios-->
+     <div id="i_divlgTable" class="row visible-lg visible-md visible-sm">
+         <div class="col-xs-12">
+             <div class="table-responsive">
+
+                 <table datatable="ng" class="table table-bordered c_background">
+                     <thead>
+                         <tr>
+                             <th>Folio</th>
+                             <th>Nombre</th>
+                             <th>RFC</th>
+                             <th>Monto</th>
+                             <th>Tipo</th>
+                             <th>Timbrado</th>
+                             <th>Estatus</th>
+                             <th>Opciones</th>
+                         </tr>
+                     </thead>
+                     <tbody>
+                    <tr  ng-class="{'tr_pendiente':f.fecha_timbrado==0,'tr_timbrada':f.fecha_cancelada==null,'tr_cancelada':f.fecha_cancelada!=null}" ng-repeat="f in facturas">
+                      <td>{{f.folio}}</td>
+                      <td>{{f.nombre}}</td>
+                      <td>{{f.RFC}}</td>
+                      <td>{{f.montoTotal | currency}}</td>
+                      <td>{{f.tipo}}</td>
+                      <td ng-if="f.fecha_timbrado!=0">{{f.fecha_timbrado}}</td>
+                      <td ng-if="f.fecha_timbrado==0">No timbrado</td>
+                      
+                      <td ng-if="f.fecha_cancelada!=null&&f.fecha_timbrado!=0">
+                          <i class="fa fa-times" style="font-size:20px;"></i>
+                      </td>
+                      <td ng-if="f.fecha_cancelada==null&&f.fecha_timbrado!=0">
+                        <i class="fa fa-bell" style="font-size:20px;"></i>
+                    </td>
+                    <td ng-if="f.fecha_timbrado==0">
+                            <i class="fa fa-exclamation" style="font-size:20px;"></i>
+                        </td>
+                    <td>
+                        <button ng-click="nextStep(f)" class="btn btn-default c_buttonTable1"><i class="fa fa-cog"></i></button>
+                        <button ng-click="showDoc(f)" ng-if="f.fecha_timbrado!=0" class="btn btn-default c_buttonTable1"><i class="fa fa-eye"></i></button>
+                        
+                    </td>
+                      
+                    </tr>
+
+                     </tbody>
+                 </table><!--/c_Table-->
+
+             </div> <!--/TableResponsiveCustom-->
+         </div>
+     </div>
+    <div id="i_divxsTable" class="visible-xs">
+         <div class="row" ng-repeat="f in facturas">
+          <div class="col-xs-12">
+<div class="table-responsive">
+            <table class="table table-bordered">
+                   <tbody ng-class="{'tr_pendiente':f.fecha_timbrado==0,'tr_timbrada':f.fecha_cancelada==null,'tr_cancelada':f.fecha_cancelada!=null}">
+                  <tr>
+                      <td>Folio</td>
+                      <td>{{f.folio}}</td>
+                  </tr>
+                  <tr>
+                        <td>Nombre</td>
+                        <td>{{f.nombre}}</td>
+                    </tr>
+                    <tr>
+                            <td>RFC</td>
+                            <td>{{f.RFC}}</td>
+                        </tr>
+                        <tr>
+                                <td>Monto</td>
+                                <td>{{f.montoTotal | currency}}</td>
+                            </tr>
+                            <tr>
+                                    <td>Tipo</td>
+                                    <td>{{f.tipo}}</td>
+                                </tr>
+                                <tr>
+                                        <td>Timbrado</td>
+                                        <td>{{f.fecha_timbrado}}</td>
+                                    </tr>
+                                    <tr>
+                                            <td>Estatus</td>
+                                            <td ng-if="f.fecha_cancelada!=null">
+                                                    <i class="fa fa-times" style="font-size:20px;"></i>
+                                                </td>
+                                                <td ng-if="f.fecha_cancelada==null&&f.fecha_timbrado!=0">
+                                                  <i class="fa fa-bell" style="font-size:20px;"></i>
+                                              </td>
+                                              <td ng-if="f.fecha_timbrado==0">
+                                                      <i class="fa fa-exclamation" style="font-size:20px;"></i>
+                                                  </td>
+
+                                        </tr>
+                                        <tr>
+                                            <td>Opciones</td>
+                                            <td>
+                                                <button ng-click="nextStep(f)" class="btn btn-default c_buttonTable1"><i class="fa fa-cog"></i></button>
+                                                <button ng-click="showDoc(f)" ng-if="f.fecha_timbrado!=0" class="btn btn-default c_buttonTable1"><i class="fa fa-eye"></i></button>
+                                                
+                                </td>
+                                        </tr>
+
+
+                   </tbody>
+
+            </table>
+          </div>
+        </div>
+
+         </div>
+
+    </div>
+
+
+ </div> <!--/Container--> 

@@ -1,0 +1,836 @@
+﻿<?php
+require_once("../Login/php/Functions.php");   
+$link = linkDBLuxLine();
+$luxlineObj = new luxlineWebLogin($link);
+
+$luxlineObj->initialCheckUpSystems();
+?>
+
+<!--Desarrollado por Luxline Solutions-->
+<html lang="es-mx">
+    
+<head>  <!--HEAD-->
+    <title>Busqueda de facturas</title>
+    
+    <!--MetaArea-->
+    <meta charset="utf-8"> <!--Caracteres Codificados-->
+    <meta name="viewport" content="width=device-width, initial-scale=1"> <!--Para Dispositivos Moviles habilita touch-zoom etc-->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <!--/MetaArea-->
+    <!--CSS-->
+    <link href="css/bootstrap.min.css" rel="stylesheet"><!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="font-awesome/css/font-awesome.min.css">
+    <link rel="icon" href="img/luxline1.ico" type="image/x-icon">
+    <link href="//cdn.datatables.net/1.10.15/css/jquery.dataTables.min.css" rel="stylesheet" />
+
+    <!-- jQuery -->
+    <script src="js/jquery.js"></script>
+
+    <!-- Bootstrap Core JavaScript -->
+    <script src="js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" rel="stylesheet" type="text/css" />
+    <script src="//cdn.datatables.net/1.10.15/js/jquery.dataTables.min.js"></script>
+    <!--/JS-->
+    <link rel="stylesheet" href="css/style.css" type="text/css" />
+
+    <!--Google+ api-->
+    <script src="https://apis.google.com/js/api.js?onload=handleClientLoad"></script>
+    <!--Google+ api-->
+
+    <script src="js/resizeWatcher.js"></script>
+
+    <script src="js/exportacionMasiva.js" charset="utf-8"></script>
+
+    <style>
+        input[type="date"] {
+            display: block;
+            -webkit-appearance: textfield;
+            -moz-appearance: textfield;
+            min-height: 1.2em;
+        }
+    </style>
+
+    <script>
+        var ApiLogIn = function (btnSingIn, btnSignOut, msgContainer,phpLogin) {
+            //var test = 10; private variable
+            //var method = function(){} private method
+            //this.test = 10; public variable
+            //this.method = function(){} public method
+            var self = this;
+            var m_auth2 = null; // The Sign-In object.
+            var m_btnSignIn = btnSingIn;
+            var m_btnSignOut = btnSignOut;
+            var m_message = msgContainer;
+            var m_apiKey = 'accesssecurity-140019';
+            var m_clientId = "1043488027097-f77grlc3h5cli90m6c0b4urra6jmcakn.apps.googleusercontent.com";
+            var m_phpLogin = phpLogin;
+            // Enter one or more authorization scopes. Refer to the documentation for
+            // the API or https://developers.google.com/identity/protocols/googlescopes
+            // for details.
+            var m_scopes = 'profile https://www.googleapis.com/auth/userinfo.profile';
+            var m_cookie_policy = 'single_host_origin';
+
+
+            this.signIn = function () {
+                m_auth2.signIn();
+            }
+
+            this.logOut = function () {
+                var User = m_auth2.currentUser.get();
+                var l_RO = User.getAuthResponse();
+                var access_token = l_RO.access_token;
+
+                var location = (parseInt(screen.availWidth) / 2) - 290;
+                var revokeUrl = window.open('https://accounts.google.com/Logout', "Logout", "left=" + location + ",top=10 width=580,height=800");
+                revokeUrl.focus();
+                setTimeout(function () {
+                    revokeUrl.close();
+                }, 500);
+            }
+
+            var updateSigninStatus = function (isSignedIn) { //Callback function
+                if (isSignedIn) {
+                    //*****************googleUser**************
+                    //A GoogleUser object represents one user account.
+                    var User = m_auth2.currentUser.get()
+                    var profile = User.getBasicProfile();
+                    //*****************googleUser**************
+                    var user_id = profile.getId();
+
+                    //console.log('ID: ' + user_id); // Do not send to your backend! Use an ID token instead.
+                    //console.log('Name: ' + profile.getName());
+                    //console.log('Image URL: ' + profile.getImageUrl());
+                    //console.log('Email: ' + profile.getEmail());
+
+                    // The ID token you need to pass to your backend:
+                    var l_RO = User.getAuthResponse();
+
+                    var id_token = l_RO.id_token;
+                    //var access_token = l_RO.access_token;
+                    //var log_hint = l_RO.login_hint;
+                    //var scopes = l_RO.scope;
+                    //var expire_time = l_RO.expires_in;
+                    //var f_issued_at = l_RO.first_issued_at;
+                    //var expires_at = l_RO.expires_at;
+
+                    //console.log("ID Token: " + id_token);
+                    //console.log("Access Token: " + access_token);
+                    //console.log("Log Hint: " + log_hint);
+                    //console.log("Scopes: " + scopes);
+                    //console.log("Expire Time: " + expire_time);
+                    //console.log("f_issued_at: " + f_issued_at);
+                    //console.log("Expires at: " + expire_time);
+
+                    $.post(m_phpLogin, { ID_TOKEN: id_token }, function (data, status) {
+                        var indexer = parseInt(data);
+                        switch (indexer) {
+                            case 0:
+                                if (window.location.href === "http://www.luxline.com.mx") {
+                                    setTimeout(function () {
+                                        window.location.href = "http://www.luxline.com.mx/testLuxFact";
+                                    }, 1000);
+                                }
+
+                                if(m_btnSignIn !== null)
+                                    $(m_btnSignIn).hide();
+
+                                if(m_btnSignOut !== null)
+                                    $(m_btnSignOut).show();
+                                break;
+                            case -1:
+                                console.log("Token Invalido");
+                                break;
+                            case -2:
+                                console.log("Estampa de tiempo expirada");
+                                break;
+                            case -3:
+                                if(m_message !== null)
+                                    $(m_message).html("<h3>El usuario no existe en la base de datos. Ingrese a su cuenta de Google+ con un usuario válido.</h3>");
+                                else
+                                    console.log("El usuario no existe en la base de datos. Ingrese a su cuenta de Google+ con un usuario válido.");
+
+                                if (window.location.href !== "http://www.luxline.com.mx") {
+                                    setTimeout(function () {
+                                        window.location.href = "http://www.luxline.com.mx";
+                                    }, 1000);
+                                }
+
+
+                                if(m_btnSignOut !== null)
+                                    $(m_btnSignOut).hide();
+
+                                if(m_btnSignIn !== null)
+                                    $(m_btnSignIn).show();
+                                break;
+                            case -4:
+                                console.log("Hay inconsistencia en la base de datos");
+                                break;
+                            default:
+                                break;
+                        }
+                    });
+                }
+                else {
+                    if(m_message !== null)
+                        m_message.html("<h3>De click a Ingresar para comenzar</h3>")
+                    else
+                        console.log("De click a Ingresar para comenzar");
+
+                    if(m_btnSignIn !== null)
+                        $(m_btnSignIn).show();
+
+                    if(m_btnSignOut !== null)
+                        $(m_btnSignOut).hide();
+
+
+                    $.post("../Login/php/clearSession.php", {}, function () {
+                    if (window.location.href !== "http://www.luxline.com.mx") {
+                        setTimeout(function () {
+                            window.location.href = "http://www.luxline.com.mx";
+                        }, 1000);
+                    }
+                    });
+
+                }
+            }
+
+           this.initAuth = function () {
+                //make gapi calls
+                gapi.client.setApiKey(m_apiKey);
+                gapi.auth2.init({
+                    client_id: m_clientId,
+                    scope: m_scopes,
+                    cookie_policy: m_cookie_policy
+                }).then(function () {
+                    //Obtener instancia de autorización
+
+                    //****************auth2***************************************
+                    //auth 2 is a GoogleAuth object that is a singleton class that provides methods to allow
+                    //the user to sign in with a Google account, get the user's current
+                    //sign-in status, get specific data from the user's Google profile,
+                    //request additional scopes, and sign out from the current account.
+                    m_auth2 = gapi.auth2.getAuthInstance();
+                    //****************auth2***************************************
+
+                    //Víncular un cambio de estado a una función
+
+                    m_auth2.isSignedIn.listen(updateSigninStatus);
+
+                    //Checar el estado inicial, podría ya estar loggeado
+                    updateSigninStatus(m_auth2.isSignedIn.get());
+
+                    //Listen to signin states
+                    if(m_btnSignIn !== null)
+                        m_btnSignIn.addEventListener("click", self.signIn);
+
+                    if(m_btnSignOut !== null)
+                        m_btnSignOut.addEventListener("click", self.logOut);
+                });
+            }
+
+        };
+
+    </script>
+    <!--ApiLogIn-->
+
+    <script>
+        var go_ApiLogIn = null;
+        var authorizeButton = null;
+        var signoutButton = null;
+        var g_message = null;
+        var g_signOutBtn = null;
+        var g_signInBtn = null;
+
+        $(document).ready(function () {
+            g_message = null;
+            g_signInBtn = null;
+            g_signOutBtn = document.getElementById('signout-button');
+
+            go_ApiLogIn = new ApiLogIn(g_signInBtn, g_signOutBtn, g_message, "../../Login/php/logInFacturacion.php");
+            gapi.load('client:auth2', go_ApiLogIn.initAuth);
+        });
+    </script>
+
+</head> 
+
+<body> 
+    <form hidden id="i_formRedirect">
+        <input type="text" name="id" value="" />
+        <input type="text" name="folio" value="" />
+
+    </form>
+<div id = "i_modalBlur">
+
+ <nav class="navbar navbar-default">
+  <div class="container-fluid">
+    <div class = "row visible-xs ">
+      <img src="img/luxline.png" style = "height:8%;" id = "i_navBarLogo" alt="lux_logo">
+    </div>
+    <div class="navbar-header" style = "margin:1%;">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span> 
+      </button>
+      <img src="img/luxline.png" class = "visible-md visible-lg visible-sm" id = "i_navBarLogo" alt="lux_logo">
+    </div>
+    <div class="collapse navbar-collapse" id="myNavbar">
+        <ul class="nav navbar-nav" style = "margin:1%;" >
+      <li><a href="index.html"> Facturar</a></li>
+      <li class = "c_navBarActivo"><a href="folios.html">Folios</a></li>
+      <li><a href="AgrModAtajo.html">Ajustes</a></li>
+    </ul>
+        <ul class="nav navbar-nav navbar-right">
+      <li data-toggle= "modal"  data-target="#i_modalOpcionesUsuario"><a href="#"><span class="fa fa-user" style = "font-size:20px;" aria-hidden="true"></span></a></li>
+      <li data-toggle= "modal"  data-target="#i_modalCerrarSesion"><a href="#"><span class="fa fa-sign-out" style = "font-size:20px;" aria-hidden="true"></span></a></li>
+    </ul>
+    </div>
+  </div>
+</nav>
+
+ <div class = "container" id = "i_content"> 
+    <div class="row">
+        <div class="col-xs-12">
+                <p>Por Fecha</p>
+        </div>
+    </div>
+
+   <div class = "row">  
+       <div class="col-sm-6">
+           <input id="dateFrom" class="form-control c_input" type="date">
+       </div> 
+       <div class="col-sm-6">
+           <input id="dateTo" class="form-control c_input" type="date">
+       </div> 
+   </div> <!-- Row Fecha-->
+
+    <div class="row" style="margin-top:10px;">
+        <div class="col-sm-12">
+            <p>Por Monto</p>
+        </div>
+    </div>
+
+   <div class = "row c_inputForm">
+       <div class="col-sm-6">
+           <input id="inputAmountFrom" placeholder="desde" class="form-control c_input" type="number">
+       </div> 
+       <div class="col-sm-6">
+           <input id="inputAmountTo" placeholder="hasta" class="form-control c_input" type="number">
+       </div>
+    </div> 
+
+    <div class="row">
+        <div class="col-xs-12">
+            <button type="button" id="btnSearch" class="btn c_button c_faSize c_Accept"><i class="fa fa-search" aria-hidden="true"></i></button>
+        </div>
+    </div>
+   <!-- Row Monto-->
+   
+   <div class = "row c_inputForm" style="margin-top:20px;">
+       <h4>Búsqueda Personalizada</h4>   
+     <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12"></div>      
+       <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12" id="i_inputFormMargin">
+           <input placeholder="Folio,Nombre, RFC..." id="inputSearch" class="form-control c_input" type="text">
+       </div>
+       <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12"></div>
+
+   </div> <!-- Busqueda Personalizada -->
+
+   <div class="btn-group btn-group-lg" id ="i_containerEstadoTimbrePill" role="group" aria-label="...">
+  <button type="button" id = "i_estadoTimbrePillTimbradas" class="btn btn-default"><i class="fa fa-bell" style = "font-size:20px;" aria-hidden="true"></i></button>
+  <button type="button" id = "i_estadoTimbrePillGuardadas" class="btn btn-default"><i class="fa fa-exclamation"  style = "font-size:20px;" aria-hidden="true"></i></button>
+       <button type="button" id="i_estadoTimbrePillCanceladas" class="btn btn-default">
+           <i class="fa fa-times" style="font-size:20px;" aria-hidden="true"></i>
+       </button>
+       <button type="button" style="border-radius: 0 6px 6px 0;" id="i_estadoTimbrePillDeshacer" class="btn btn-default">
+           <i class="fa fa-refresh" style="font-size:20px;" aria-hidden="true"></i>
+       </button>
+  <button type="button" class="btn" style="background-color:transparent; border:none; font-size:25px;"><i class="fa fa-question-circle" data-toggle= "modal"  data-target="#i_modalPill" aria-hidden="true"></i></button>
+  </div>
+
+     <div class="row c_inputForm" style="margin-top:20px;">
+         <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+             <button id="i_btnExportarExcel" class="btn c_Accept c_faSize"><i style="margin-right:5px;" class="fa fa-file-excel-o"></i> Excel </button>
+             <button type="button" class="btn" style="background-color:transparent; border:none; font-size:25px;"><i class="fa fa-question-circle" data-toggle="modal" data-target="#i_modalExcelInfo" aria-hidden="true"></i></button>
+         </div>
+         <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+             <h4>Exportación masíva de xml y pdf</h4>
+             <div class="btn-group">
+                 <button id="btnExportarMas" class="btn c_Accept c_faSize"><i class="fa fa-file-excel-o" aria-hidden="true"></i> Exportar Ahora</button>
+               
+             </div>
+
+         </div>
+     </div>
+
+   <div class = "row">
+     <div class = "col-xs-12">
+       <h3>Folios</h3>
+       <hr>
+     </div> 
+   
+   </div> <!-- Folios-->
+     <div id="i_divlgTable" class="row visible-lg visible-md visible-sm">
+         <div class="col-xs-12">
+             <div class="table-responsive">
+
+                 <table id="tableFolios" class="table table-bordered c_background">
+                     <thead>
+                         <tr>
+                             <th>Folio</th>
+                             <th>Nombre</th>
+                             <th>RFC</th>
+                             <th>Monto</th>
+                             <th>Tipo</th>
+                             <th>Timbrado</th>
+                             <th>Estatus</th>
+                             <th>Opciones</th>
+                         </tr>
+                     </thead>
+                     <tbody id="tableFacturas"></tbody>
+                 </table><!--/c_Table-->
+
+             </div> <!--/TableResponsiveCustom-->
+         </div>
+     </div>
+    <div id="i_divxsTable" class="visible-xs">
+
+
+    </div>
+
+
+ </div> <!--/Container--> 
+ 
+ </div><!-- /i_modalBlur -->
+ 
+ <!--ModalLoader -->
+<div class="modal fade" id="modalPreview" role="dialog">
+        
+    
+     <div class="sk-cube-grid">
+      <div class="sk-cube sk-cube1"></div>
+      <div class="sk-cube sk-cube2"></div>
+      <div class="sk-cube sk-cube3"></div>
+      <div class="sk-cube sk-cube4"></div>
+      <div class="sk-cube sk-cube5"></div>
+      <div class="sk-cube sk-cube6"></div>
+      <div class="sk-cube sk-cube7"></div>
+      <div class="sk-cube sk-cube8"></div>
+      <div class="sk-cube sk-cube9"></div>
+     </div>
+     
+     
+    
+     
+     
+ 
+    
+</div><!--/ModalLoader -->
+
+    <div class="modal fade" id="i_modalFailInputs" role="dialog">
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-6 col-sm-offset-3 text-center modal-box">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    <h3 class="h3Modal">Debes de completar el formulario</h3>
+
+                    <button type="button" class="btn  c_modalDismiss c_AcceptModal" data-dismiss="modal" autofocus>Aceptar</button>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+<!--ModalCerrarSesion-->
+<div class="modal fade" id="i_modalCerrarSesion" role="dialog">
+           <div class="container">
+             <div class="row">
+              <div class="col-sm-6 col-sm-offset-3 text-center modal-box">
+              <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                  <h3 class = "h3Modal">¿Esta seguro que desea cerrar sesión?</h3>
+                    <button type="button" class="btn  c_modalDismiss c_AcceptModal" data-dismiss="modal" autofocus id="signout-button">Aceptar</button>
+                    <button type="button" class="btn  c_modalDismiss c_Cancel" data-dismiss="modal">Cancelar</button>
+             </div>
+            </div>
+           </div>
+        </div><!--/ModalCerrarSesion -->
+
+<!--ModalOpcionesUsuario-->
+<div class="modal fade" id="i_modalOpcionesUsuario" role="dialog">
+           <div class="container">
+             <div class="row">
+              <div class="col-sm-6 col-sm-offset-3 text-center modal-box">
+              <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                  <h3 class = "h3Modal">¿Seguro que desa salir a configuración avanzada?</h3>
+                    <button onclick="location.href = 'opcionesUsuario.html'" type="button" class="btn  c_modalDismiss c_AcceptModal" data-dismiss="modal" autofocus>Acceder</button>
+                    <button type="button" class="btn  c_modalDismiss c_Cancel" data-dismiss="modal">Regresar</button>
+                  
+             </div>
+            </div>
+           </div>
+        </div><!--/ModalOpcionesUsuario-->
+
+<!--ModalPill-->
+<div class="modal fade" id="i_modalPill" role="dialog">
+           <div class="container">
+             <div class="row">
+              <div class="col-sm-6 col-sm-offset-3 text-center modal-box">
+              <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                  <h3 class = "h3Modal">Filtro por Estatus</h3>
+                  
+                  <h4>Al dar click a los siguientes iconos permite filtrar el estatus de todas las facturas (o las facturas catalogadas por fecha) para su comodidad.</h4>
+                  
+                  <button type="button" class="btn  c_modalDismiss c_Accept" data-dismiss="modal" autofocus>Aceptar</button>
+                  
+             </div>
+            </div>
+           </div>
+        </div><!--/ModalPill -->
+        
+
+    <!--ModalPill-->
+    <div class="modal fade" id="i_modalExcelInfo" role="dialog">
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-6 col-sm-offset-3 text-center modal-box">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    <h3 class="h3Modal">Descarga tus facturas en excel</h3>
+
+                    <h4>Esto es una excelente herramienta cuando tu contador/a requiere las facturas de un mes en específico. Usa los filtros para recuperar las facturas que quieres exportar y haz click!</h4>
+
+                    <button type="button" class="btn  c_modalDismiss c_Accept" data-dismiss="modal" autofocus>Aceptar</button>
+
+                </div>
+            </div>
+        </div>
+    </div><!--/ModalPill -->
+
+
+
+
+
+    <script>
+      var gd_divLG = $("#i_divlgTable");
+      var gd_divXS = $("#i_divxsTable");
+      var gd_tableFacturas = $("#tableFacturas");
+      var gd_dateFrom = $("#dateFrom");
+      var gd_dateTo = $("#dateTo");
+      var gd_amountFrom = $("#inputAmountFrom");
+      var gd_amountTo = $("#inputAmountTo");
+      var gd_inputSearch = $("#inputSearch");
+      var filter_type = 0;
+     
+
+
+      $(document).ready(function () {
+          setTimeout(function () {
+              $("#tableFolios").dataTable(
+                  
+        {
+            "language": {
+                "search": "Buscar:",
+                "lengthMenu": "Mostrano _MENU_ Entradas por página",
+                "zeroRecords": "No se encontraron resultados",
+                "info": "Mostrando página _PAGE_ de _PAGES_ páginas",
+                "infoEmpty": "No Hay Información Disponoble",
+                "infoFiltered": "(filtrado de un total de _MAX_ entradas)",
+                "paginate": {
+                    "previous": "Anterior",
+                    "next": "Siguiente"
+                }
+            }
+        }
+        );
+          }, 1000);
+
+
+          var d_btnExportarExcel = $("#i_btnExportarExcel");
+
+          function getFoliosFromUI() {
+              var folios = [];
+              var rows = gd_tableFacturas.children();
+              
+              rows.each(function (i, child) {
+                  var data = $(child).children();
+                  folios[i] = data.eq(0).text();
+              });
+              return folios;
+          }
+          
+          function generateExcel(folios) {
+              d_btnExportarExcel.prop('disabled', true);
+              $.post("php/xlsGen.php", { FOLIOS: folios }, function (data, status) {
+                  var fileName = data;
+                  window.location.href = 'https://www.luxline.com.mx/'+ '<?php echo $_SESSION['ui'][0]['folder']; ?>'  +'/PHPExcel/files/' + fileName;
+                  d_btnExportarExcel.prop('disabled', false);
+              });
+          }
+
+          d_btnExportarExcel.on('click', function (event) {
+              event.preventDefault();  //stop the browser from following
+              var folios = getFoliosFromUI()
+              generateExcel(folios);
+          });
+
+          function getFacturas() {
+              var s = gd_inputSearch.val();
+              if (s != "") {
+                  if (gd_divLG.is(":visible")) {
+                      gd_tableFacturas.load("php/getAllFacturasSearch.php", { query: s });
+                  }
+                  if (gd_divXS.is(":visible")) {
+                      gd_divXS.load("php/getAllFacturasSearchXS.php", { query: s });
+                  }
+              } else {
+                  updateTableFacutras(last_search);
+              }
+          }
+
+
+          var rszWatcher = new resizeWatcher({
+              'function': getFacturas,
+              'params': []
+          });
+
+           
+            updateTableFacutras(0);
+          
+
+            $("#i_estadoTimbrePillDeshacer").click(function () {
+                $("input").val("");
+                updateTableFacutras(0);
+
+            });
+            $("#modalPreview").on('shown.bs.modal', function () {
+            });
+
+
+            gd_inputSearch.on("input", function () {
+                //getAllFacturasSearchXS.php
+
+                if (gd_divLG.is(":visible")) {
+                    gd_tableFacturas.load("php/getAllFacturasSearch.php", { query: this.value });
+                }
+                if (gd_divXS.is(":visible")) {
+                    gd_divXS.load("php/getAllFacturasSearchXS.php", { query: this.value });
+                }
+
+            });
+
+
+
+            $("#i_estadoTimbrePillCanceladas").click(function () {
+                var lo_searchParams = { showOnly: 'canceladas', order: 'c.nombre', ascDesc: 'ASC', searchString: gd_inputSearch.val(), dateFrom: gd_dateFrom.val(), dateTo: gd_dateTo.val(), amountFrom: gd_amountFrom.val(), amountTo: gd_amountTo.val() };
+                gd_tableFacturas.load("php/getTable.php", { searchParams: JSON.stringify(lo_searchParams) });
+            });
+
+            $("#i_estadoTimbrePillGuardadas").click(function () {
+                filter_type = 2;
+                updateTableFacutras(4);
+            });
+            $("#i_estadoTimbrePillTimbradas").click(function () {
+                filter_type = 1;
+                updateTableFacutras(4);
+
+            });
+
+
+            $("#btnSearch").click(function () {
+
+                var fail = true;
+                if (gd_dateFrom.val() != '' && gd_dateTo.val() != '' && gd_amountFrom.val() == '' && gd_amountTo.val() == '') {// filtrar solo por fecha 
+                    fail = false;
+                    updateTableFacutras(1);
+                }
+                if (gd_amountFrom.val() != '' && gd_amountTo.val() != '' && gd_dateFrom.val() == '' && gd_dateTo.val() == '') {
+                    fail = false;
+
+                    updateTableFacutras(2);
+
+                }
+                if (gd_amountFrom.val() != '' && gd_amountTo.val() != '' && gd_dateFrom.val() != '' && gd_dateTo.val() != '') {
+                    fail = false;
+
+                    updateTableFacutras(3);
+
+                }
+                if (fail) {
+                    $("#i_modalFailInputs").modal();
+                }
+
+
+
+            });
+
+
+        });
+        
+        var last_search = 0;
+        function updateTableFacutras(option) {
+            // input = input de buscar y boton presionado de filtrado
+            // option =0, todo desde 0, mostrar todas
+            // option =1 , por fecha e input
+            // option = 2; monto e input
+            // option = 3; monto, fecha e input 
+            last_search = option;
+            if (gd_divXS.is(":visible")) {
+
+                switch (option) {
+                    case 0:
+
+                        gd_divXS.load("php/getAllFacturasXS.php");
+                        break;
+                    case 1:
+                        var fecha_from = gd_dateFrom.val();
+                        var fecha_to = gd_dateTo.val();
+                        gd_divXS.load("php/getDateFacturasXS.php", { dateFrom: fecha_from, dateTo: fecha_to, state: filter_type });
+
+
+                        break;
+                    case 2:
+                        var amountFrom = gd_amountFrom.val();
+                        var amountTo = gd_amountTo.val();
+                        gd_divXS.load("php/getAmountFacturasXS.php", { amountFrom: amountFrom, amountTo: amountTo, state: filter_type });
+
+                        break;
+                    case 3:
+                        var amountFrom = gd_amountFrom.val();
+                        var amountTo = gd_amountTo.val();
+                        var fecha_from = gd_dateFrom.val();
+                        var fecha_to = gd_dateTo.val();
+                        gd_divXS.load("php/getAmountDateFacturasXS.php", { amountFrom: amountFrom, amountTo: amountTo, dateFrom: fecha_from, dateTo: fecha_to, state: filter_type });
+
+                        break;
+                    case 4:
+                        gd_divXS.load("php/getAllFacturasXSFilter.php", {filter:filter_type  });
+
+
+                        break;
+                        
+
+                }
+
+            }
+
+
+            if (gd_divLG.is(":visible")) {
+                switch (option) {
+                    case 0:
+                        gd_tableFacturas.load("php/getAllFacturas.php");
+                        break;
+                    case 1:
+                        var fecha_from = gd_dateFrom.val();
+                        var fecha_to = gd_dateTo.val();
+                        gd_tableFacturas.load("php/getDateFacturas.php", { dateFrom: fecha_from, dateTo: fecha_to, state: filter_type });
+
+
+                        break;
+                    case 2:
+                        var amountFrom = gd_amountFrom.val();
+                        var amountTo = gd_amountTo.val();
+                        gd_tableFacturas.load("php/getAmountFacturas.php", { amountFrom: amountFrom, amountTo: amountTo, state: filter_type });
+
+                        break;
+                    case 3:
+                        var amountFrom = gd_amountFrom.val();
+                        var amountTo = gd_amountTo.val();
+                        var fecha_from = gd_dateFrom.val();
+                        var fecha_to = gd_dateTo.val();
+                        gd_tableFacturas.load("php/getAmountDateFacturas.php", { amountFrom: amountFrom, amountTo: amountTo, dateFrom: fecha_from, dateTo: fecha_to, state: filter_type });
+
+                        break;
+                    case 4:
+                        gd_tableFacturas.load("php/getAllFacturasFilter.php", {filter:filter_type});
+
+
+                        break;
+
+
+
+
+                }
+            }
+
+
+        }
+
+
+        $(document).on("click", ".c_buttonTable2", function () {
+             
+            var params = $(this).attr("id");
+            if (params.trim() != "") {
+
+                var a_params = params.split(",");
+                var tipo = a_params[0];
+                var folio = a_params[1];
+                var idCliente = a_params[2];
+
+                switch (tipo) {
+
+                    case "t":
+                        window.open("opcionesTimbrado.html?id=" + idCliente + "&folio=" + folio);
+
+                        break;
+                    case "c":
+                        window.open("opcionesCancelado.html?id=" + idCliente + "&folio=" + folio, "_self");
+
+
+                        break;
+                    case "p":
+                        //window.open("opcionesGenerada.html?id=" + idCliente + "&folio=" + folio, "_self");
+                        var form = $("#i_formRedirect");
+                        form.attr("action", "opcionesGenerada.html");
+                        form.attr("method", "post");
+                        var form_inputs = form.children();
+                        form_inputs[0].value = idCliente;
+                        form_inputs[1].value = folio;
+                     
+                        form.submit();
+
+                        break;
+
+                }
+
+            }
+
+        });
+
+
+        function mostrar_preview(xmlfile, folio, idcliente)
+        {
+
+            if(xmlfile!='0')
+            {
+                var tmp = xmlfile.split(".xml");
+                var pdfFile = tmp[0] + ".pdf";
+                window.open("printPDF.php?pdfFile=" + pdfFile+"&type=1");
+            }
+            else
+            {
+
+                $.post("Facturacion/vistaPreviaModCliente.php", { folio: folio, idCliente: idcliente }, function (data) {
+                  //  alert(data);
+                    var pdfFile = "preview" + folio + ".pdf";
+
+                    window.open("printPDF.php?pdfFile=" + pdfFile + "&type=0");
+
+
+                });
+            }
+            
+
+
+        }
+  
+       
+
+
+
+    </script>
+
+</body>
+
+</html> 
+

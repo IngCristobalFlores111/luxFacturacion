@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<cfdi:Comprobante xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:cfdi="http://www.sat.gob.mx/cfd/3" xsi:schemaLocation="http://www.sat.gob.mx/cfd/3 http://www.sat.gob.mx/sitio_internet/cfd/3/cfdv33.xsd " Version="3.3" Serie="A" Folio="627" Fecha="2017-12-31T09:33:31" MetodoPago="PUE" FormaPago="01" TipoDeComprobante="I" CondicionesDePago="Sin condiciones" Moneda="MXN" TipoCambio="1" LugarExpedicion="45188" SubTotal="15858.76" Descuento="0" Total="18396.16" Certificado="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" NoCertificado="00001000000407489457" Sello="Th6ECCENUDxq6Iwx8yezXkBdufVyqT8Kr37O+xRnCHrIUKZozmjor3tWz0sxF8CnbYTxYpKsTlIsDwVI3t1ME6GOm+lQ7mqWVBwIVphSKUDMRM7si3pInBoeUvT53y7nS+VGUIx4CqThoieqnGbuIUP6fCkNPc3d4M7T/U8dp0v8A66iecE3m/5xsKViG56nbXTr75RZm4v7BzBp1w6GNpATYUgGFVXLymBFBmIpHcMvzJxu78M3oZnDjlLdnw263osiOTVFtlfuhZg630sOjKFEipIUtSEbcnoQ+D1akKtfhYhTUr6RwSo0pVbYFs6lTYzSgQ/ZlBxHnVDcPaqoSQ==">
+  <cfdi:Emisor Rfc="GONM540312B43" RegimenFiscal="612" Nombre="Miguel Ángel González Navarro"/>
+  <cfdi:Receptor UsoCFDI="G01" Rfc="XAXX010101000" Nombre="PUBLICO EN GENERAL"/>
+  <cfdi:Conceptos>
+    <cfdi:Concepto Cantidad="1" ClaveUnidad="H87" NoIdentificacion="0" Descripcion="VENTA DE MOSTRADOR  TC 6836 LENTE OFTALMICO" ValorUnitario="2063.89" ClaveProdServ="42142901" Importe="2063.89">
+      <cfdi:Impuestos>
+        <cfdi:Traslados>
+          <cfdi:Traslado Base="2063.89" Impuesto="002" TipoFactor="Tasa" TasaOCuota="0.160000" Importe="330.22"/>
+        </cfdi:Traslados>
+      </cfdi:Impuestos>
+    </cfdi:Concepto>
+    <cfdi:Concepto Cantidad="1" ClaveUnidad="H87" NoIdentificacion="0" Descripcion="VENTA DE MOSTRADOR  TC 6083 LENTE OFTALMICO" ValorUnitario="1118.11" ClaveProdServ="42142901" Importe="1118.11">
+      <cfdi:Impuestos>
+        <cfdi:Traslados>
+          <cfdi:Traslado Base="1118.11" Impuesto="002" TipoFactor="Tasa" TasaOCuota="0.160000" Importe="178.9"/>
+        </cfdi:Traslados>
+      </cfdi:Impuestos>
+    </cfdi:Concepto>
+    <cfdi:Concepto Cantidad="1" ClaveUnidad="H87" NoIdentificacion="0" Descripcion="VENTA DE MOSTRADOR  EFECTIVO LENTE OFTALMICO" ValorUnitario="2590.52" ClaveProdServ="42142901" Importe="2590.52">
+      <cfdi:Impuestos>
+        <cfdi:Traslados>
+          <cfdi:Traslado Base="2590.52" Impuesto="002" TipoFactor="Tasa" TasaOCuota="0.160000" Importe="414.48"/>
+        </cfdi:Traslados>
+      </cfdi:Impuestos>
+    </cfdi:Concepto>
+    <cfdi:Concepto Cantidad="1" ClaveUnidad="H87" NoIdentificacion="0" Descripcion="VENTA DE MOSTRADOR  EFECTIVO LENTE OFTALMICO" ValorUnitario="5603.45" ClaveProdServ="42142901" Importe="5603.45">
+      <cfdi:Impuestos>
+        <cfdi:Traslados>
+          <cfdi:Traslado Base="5603.45" Impuesto="002" TipoFactor="Tasa" TasaOCuota="0.160000" Importe="896.55"/>
+        </cfdi:Traslados>
+      </cfdi:Impuestos>
+    </cfdi:Concepto>
+    <cfdi:Concepto Cantidad="1" ClaveUnidad="H87" NoIdentificacion="0" Descripcion="VENTA DE MOSTRADOR  TC 2605 LENTE OFTALMICO" ValorUnitario="431.04" ClaveProdServ="42142901" Importe="431.04">
+      <cfdi:Impuestos>
+        <cfdi:Traslados>
+          <cfdi:Traslado Base="431.04" Impuesto="002" TipoFactor="Tasa" TasaOCuota="0.160000" Importe="68.97"/>
+        </cfdi:Traslados>
+      </cfdi:Impuestos>
+    </cfdi:Concepto>
+    <cfdi:Concepto Cantidad="1" ClaveUnidad="H87" NoIdentificacion="0" Descripcion="VENTA DE MOSTRADOR  TC 0706 LENTE OFTALMICO" ValorUnitario="3662.94" ClaveProdServ="42142901" Importe="3662.94">
+      <cfdi:Impuestos>
+        <cfdi:Traslados>
+          <cfdi:Traslado Base="3662.94" Impuesto="002" TipoFactor="Tasa" TasaOCuota="0.160000" Importe="586.07"/>
+        </cfdi:Traslados>
+      </cfdi:Impuestos>
+    </cfdi:Concepto>
+    <cfdi:Concepto Cantidad="1" ClaveUnidad="H87" NoIdentificacion="0" Descripcion="VENTA DE MOSTRADOR  TC 5196 Solución para limpiar anteojos" ValorUnitario="74.14" ClaveProdServ="42142908" Importe="74.14">
+      <cfdi:Impuestos>
+        <cfdi:Traslados>
+          <cfdi:Traslado Base="74.14" Impuesto="002" TipoFactor="Tasa" TasaOCuota="0.160000" Importe="11.86"/>
+        </cfdi:Traslados>
+      </cfdi:Impuestos>
+    </cfdi:Concepto>
+    <cfdi:Concepto Cantidad="1" ClaveUnidad="H87" NoIdentificacion="0" Descripcion="VENTA DE MOSTRADOR  TC 9992 Solución para limpiar anteojos" ValorUnitario="86.21" ClaveProdServ="42142908" Importe="86.21">
+      <cfdi:Impuestos>
+        <cfdi:Traslados>
+          <cfdi:Traslado Base="86.21" Impuesto="002" TipoFactor="Tasa" TasaOCuota="0.160000" Importe="13.79"/>
+        </cfdi:Traslados>
+      </cfdi:Impuestos>
+    </cfdi:Concepto>
+    <cfdi:Concepto Cantidad="1" ClaveUnidad="H87" NoIdentificacion="0" Descripcion="VENTA DE MOSTRADOR  TC 8076 Solución para limpiar anteojos" ValorUnitario="206.9" ClaveProdServ="42142908" Importe="206.9">
+      <cfdi:Impuestos>
+        <cfdi:Traslados>
+          <cfdi:Traslado Base="206.9" Impuesto="002" TipoFactor="Tasa" TasaOCuota="0.160000" Importe="33.1"/>
+        </cfdi:Traslados>
+      </cfdi:Impuestos>
+    </cfdi:Concepto>
+    <cfdi:Concepto Cantidad="1" ClaveUnidad="H87" NoIdentificacion="0" Descripcion="VENTA DE MOSTRADOR  TC 8076 Solución para limpiar anteojos" ValorUnitario="21.56" ClaveProdServ="42142908" Importe="21.56">
+      <cfdi:Impuestos>
+        <cfdi:Traslados>
+          <cfdi:Traslado Base="21.56" Impuesto="002" TipoFactor="Tasa" TasaOCuota="0.160000" Importe="3.45"/>
+        </cfdi:Traslados>
+      </cfdi:Impuestos>
+    </cfdi:Concepto>
+  </cfdi:Conceptos>
+  <cfdi:Impuestos TotalImpuestosTrasladados="2537.4">
+    <cfdi:Traslados>
+      <cfdi:Traslado Impuesto="002" TasaOCuota="0.160000" Importe="2537.4" TipoFactor="Tasa"/>
+    </cfdi:Traslados>
+  </cfdi:Impuestos>
+  <cfdi:Complemento>
+    <tfd:TimbreFiscalDigital xmlns:tfd="http://www.sat.gob.mx/TimbreFiscalDigital" xsi:schemaLocation="http://www.sat.gob.mx/TimbreFiscalDigital http://www.sat.gob.mx/sitio_internet/cfd/TimbreFiscalDigital/TimbreFiscalDigitalv11.xsd" Version="1.1" UUID="79f157ec-fd56-45ae-a3e5-21743d704252" FechaTimbrado="2017-12-31T09:35:34" RfcProvCertif="LSO1306189R5" SelloCFD="Th6ECCENUDxq6Iwx8yezXkBdufVyqT8Kr37O+xRnCHrIUKZozmjor3tWz0sxF8CnbYTxYpKsTlIsDwVI3t1ME6GOm+lQ7mqWVBwIVphSKUDMRM7si3pInBoeUvT53y7nS+VGUIx4CqThoieqnGbuIUP6fCkNPc3d4M7T/U8dp0v8A66iecE3m/5xsKViG56nbXTr75RZm4v7BzBp1w6GNpATYUgGFVXLymBFBmIpHcMvzJxu78M3oZnDjlLdnw263osiOTVFtlfuhZg630sOjKFEipIUtSEbcnoQ+D1akKtfhYhTUr6RwSo0pVbYFs6lTYzSgQ/ZlBxHnVDcPaqoSQ==" NoCertificadoSAT="00001000000408254801" SelloSAT="oAsPUK816aCuxjRC9z7gOKbMJq6ibiD+OkcQ0hmzLs/n9PsMhutnRxCEnPk7nOTO4Rhb7FljhJOMsKsi1ttBeGdgy8T/NLz++EU7metib6wjtxJl4TA1cIqGTZpRB9ph/SYFruUqF14Mm3QzXOzbvDZjGko8204vZduy/xN+Qi1GJy6rci0/DebKXkuuwjhB0ZUwSs1kINQueTBq5KLcwSdOdo8SrgDg+kAtCuQAGHW6vOptWzKiuGgYTI74N7oDpdWnX7Rsqg18gJL1ziYidpbJj2ovetHjtpP78BxyH4pnfGSfb318vE5AXe7jRSiqODpDB3vz12zQoDp5ETeRDA=="/>
+  </cfdi:Complemento>
+</cfdi:Comprobante>

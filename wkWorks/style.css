@@ -1,0 +1,96 @@
+*,
+*:before,
+*:after {
+-webkit-box-sizing: border-box;
+-moz-box-sizing: border-box;
+box-sizing: border-box;
+}
+.cadenas{
+    overflow: hidden;
+}
+.table-cadenas td{
+    padding: 8px;
+    line-height: 1.42857143;
+    vertical-align: top;
+    word-wrap: break-word;
+    
+}
+.conceptos{
+    overflow: hidden;
+}
+body{
+    font-size: 12px;
+}
+
+.datos-cliente{
+margin: 0;
+    overflow: hidden;
+    transform: translate(0,-30px);
+
+}
+.header-important{
+    background-color:rgb(86,86,86);
+    font-weight: bold;
+    color:white;
+    padding: 11px;
+}
+.table-params{
+text-align: center;
+margin: 0 auto;
+
+}
+.border-less{
+border: none !important;
+}
+.table-params td{
+padding: 2px !important;
+}
+.td-important{
+    background-color:rgb(86,86,86);
+    font-weight: bold;
+    color:white;
+}
+.tr-important td{
+    background-color:rgb(86,86,86);
+    font-weight: bold;
+    color:white;
+}
+
+row{
+    padding: 0 !important;
+    margin: 0;
+}
+
+h1,h2,h3,h4,h5,h6{
+    font-weight:bold;
+    font-family: 'Dosis',sans-serif;
+    }
+    .info-emisor{
+text-align: center;
+margin: 0;
+padding: 0;
+    }
+    .info-emisor p{
+        font-size: 14px;
+        margin-top: 0;
+        line-height: 20px;
+        }
+    .table-factura-detalles{
+        text-align:center;
+        width:100%;
+        border-collapse: collapse;
+        
+        
+    }
+    .table-factura-detalles tbody td{
+        text-align: center;
+        padding: 5px;
+        border-collapse: collapse;
+        
+    }
+    .table-factura-detalles tr:nth-child(odd) {
+        background:rgb(86,86,86);
+        color:white;
+        font-weight: bold;
+    }
+    

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<cfdi:Comprobante xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:cfdi="http://www.sat.gob.mx/cfd/3" xsi:schemaLocation="http://www.sat.gob.mx/cfd/3 http://www.sat.gob.mx/sitio_internet/cfd/3/cfdv33.xsd " Version="3.3" Serie="A" Folio="491" Fecha="2018-01-16T16:21:45" MetodoPago="PUE" FormaPago="01" TipoDeComprobante="I" CondicionesDePago="nada" Moneda="MXN" TipoCambio="1" LugarExpedicion="45133" SubTotal="200" Descuento="0" Total="232" Certificado="MIIFxTCCA62gAwIBAgIUMjAwMDEwMDAwMDAzMDAwMjI4MTUwDQYJKoZIhvcNAQELBQAwggFmMSAwHgYDVQQDDBdBLkMuIDIgZGUgcHJ1ZWJhcyg0MDk2KTEvMC0GA1UECgwmU2VydmljaW8gZGUgQWRtaW5pc3RyYWNpw7NuIFRyaWJ1dGFyaWExODA2BgNVBAsML0FkbWluaXN0cmFjacOzbiBkZSBTZWd1cmlkYWQgZGUgbGEgSW5mb3JtYWNpw7NuMSkwJwYJKoZIhvcNAQkBFhphc2lzbmV0QHBydWViYXMuc2F0LmdvYi5teDEmMCQGA1UECQwdQXYuIEhpZGFsZ28gNzcsIENvbC4gR3VlcnJlcm8xDjAMBgNVBBEMBTA2MzAwMQswCQYDVQQGEwJNWDEZMBcGA1UECAwQRGlzdHJpdG8gRmVkZXJhbDESMBAGA1UEBwwJQ295b2Fjw6FuMRUwEwYDVQQtEwxTQVQ5NzA3MDFOTjMxITAfBgkqhkiG9w0BCQIMElJlc3BvbnNhYmxlOiBBQ0RNQTAeFw0xNjEwMjUyMTUyMTFaFw0yMDEwMjUyMTUyMTFaMIGxMRowGAYDVQQDExFDSU5ERU1FWCBTQSBERSBDVjEaMBgGA1UEKRMRQ0lOREVNRVggU0EgREUgQ1YxGjAYBgNVBAoTEUNJTkRFTUVYIFNBIERFIENWMSUwIwYDVQQtExxMQU43MDA4MTczUjUgLyBGVUFCNzcwMTE3QlhBMR4wHAYDVQQFExUgLyBGVUFCNzcwMTE3TURGUk5OMDkxFDASBgNVBAsUC1BydWViYV9DRkRJMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAgvvCiCFDFVaYX7xdVRhp/38ULWto/LKDSZy1yrXKpaqFXqERJWF78YHKf3N5GBoXgzwFPuDX+5kvY5wtYNxx/Owu2shNZqFFh6EKsysQMeP5rz6kE1gFYenaPEUP9zj+h0bL3xR5aqoTsqGF24mKBLoiaK44pXBzGzgsxZishVJVM6XbzNJVonEUNbI25DhgWAd86f2aU3BmOH2K1RZx41dtTT56UsszJls4tPFODr/caWuZEuUvLp1M3nj7Dyu88mhD2f+1fA/g7kzcU/1tcpFXF/rIy93APvkU72jwvkrnprzs+SnG81+/F16ahuGsb2EZ88dKHwqxEkwzhMyTbQIDAQABox0wGzAMBgNVHRMBAf8EAjAAMAsGA1UdDwQEAwIGwDANBgkqhkiG9w0BAQsFAAOCAgEAJ/xkL8I+fpilZP+9aO8n93+20XxVomLJjeSL+Ng2ErL2GgatpLuN5JknFBkZAhxVIgMaTS23zzk1RLtRaYvH83lBH5E+M+kEjFGp14Fne1iV2Pm3vL4jeLmzHgY1Kf5HmeVrrp4PU7WQg16VpyHaJ/eonPNiEBUjcyQ1iFfkzJmnSJvDGtfQK2TiEolDJApYv0OWdm4is9Bsfi9j6lI9/T6MNZ+/LM2L/t72Vau4r7m94JDEzaO3A0wHAtQ97fjBfBiO5M8AEISAV7eZidIl3iaJJHkQbBYiiW2gikreUZKPUX0HmlnIqqQcBJhWKRu6Nqk6aZBTETLLpGrvF9OArV1JSsbdw/ZH+P88RAt5em5/gjwwtFlNHyiKG5w+UFpaZOK3gZP0su0sa6dlPeQ9EL4JlFkGqQCgSQ+NOsXqaOavgoP5VLykLwuGnwIUnuhBTVeDbzpgrg9LuF5dYp/zs+Y9ScJqe5VMAagLSYTShNtN8luV7LvxF9pgWwZdcM7lUwqJmUddCiZqdngg3vzTactMToG16gZA4CWnMgbU4E+r541+FNMpgAZNvs2CiW/eApfaaQojsZEAHDsDv4L5n3M1CC7fYjE/d61aSng1LaO6T1mh+dEfPvLzp7zyzz+UgWMhi5Cs4pcXx1eic5r7uxPoBwcCTt3YI1jKVVnV7/w=" NoCertificado="20001000000300022815" Sello="T7s++UxlzI6twDjJzKPP57Hs5QkPwBUoCE4ZhpmtJ8SshTqM/tIqvxFaww8+IJPDGapcHvpAUJrbgEGrzLuJZSYwoD9ElUeDuJM6CegOc+0nclpIAHaw0F+zK6BgU7pTMOPnPpOsIkzOAgqpu7L+WbzlZ4FBX0NCov4WsLNk5oml9oQC5IXLcAYD9YlBoa5q+17xViycGM64/MHxtWLjlvuPAV1/mTf6G4Uh/kK0R6t2DIjeVoVLKmTXAXodD9Ks+xY4UhXI7s1Phe+Qjf5aKgOJxw08l1pq5ve94dCeVbJdYfeYej3wefScr2mqZxFgxHXOeZYN8kLbe+nWl0gN8Q==">
+  <cfdi:Emisor Rfc="LAN7008173R5" Nombre="MARIA ELENA IÑIGUEZ DIAZ DE LEON" RegimenFiscal="601"/>
+  <cfdi:Receptor UsoCFDI="G01" Rfc="XAXX010101000" Nombre="PUBLICO EN GENERAL"/>
+  <cfdi:Conceptos>
+    <cfdi:Concepto Cantidad="10" ClaveUnidad="E48" NoIdentificacion="1" Descripcion="prueba" ValorUnitario="10" ClaveProdServ="20142903" Importe="100">
+      <cfdi:Impuestos>
+        <cfdi:Traslados>
+          <cfdi:Traslado Base="100" Impuesto="002" TipoFactor="Tasa" TasaOCuota="0.160000" Importe="16"/>
+        </cfdi:Traslados>
+      </cfdi:Impuestos>
+    </cfdi:Concepto>
+    <cfdi:Concepto Cantidad="10" ClaveUnidad="E48" NoIdentificacion="10" Descripcion="esta es otra prubea" ValorUnitario="10" ClaveProdServ="72101511" Importe="100">
+      <cfdi:Impuestos>
+        <cfdi:Traslados>
+          <cfdi:Traslado Base="100" Impuesto="002" TipoFactor="Tasa" TasaOCuota="0.160000" Importe="16"/>
+        </cfdi:Traslados>
+      </cfdi:Impuestos>
+    </cfdi:Concepto>
+  </cfdi:Conceptos>
+  <cfdi:Impuestos TotalImpuestosTrasladados="32">
+    <cfdi:Traslados>
+      <cfdi:Traslado Impuesto="002" TasaOCuota="0.160000" Importe="32" TipoFactor="Tasa"/>
+    </cfdi:Traslados>
+  </cfdi:Impuestos>
+  <cfdi:Complemento>
+    <tfd:TimbreFiscalDigital xmlns:tfd="http://www.sat.gob.mx/TimbreFiscalDigital" xsi:schemaLocation="http://www.sat.gob.mx/TimbreFiscalDigital http://www.sat.gob.mx/sitio_internet/cfd/TimbreFiscalDigital/TimbreFiscalDigitalv11.xsd" Version="1.1" UUID="bda1d09b-77ea-42ff-b57c-f100abb213a3" FechaTimbrado="2018-01-16T16:23:48" RfcProvCertif="AAA010101AAA" SelloCFD="T7s++UxlzI6twDjJzKPP57Hs5QkPwBUoCE4ZhpmtJ8SshTqM/tIqvxFaww8+IJPDGapcHvpAUJrbgEGrzLuJZSYwoD9ElUeDuJM6CegOc+0nclpIAHaw0F+zK6BgU7pTMOPnPpOsIkzOAgqpu7L+WbzlZ4FBX0NCov4WsLNk5oml9oQC5IXLcAYD9YlBoa5q+17xViycGM64/MHxtWLjlvuPAV1/mTf6G4Uh/kK0R6t2DIjeVoVLKmTXAXodD9Ks+xY4UhXI7s1Phe+Qjf5aKgOJxw08l1pq5ve94dCeVbJdYfeYej3wefScr2mqZxFgxHXOeZYN8kLbe+nWl0gN8Q==" NoCertificadoSAT="20001000000300022323" SelloSAT="iC9UdEhWLZpnSEwiFPq9Jc1HgLlOIbWnZ9tVzE0zOOmT9gwScu5VeU7+0gB7+5jRD08WPg6+IK2BDucxK9CdIKDyTd4ikgKJDxB3y6F1Lp7wxzOKqngbT0pfzTB/KanQb6VXEnBq2JDNED3EbmUjLaJSJIsPabQUqirJeXrAjjXcIefC0mal0xioiBf/Cj8bW7gGV1lrettFGnlY/9G55ZjR8gX671QRr7P2N78KJUuwb4N99bIXdwH1przAmZ/edLOOVfsl/pNKrNP7SxfW4EmbnNeO3cLN13N8fm4KhSXwuuvu/mjXfPdEP4NTC17/v/gEo0PAixTijiYkqGy4bw=="/>
+  </cfdi:Complemento>
+</cfdi:Comprobante>

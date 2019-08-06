@@ -1,0 +1,781 @@
+﻿<?php
+require_once("../Login/php/Functions.php");   
+$link = linkDBLuxLine();
+$luxlineObj = new luxlineWebLogin($link);
+$luxlineObj->initialCheckUpSystems();
+
+$sql = createMysqliConnection();
+$query ="SELECT idAduana AS id, nombre FROM `aduanas`";
+$aduanas = $sql->executeQuery($query);
+
+
+
+?>
+
+
+<html lang="es-mx" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title>Ajustes y Atajos</title>
+
+    <!--MetaArea-->
+    <meta charset="utf-8"> <!--Caracteres Codificados-->
+    <meta name="viewport" content="width=device-width, initial-scale=1"> <!--Para Dispositivos Moviles habilita touch-zoom etc-->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <!--/MetaArea-->
+    <!--CSS-->
+    <link href="css/bootstrap.min.css" rel="stylesheet"><!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="css/style.css" type="text/css" />
+    <link rel="stylesheet" href="font-awesome/css/font-awesome.min.css">
+    <link rel="icon" href="img/luxline1.ico" type="image/x-icon">
+    <link href="//cdn.datatables.net/1.10.15/css/jquery.dataTables.min.css" rel="stylesheet" />
+
+    <!-- jQuery -->
+    <script src="js/jquery.js"></script>
+
+    <!-- Bootstrap Core JavaScript -->
+    <script src="js/bootstrap.min.js"></script>
+    <script src="//cdn.datatables.net/1.10.15/js/jquery.dataTables.min.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" rel="stylesheet" type="text/css" />
+    <script src="js/bootbox.min.js"></script>
+   
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css" rel="stylesheet" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js"></script>
+  <link href="css/select2-flat.css" rel="stylesheet" type="text/css" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.6.6/angular.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/angular-sanitize/1.6.6/angular-sanitize.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-select/0.20.0/select.min.js"></script>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-select/0.20.0/select.min.css" rel="stylesheet" />
+<script src="js/services/facturacion/facturarService.js"></script>
+<script src="js/services/pedimentos/pedimentosService.js"></script>
+<script src="js/services/config/configService.js"></script>
+<script src="js/services/tiposFactura/tiposFacturasService.js"></script>
+<script src="js/controllers/config/ctrlConfig.js"></script>
+<script src="js/controllers/config/pedimentos33/ctrlPedimentos.js"></script>
+<script src="js/controllers/config/atajos/ctrlModAtajos.js"></script>
+
+<script src="js/controllers/config/series/ctrlSeries.js"></script>
+<script src="js/controllers/config/atajos/ctrlAgregarAtajo.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootbox.js/4.4.0/bootbox.min.js"></script>
+<script src="js/controllers/config/tiposFactura/ctrlTiposFactura.js"></script>
+<script>
+   (function(){
+     var app = angular.module("app",['ui.select', 'ngSanitize']);
+     app.service("facturarService",facturarService);
+     app.service("pedimentosService",pedimentosService);
+     app.service("configService",configService);
+     app.service("tiposFacturasService",tiposFacturasService);
+
+     app.controller("ctrlConfig",ctrlConfig);
+      app.controller("ctrlSeries",ctrlSeries);
+      app.controller("ctrlPedimentos",ctrlPedimentos);
+      app.controller("ctrlAgregarAtajo",ctrlAgregarAtajo);
+      app.controller("ctrlModAtajos",ctrlModAtajos);
+      app.controller("ctrlTiposFactura",ctrlTiposFactura);
+      app.controller("ctrlMain",function($scope){
+        $scope.irOpcionesUsuario = function(){
+       location.href="opcionesUsuario.html";
+        }
+        $scope.cerrarSesion = function(){
+            bootbox.confirm({
+    title: "Seguro que deseas cerrar sesión?",
+    message: "Tu sesión actual se reiniciara",
+    buttons: {
+        cancel: {
+            label: '<i class="fa fa-times"></i> Cancelar'
+        },
+        confirm: {
+            label: '<i class="fa fa-check"></i> Confirmar'
+        }
+    },
+    callback: function (result) {
+        if(result){
+            document.location.href = "https://www.google.com/accounts/Logout?continue=https://appengine.google.com/_ah/logout?continue=https://www.luxline.com.mx";
+            
+            $.post("php/goSession.php");
+        }
+    }
+});
+         
+        }
+
+
+
+      });
+
+
+    
+   })()
+    
+</script>
+<style>
+                select option {
+    /*background-color: rgba(255,255,255,0.25);*/
+        border-color: rgba(0,0,0,0.25);
+        color:black;
+}
+table.dataTable tbody tr {
+    background-color: transparent !important;
+}
+    </style>
+
+    <!--/JS-->
+    <!--Google+ api-->
+    <script src="https://apis.google.com/js/api.js?onload=handleClientLoad"></script>
+    <!--Google+ api-->
+    <!--ApiLogIn-->
+    <script>
+        var ApiLogIn = function (btnSingIn, btnSignOut, msgContainer,phpLogin) {
+            //var test = 10; private variable
+            //var method = function(){} private method
+            //this.test = 10; public variable
+            //this.method = function(){} public method
+            var self = this;
+            var m_auth2 = null; // The Sign-In object.
+            var m_btnSignIn = btnSingIn;
+            var m_btnSignOut = btnSignOut;
+            var m_message = msgContainer;
+            var m_apiKey = 'accesssecurity-140019';
+            var m_clientId = "1043488027097-f77grlc3h5cli90m6c0b4urra6jmcakn.apps.googleusercontent.com";
+            var m_phpLogin = phpLogin;
+            // Enter one or more authorization scopes. Refer to the documentation for
+            // the API or https://developers.google.com/identity/protocols/googlescopes
+            // for details.
+            var m_scopes = 'profile https://www.googleapis.com/auth/userinfo.profile';
+            var m_cookie_policy = 'single_host_origin';
+
+
+            this.signIn = function () {
+                m_auth2.signIn();
+            }
+
+            this.logOut = function () {
+                var User = m_auth2.currentUser.get();
+                var l_RO = User.getAuthResponse();
+                var access_token = l_RO.access_token;
+
+                var location = (parseInt(screen.availWidth) / 2) - 290;
+                var revokeUrl = window.open('https://accounts.google.com/Logout', "Logout", "left=" + location + ",top=10 width=580,height=800");
+                revokeUrl.focus();
+                setTimeout(function () {
+                    revokeUrl.close();
+                }, 500);
+            }
+
+            var updateSigninStatus = function (isSignedIn) { //Callback function
+                if (isSignedIn) {
+                    //*****************googleUser**************
+                    //A GoogleUser object represents one user account.
+                    var User = m_auth2.currentUser.get()
+                    var profile = User.getBasicProfile();
+                    //*****************googleUser**************
+                    var user_id = profile.getId();
+
+                    //console.log('ID: ' + user_id); // Do not send to your backend! Use an ID token instead.
+                    //console.log('Name: ' + profile.getName());
+                    //console.log('Image URL: ' + profile.getImageUrl());
+                    //console.log('Email: ' + profile.getEmail());
+
+                    // The ID token you need to pass to your backend:
+                    var l_RO = User.getAuthResponse();
+
+                    var id_token = l_RO.id_token;
+                    //var access_token = l_RO.access_token;
+                    //var log_hint = l_RO.login_hint;
+                    //var scopes = l_RO.scope;
+                    //var expire_time = l_RO.expires_in;
+                    //var f_issued_at = l_RO.first_issued_at;
+                    //var expires_at = l_RO.expires_at;
+
+                    //console.log("ID Token: " + id_token);
+                    //console.log("Access Token: " + access_token);
+                    //console.log("Log Hint: " + log_hint);
+                    //console.log("Scopes: " + scopes);
+                    //console.log("Expire Time: " + expire_time);
+                    //console.log("f_issued_at: " + f_issued_at);
+                    //console.log("Expires at: " + expire_time);
+
+                    $.post(m_phpLogin, { ID_TOKEN: id_token }, function (data, status) {
+                        var indexer = parseInt(data);
+                        switch (indexer) {
+                            case 0:
+                                if (window.location.href === "http://www.luxline.com.mx") {
+                                    setTimeout(function () {
+                                        window.location.href = "http://www.luxline.com.mx/testLuxFact";
+                                    }, 1000);
+                                }
+
+                                if(m_btnSignIn !== null)
+                                    $(m_btnSignIn).hide();
+
+                                if(m_btnSignOut !== null)
+                                    $(m_btnSignOut).show();
+                                break;
+                            case -1:
+                                console.log("Token Invalido");
+                                break;
+                            case -2:
+                                console.log("Estampa de tiempo expirada");
+                                break;
+                            case -3:
+                                if(m_message !== null)
+                                    $(m_message).html("<h3>El usuario no existe en la base de datos. Ingrese a su cuenta de Google+ con un usuario válido.</h3>");
+                                else
+                                    console.log("El usuario no existe en la base de datos. Ingrese a su cuenta de Google+ con un usuario válido.");
+
+                                if (window.location.href !== "http://www.luxline.com.mx") {
+                                    setTimeout(function () {
+                                        window.location.href = "http://www.luxline.com.mx";
+                                    }, 1000);
+                                }
+
+
+                                if(m_btnSignOut !== null)
+                                    $(m_btnSignOut).hide();
+
+                                if(m_btnSignIn !== null)
+                                    $(m_btnSignIn).show();
+                                break;
+                            case -4:
+                                console.log("Hay inconsistencia en la base de datos");
+                                break;
+                            default:
+                                break;
+                        }
+                    });
+                }
+                else {
+                    if(m_message !== null)
+                        m_message.html("<h3>De click a Ingresar para comenzar</h3>")
+                    else
+                        console.log("De click a Ingresar para comenzar");
+
+                    if(m_btnSignIn !== null)
+                        $(m_btnSignIn).show();
+
+                    if(m_btnSignOut !== null)
+                        $(m_btnSignOut).hide();
+
+
+                    $.post("../../Login/php/clearSession.php", {}, function () {
+                    if (window.location.href !== "http://www.luxline.com.mx") {
+                        setTimeout(function () {
+                            window.location.href = "http://www.luxline.com.mx";
+                        }, 1000);
+                    }
+                    });
+
+                }
+            }
+
+           this.initAuth = function () {
+                //make gapi calls
+                gapi.client.setApiKey(m_apiKey);
+                gapi.auth2.init({
+                    client_id: m_clientId,
+                    scope: m_scopes,
+                    cookie_policy: m_cookie_policy
+                }).then(function () {
+                    //Obtener instancia de autorización
+
+                    //****************auth2***************************************
+                    //auth 2 is a GoogleAuth object that is a singleton class that provides methods to allow
+                    //the user to sign in with a Google account, get the user's current
+                    //sign-in status, get specific data from the user's Google profile,
+                    //request additional scopes, and sign out from the current account.
+                    m_auth2 = gapi.auth2.getAuthInstance();
+                    //****************auth2***************************************
+
+                    //Víncular un cambio de estado a una función
+
+                    m_auth2.isSignedIn.listen(updateSigninStatus);
+
+                    //Checar el estado inicial, podría ya estar loggeado
+                    updateSigninStatus(m_auth2.isSignedIn.get());
+
+                    //Listen to signin states
+                    if(m_btnSignIn !== null)
+                        m_btnSignIn.addEventListener("click", self.signIn);
+
+                    if(m_btnSignOut !== null)
+                        m_btnSignOut.addEventListener("click", self.logOut);
+                });
+            }
+
+        };
+
+    </script>
+    <!--ApiLogIn-->
+
+    <script>
+        var go_ApiLogIn = null;
+        var authorizeButton = null;
+        var signoutButton = null;
+        var g_message = null;
+        var g_signOutBtn = null;
+        var g_signInBtn = null;
+
+        $(document).ready(function () {
+            g_message = null;
+            g_signInBtn = null;
+            g_signOutBtn = document.getElementById('signout-button');
+
+            go_ApiLogIn = new ApiLogIn(g_signInBtn, g_signOutBtn, g_message, "../../Login/php/logInFacturacion.php");
+            gapi.load('client:auth2', go_ApiLogIn.initAuth);
+        });
+    </script>
+
+</head>
+<body ng-app="app" ng-controller="ctrlMain">
+
+<div id = "i_modalBlur">
+
+<nav class="navbar navbar-default">
+  <div class="container-fluid">
+    <div class = "row visible-xs ">
+      <img src="img/luxline.png" style = "height:8%;" id = "i_navBarLogo" alt="lux_logo">
+    </div>
+    <div class="navbar-header" style = "margin:1%;">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span> 
+      </button>
+      <img src="img/luxline.png" class = "visible-md visible-lg visible-sm" id = "i_navBarLogo" alt="lux_logo">
+    </div>
+    <div class="collapse navbar-collapse" id="myNavbar">
+        <ul class="nav navbar-nav" style = "margin:1%;" >
+      <li><a href="index.html"> Facturar</a></li>
+      <li><a href="folios.html">Folios</a></li>
+      <li class = "c_navBarActivo"><a href="AgrModAtajo.html">Ajustes</a></li>
+    </ul>
+        <ul class="nav navbar-nav navbar-right">
+      <li ng-click="irOpcionesUsuario()"  data-toggle= "modal" data-target="#i_modalOpcionesUsuario" ><a href="#"><span class="fa fa-user" style = "font-size:20px;" aria-hidden="true"></span></a></li>
+      <li ng-click="cerrarSesion()" ><a href="#"><span class="fa fa-sign-out" style = "font-size:20px;" aria-hidden="true"></span></a></li>
+    </ul>
+    </div>
+  </div>
+</nav>
+
+
+<div class="container">
+         <div class = "c_marginTitle">
+                <h3 style = "display:inline;">Ajustes Principales</h3><i style = "display:inline; margin-left:inherit;" class="fa fa-question-circle fa-2x" data-toggle="modal"  data-target = "#i_modalAjustesPrincipales"></i>
+              </div>
+             <hr>
+        
+        <!--lg md-->
+        <ul class="nav nav-pills">
+            <li class="active"><a data-toggle="tab" href="#menu1">Agregar Atajo</a></li>
+            <li><a data-toggle="tab" href="#menu2">Modificar Atajo</a></li>
+            <li><a data-toggle="tab" href="#menu3" >Claves Prod. Serv.</a></li>
+            <li><a data-toggle="tab" href="#menu4" >Unidades</a></li>
+
+            <li><a data-toggle="tab" href="#menu5" >Pedimentos</a></li>
+            <li><a data-toggle="tab" href="#menu6" >Series</a></li>
+            <li><a data-toggle="tab" href="#menu7">Tipos de Factura</a></li>
+            
+         </ul>
+        
+  
+
+        <div class="tab-content" style ="padding: 2%;">
+            <div ng-controller="ctrlTiposFactura" ng-include="'views/tiposFactura.htm'" class="tab-pane fade in"  style = "margin-top: 4%;" id="menu7">
+            
+            </div>
+        
+
+        <div ng-controller="ctrlPedimentos" ng-include="'views/pedimentos33.html'" class="tab-pane fade in"  style = "margin-top: 4%;" id="menu5">
+           
+
+        </div>
+       <div ng-controller="ctrlSeries" id="menu6" class="tab-pane fade in"  style = "margin-top: 4%;">
+<h4>Series</h4>
+<p>{{(opcion==0)?'Nueva Serie':'Modificando serie '+nueva.serie}}</p>
+<div class="row">
+<div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
+        <div class="form-group">
+                <div class="input-group">
+            <span class="input-group-addon"><i class="fa" ng-class="{'fa-plus':opcion==0,'fa-check':opcion==1}" aria-hidden="true"></i> Serie</span>
+            <input class="form-control" ng-model="nueva.serie" type="text">
+                </div>
+            </div>
+</div>
+<div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+        <div class="btn-group" style="float:left">
+                <button ng-click="agregarSerie()" class="btn btn-primary"><i class="fa"  ng-class="{'fa-plus':opcion==0,'fa-check':opcion==1}"></i></button>
+            </div>
+</div>
+
+</div>
+
+
+
+<div class="table-responsive">
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Serie</th>
+                <th>Factura Actual</th>
+                <th>Opciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="s in series">
+                <td>{{s.serie}}</td>
+                <td>{{s.folio}}</td>
+                <td>
+                  <div class="btn-group">
+                      
+                      <button class="btn btn-primary" ng-click="modSerie(s)"><i class="fa fa-cog"></i></button>
+                      <button ng-if="s.folio==0" class="btn btn-danger" ng-click="eliminarSerie(s)"><i class="fa fa-times"></i></button>
+                      
+                    </div>
+
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+
+
+
+
+
+       </div>
+
+            <div ng-controller="ctrlAgregarAtajo" ng-include="'views/agregarAtajoForm.htm'" id="menu1" class="tab-pane fade in active" style = "margin-top: 4%;" >
+             
+                   
+            </div>
+            <div ng-controller="ctrlModAtajos" id="menu2" class="tab-pane fade" ng-include="'views/agregadModAtajo.htm'">
+           
+
+            </div>
+   
+            <div id="menu4" class="tab-pane fade" ng-controller="ctrlConfig">
+                    <h4>Unidades</h4>
+      
+                    <div class="row row-spanning">
+                                            <div class="col-lg-8 col-md-8 col-sm-8 col-xs-9">
+                                                <div class="form-group">
+                                                    <div class="input-group">
+                                                            <span ng-click="searchUnidad()" class="input-group-addon"><i class="fa fa-search"></i></span>
+                                                            <input class="form-control" ng-model="unidades.q" type="text">
+                                                        </div>
+                            
+                                                        </div>
+                                                        <ul style="position: absolute;max-height:300px;overflow:auto" class="list-group list-claveprod" ng-if="unidadSelected==null">
+                                                                <li style="color:black" ng-click="agregarUnidad(p)" class="list-group-item" ng-repeat="p in unidades.unidades">{{p.nombre}} <small>{{p.codigo}}</small></li>
+                                                               
+                                                            </ul>
+                                            </div>
+                                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-3">
+                                                    <div class="btn-group" style="float:left">
+                                                       <button ng-click="ocultarUnidades()" class="btn btn-primary btn-lg"><i class="fa fa-eraser"></i></button>
+                                                    </div>
+                     
+                                            </div>
+                                             </div>
+                     <div class="row">
+                                                            <div class="col-lg-10 col-md-10 col-sm-10 col-xs-10">
+                                                                   <div class="alert alert-info" ng-if="unidadSelected!=null">
+                                                                           <button ng-click="deselectUnidad()" type="button" class="close" aria-hidden="true">&times;</button>
+                                                                           <strong>{{unidadSelected.codigo}}</strong>  {{unidadSelected.nombre}}
+                                                                       </div>
+                                                            </div>
+                                                            <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2" ng-if="unidadSelected!=null">
+                                                             <div class="btn-group">
+                                                              <button ng-click="confirmUnidad()" class="btn btn-lg  btn-success btn-plus"><i class="fa fa-plus"></i></button>
+                                                             </div>
+                                                            </div>
+                                                            </div>
+                                                    
+                      
+                     <div class="table-responsive">
+                                                        <table class="table table-bordered">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th>Clave</th>
+                                                                    <th>Nombre</th>
+                                                                    <th>Descripción</th>
+                                                                    
+                                                                    <th>Opciones</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                <tr ng-repeat="u in unidadesActuales">
+                                                                    <td>{{u.codigo}}</td>
+                                                                    <td>{{u.nombre}}</td>
+                                                                    <td>{{u.descripcion}}</td>
+                                                                    <td>
+                                                                        <div class="btn-group">
+                                                                        <button ng-click="eliminarUnidad(u)" class="btn btn-danger"><i class="fa fa-times"></i></button>
+                                                                        </div>
+                                                                    </td>
+                                                                    
+                                                                </tr>
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+         
+                </div>
+
+                <div id="menu3" class="tab-pane fade" style = "margin-top: 4%;" ng-controller="ctrlConfig">
+                    <p>*Aqui puedes definir los parametros CFDI 3.3 que mas utilizas</p>
+                     <h4>Claves Producto Servicio</h4>
+                     <div class="row row-spanning">
+                        <div class="col-lg-8 col-md-8 col-sm-8 col-xs-9">
+                                <div class="form-group">
+                                        <div class="input-group">
+                                            <span class="input-group-addon"><i class="fa fa-search"></i></span>
+                                            <input ng-keyup="searchClaveProd()" class="form-control" ng-model="claveProd.q" type="text">
+                                        </div>
+                                        </div>
+                                        
+                                        <ul style="position: absolute;max-height:300px;overflow:auto" class="list-group list-claveprod" ng-if="claveProdSelected==null"  ng-hide="claveProd.q == '' || claveProd.q == null">
+                                            <li style="color:black" ng-click="agregarClaveProd(p)" class="list-group-item" ng-repeat="p in claveProd.prods">{{p.codigo}} <small>{{p.descripcion}}</small></li>
+                                           
+                                        </ul>
+                        </div>
+                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-3">
+                              <div class="btn-group" style="float:left;">
+                                  <button ng-click="oculatrBusquedaProds()" class="btn-plus btn btn-primary btn-lg"><i class="fa fa-eraser"></i></button>
+                              </div>  
+                            </div>
+                     </div>
+                    
+                     <div class="row">
+                     <div class="col-lg-10 col-md-10 col-sm-10 col-xs-10">
+                            <div class="alert alert-info" ng-if="claveProdSelected!=null">
+                                    <button ng-click="deselectClaveProd()" type="button" class="close" aria-hidden="true">&times;</button>
+                                    <strong>{{claveProdSelected.codigo}}</strong>{{claveProdSelected.descripcion}}
+                                </div>
+                     </div>
+                     <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2" ng-if="claveProdSelected!=null">
+                      <div class="btn-group">
+                       <button ng-click="confirmClaveProd()" class="btn btn-lg  btn-success"><i class="fa fa-plus"></i></button>
+                      </div>
+                     </div>
+                     </div>
+                     
+                     
+                     
+                     <div class="table-responsive">
+                         <table class="table table-bordered" id="tableClavesProd">
+                             <thead>
+                                 <tr>
+                                     <th>Clave Prod.Serv.</th>
+                                     <th>Descripción</th>
+                                     <th>Opciones</th>
+                                 </tr>
+                             </thead>
+                             <tbody>
+                                 <tr ng-repeat="c in clavesProdActuales">
+                                     <td>{{c.codigo }}</td>
+                                     <td>{{c.descripcion }}</td>
+                                     <td>
+                                         <div class="btn-group">
+                                        <button ng-click="eliminarClaveProd(c)" class="btn btn-danger"><i class="fa fa-times"></i></button>
+                                         </div>
+                                     </td>
+                                     
+                                 </tr>
+                             </tbody>
+                         </table>
+                     </div>
+                   
+                          
+                               
+                             
+                                
+                     
+                     
+                     
+                 </div>
+            
+            
+            
+            
+            
+            
+            </div>
+          
+        </div>
+        
+        
+    </div> <!-- container -->
+
+
+   <!-- ModalMessagePreciosconIVA -->
+    <div class="modal fade" id="i_modalPreciosConIVA" role="dialog" style="display: none;">
+           <div class="container">
+             <div class="row">
+              <div class="col-sm-6 col-sm-offset-3 text-center modal-box">
+              <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                  
+                  <h3 style="margin:4%;">Precios con IVA</h3>
+                  
+                  <h4>Al agregar conceptos los importes se establecen con iva o sin iva </h4>
+                  <h4>Si son con iva, el programa divide entre 1.16 para quitar el iva</h4>
+                  <h4>Si son sin iva, se introducen directo al programa</h4>
+                  <button type="button" class="btn btn-default c_modalDismiss c_Accept" data-dismiss="modal" autofocus="">Aceptar</button>
+                  
+                  
+             </div>
+            </div>
+           </div>
+        </div>   <!-- /ModalMessagePreciosconIVA -->
+
+        
+    <!-- ModalMessageCambioUSD -->    
+    <div class="modal fade" id="i_modalCambioUSD" role="dialog" style="display: none;">
+           <div class="container">
+             <div class="row">
+              <div class="col-sm-6 col-sm-offset-3 text-center modal-box">
+              <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                  
+                  <h3 style="margin:4%;">Cambio de Tipo de Moneda</h3>
+                  
+                  <h4><strong>Por el momento esta función no esta disponible</strong></h4>
+                  
+                  <button type="button" class="btn btn-default c_modalDismiss c_Accept" data-dismiss="modal" autofocus="">Aceptar</button>
+                  
+                  
+             </div>
+            </div>
+           </div>
+        </div><!-- /ModalMessageCambioUSD -->  
+    
+    <!-- ModalMessageSeguro -->    
+    <div class="modal fade" id="i_modalSeguro" role="dialog" style="display: none;">
+           <div class="container">
+             <div class="row">
+              <div class="col-sm-6 col-sm-offset-3 text-center modal-box">
+              <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                  
+                  <h3 style="margin:4%;">¿Desea realizar los siguientes cambios?</h3>
+                  
+                  
+                  <button id="i_btnAceptarConfFactura" type="button" class="btn btn-default c_modalDismiss c_Accept" data-dismiss="modal" autofocus>Aceptar</button>
+                  <button type="button" class="btn  c_modalDismiss c_Cancel" data-dismiss="modal">Cancelar</button>
+                  
+                  
+             </div>
+            </div>
+           </div>
+        </div><!-- /ModalMessageSeguro -->
+        
+    <!-- ModalAjustesPrincipales -->    
+    <div class="modal fade" id="i_modalAjustesPrincipales" role="dialog" style="display: none;">
+           <div class="container">
+             <div class="row">
+              <div class="col-sm-6 col-sm-offset-3 text-center modal-box">
+              <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                  
+                  <h3 style="margin:4%;">Ajustes Principales</h3>
+                  
+                  <h4>Para realizar la facturación mas facil</h4>
+                  <h4>Puede agregar atajos para conceptos usados cotidianamente</h4>
+                  <button type="button" class="btn btn-default c_modalDismiss c_Accept" data-dismiss="modal" autofocus>Aceptar</button>
+                  
+                  
+             </div>
+            </div>
+           </div>
+        </div><!--/ModalAjustesPrincipales -->
+        
+    <!-- ModalMessageSeguroAgregar -->    
+    <div class="modal fade" id="i_modalSeguroAgregar" role="dialog" style="display: none;">
+           <div class="container">
+             <div class="row">
+              <div class="col-sm-6 col-sm-offset-3 text-center modal-box">
+              <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                  
+                  <h3 id="i_headerModal" style="margin:4%;">¿Seguro que desea guardar el siguiente atajo?</h3>
+                  <p id="i_pModal"></p>
+                  
+                  <button type="button" class="btn btn-default c_modalDismiss c_Accept" data-dismiss="modal" autofocus>Aceptar</button>
+                  <button type="button" class="btn  c_modalDismiss c_Cancel" data-dismiss="modal">Cancelar</button>
+                  
+                  
+             </div>
+            </div>
+           </div>
+        </div><!-- /ModalMessageSeguroAgregar -->
+    
+    <!-- ModalMessageEliminarAtajo -->    
+    <div class="modal fade" id="i_modalEliminarAtajo" role="dialog" style="display: none;">
+           <div class="container">
+             <div class="row">
+              <div class="col-sm-6 col-sm-offset-3 text-center modal-box">
+              <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                  
+                  <h3 style="margin:4%;">¿Seguro que desea eliminar el siguiente atajo?</h3>
+                  
+                  
+                  <button id="i_btngoElimianr" type="button" class="btn btn-default c_modalDismiss c_Accept" data-dismiss="modal" autofocus>Aceptar</button>
+                  <button type="button" class="btn  c_modalDismiss c_Cancel" data-dismiss="modal">Cancelar</button>
+                  
+                  
+             </div>
+            </div>
+           </div>
+        </div><!-- /ModalMessageEliminarAtajo -->
+        
+    <!--ModalCerrarSesion-->
+    <div class="modal fade" id="i_modalCerrarSesion" role="dialog">
+           <div class="container">
+             <div class="row">
+              <div class="col-sm-6 col-sm-offset-3 text-center modal-box">
+              <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                  <h3 class = "h3Modal">¿Esta seguro que desea cerrar sesión?</h3>
+                  
+                    <button type="button" class="btn  c_modalDismiss c_AcceptModal" data-dismiss="modal"  autofocus>Aceptar</button>
+                    <button type="button" class="btn  c_modalDismiss c_Cancel" data-dismiss="modal" >Cancelar</button>
+                  
+             </div>
+            </div>
+           </div>
+        </div><!--/ModalCerrarSesion -->
+
+    <!--ModalOpcionesUsuario-->
+    <div class="modal fade" id="i_modalOpcionesUsuario" role="dialog">
+           <div class="container">
+             <div class="row">
+              <div class="col-sm-6 col-sm-offset-3 text-center modal-box">
+              <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                  <h3 class = "h3Modal">¿Seguro que desea a ir las configuraciones?</h3>
+                   <p>Puede que la información no se haya guardado</p>
+
+                    <button onclick="location.href ='opcionesUsuario.html'" type="button" class="btn  c_modalDismiss c_AcceptModal" data-dismiss="modal" autofocus>Acceder</button>
+                    <button type="button" class="btn  c_modalDismiss c_Cancel" data-dismiss="modal">Regresar</button>
+                  
+             </div>
+            </div>
+           </div>
+        </div><!--/ModalOpcionesUsuario-->
+
+    <div class="modal fade" id="i_modalAddUnidad" role="dialog">
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-6 col-sm-offset-3 text-center modal-box">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    <h3 class="h3Modal">Agregar Unidad</h3>
+                    <label>Nueva Unidad</label>
+                    <input type="text" class="form-control c_input" id="i_inputUnidadNueva" />
+
+                    <button id="i_btnAgregarUnidad" type="button" class="btn  c_modalDismiss c_AcceptModal" data-dismiss="modal" autofocus>Acceder</button>
+                    <button type="button" class="btn  c_modalDismiss c_Cancel" data-dismiss="modal">Regresar</button>
+
+                </div>
+            </div>
+        </div>
+    </div>
+   
+
+</body>
+</html>

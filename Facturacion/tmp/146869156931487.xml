@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+                <cfdi:Comprobante xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                                  xmlns:cfdi="http://www.sat.gob.mx/cfd/3"
+                                  
+                                  
+                                  
+                                  xmlns:tfd="http://www.sat.gob.mx/TimbreFiscalDigital"
+                                  xsi:schemaLocation="http://www.sat.gob.mx/cfd/3
+                                  http://www.sat.gob.mx/sitio_internet/cfd/3/cfdv32.xsd
+                                  http://www.sat.gob.mx/TimbreFiscalDigital
+                                  http://www.sat.gob.mx/sitio_internet/TimbreFiscalDigital/TimbreFiscalDigital.xsd
+                                  
+                                  
+                                  
+                                  "
+                                  version="3.2"
+                                  serie="A"
+                                  folio="100"
+                                  fecha="2016-07-16T12:50:49"
+                                  formaDePago="PAGO EN UNA SOLA EXHIBICION"
+                                  noCertificado="00001000000301604942"
+                                  certificado="MIIEdTCCA12gAwIBAgIUMDAwMDEwMDAwMDAzMDE2MDQ5NDIwDQYJKoZIhvcNAQEFBQAwggGKMTgwNgYDVQQDDC9BLkMuIGRlbCBTZXJ2aWNpbyBkZSBBZG1pbmlzdHJhY2nDs24gVHJpYnV0YXJpYTEvMC0GA1UECgwmU2VydmljaW8gZGUgQWRtaW5pc3RyYWNpw7NuIFRyaWJ1dGFyaWExODA2BgNVBAsML0FkbWluaXN0cmFjacOzbiBkZSBTZWd1cmlkYWQgZGUgbGEgSW5mb3JtYWNpw7NuMR8wHQYJKoZIhvcNAQkBFhBhY29kc0BzYXQuZ29iLm14MSYwJAYDVQQJDB1Bdi4gSGlkYWxnbyA3NywgQ29sLiBHdWVycmVybzEOMAwGA1UEEQwFMDYzMDAxCzAJBgNVBAYTAk1YMRkwFwYDVQQIDBBEaXN0cml0byBGZWRlcmFsMRQwEgYDVQQHDAtDdWF1aHTDqW1vYzEVMBMGA1UELRMMU0FUOTcwNzAxTk4zMTUwMwYJKoZIhvcNAQkCDCZSZXNwb25zYWJsZTogQ2xhdWRpYSBDb3ZhcnJ1YmlhcyBPY2hvYTAeFw0xMzEyMDcxNzEyMDNaFw0xNzEyMDcxNzEyMDNaMIHBMSYwJAYDVQQDEx1NSUdVRUwgQU5HRUwgR09OWkFMRVogTkFWQVJSTzEmMCQGA1UEKRMdTUlHVUVMIEFOR0VMIEdPTlpBTEVaIE5BVkFSUk8xJjAkBgNVBAoTHU1JR1VFTCBBTkdFTCBHT05aQUxFWiBOQVZBUlJPMRYwFAYDVQQtEw1HT05NNTQwMzEyQjQzMRswGQYDVQQFExJHT05NNTQwMzEySEpDTlZHMDQxEjAQBgNVBAsTCVRBQkNISU5FUzCBnzANBgkqhkiG9w0BAQEFAAOBjQAwgYkCgYEAm3BVwQtl/LlJYp47LZ5QgvWllGhkTKcGj1V/j8KD1yftzzsCLSHsBYEBPDGFpPlZ0ag0y9q8FjNPRg2QGegEUhsfSDYl9wJJbbzMK3pfgTl7szXczM+B/EeAbFeyqs+cde0ywPtP/U3UjpW2yh9UEEvvPJDeyIBE0S1GU6dBElkCAwEAAaMdMBswDAYDVR0TAQH/BAIwADALBgNVHQ8EBAMCBsAwDQYJKoZIhvcNAQEFBQADggEBAIb9QN0tcGQ2NWkbo9vAzKPk3HTUDRqiVObluC/Mh09KJqrFCigmGpOK2rT3sAxOUxmDALUnnxWR0NKVtYuo5fZGB4AyE8Wx5ax9RZDaICRmzMqxW9zh0OdYLJwEu/MXe01UJtI6KwgkoG7xp4xPCkLUNvL51U03MVMqP5y0Vq28ro8ORoiVKWXmetYfZnmBXmJ22VatLb/tUJSh7FdkPqavefvxDo9vFX10LVzbfKCZDvmcIkJLKbwGetu5ge5CS4js6eTh1B00SenODJsKPLhcq+j1pH1ds37mAToH6t5Xz7qLKQr9N8VN4XyR/tGF9JRX+1tZVcSGsOlBZtesDEg="
+                                  subTotal="1.00"
+                                  descuento="0.0000"
+                                  total="1.16"
+                                  metodoDePago="EFECTIVO"
+                                  tipoDeComprobante="ingreso"
+                                  TipoCambio="1.0000"
+                                  Moneda="MXN"
+                                    LugarExpedicion="MONTERREY, NUEVO LEON"
+                                  
+                                   
+                                   >
+        
+                  <cfdi:Emisor
+                         rfc="GONM540312B43"
+                         nombre="MIGUEL ANGEL GONZALEZ NAVARRO">
+                    <cfdi:DomicilioFiscal
+                                calle="AVENIDA TABACHINES"
+                                noExterior="2970"
+                                
+                                colonia="TABACHINES"
+                                localidad="ZAPOPAN"
+                                municipio="ZAPOPAN"
+                                estado="JALISCO"
+                                pais="MEXICO"
+                                codigoPostal="45188" />
+                    <cfdi:ExpedidoEn
+                                calle="AVENIDA TABACHINES"
+                                noExterior="2970" 
+                                
+                                colonia="TABACHINES"
+                                localidad="ZAPOPAN"
+                                municipio="ZAPOPAN"
+                                estado="JALISCO"
+                                pais="MEXICO"
+                                codigoPostal="45188" />
+                    <cfdi:RegimenFiscal Regimen="MI REGIMEN" />
+                  </cfdi:Emisor>
+                
+                  <cfdi:Receptor
+                        rfc="XAXX010101000"
+                        nombre="PUBLICO GENERAL">
+                  </cfdi:Receptor>
+                  
+                  <cfdi:Conceptos>
+        <cfdi:Concepto cantidad="1" unidad="PIEZA" noIdentificacion="1" descripcion="producto prueba" valorUnitario="1.00" importe="1.00"></cfdi:Concepto>
+                            
+                  </cfdi:Conceptos>
+                  
+                  <cfdi:Impuestos totalImpuestosTrasladados="0.1600"  totalImpuestosRetenidos="0.0000" >
+                    
+                    
+                        <cfdi:Traslados>
+                       <cfdi:Traslado impuesto="IVA" tasa="16" importe="0.16" />    
+                        </cfdi:Traslados> 
+                  </cfdi:Impuestos>
+            
+                  
+                </cfdi:Comprobante>
+        

@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Factura</title>
+  <meta name="dompdf.view" content="FitH">
+  
+  <meta charset="utf-8">
+  <link href="https://fonts.googleapis.com/css?family=Caveat+Brush|Dosis|Indie+Flower|Lobster|Fjalla+One|Open+Sans+Condensed:300|Roboto|Sansita" rel="stylesheet">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<link rel="stylesheet" href="https://luxline.com.mx/joseO/LuxFacturacion/dompdf/style.css"/>
+
+</head>
+<body>
+<div class="container-fluid">
+<div class="row" style="margin-right:222px;transform:translate(0,-20px);">
+<div class="col-xs-4">
+<img  class="img-responsive"  src="https://luxline.com.mx/joseO/LuxFacturacion/dompdf/logo.png" />
+</div>
+<div class="col-xs-6">
+  <div class="info-emisor">
+<h4>Maria Elene Iñiguez Diaz de Leon</h4>
+<p>Calle de la mancha 1212</p>
+<p>Colonia la martinica</p>
+<p>Guadalajara, Jalisco México</p>
+<p>RFC: PIJA12123DOSHUVOIS12</p>
+<p>Lugar de Expedicion: la pija y los dos huevos</p>
+<p>tobalin01@gmail.com</p>
+  </div>
+
+</div>
+<div class="col-xs-2" style="transform:translate(0,-20px);">
+
+<table class="table-factura-detalles">
+  <tbody>
+    <tr>
+      <td>Factura</td>
+    </tr>
+    <tr>
+      <td>Serie: A Folio:122</td>
+    </tr>
+    <tr>
+     <td> No. de Certificado</td> 
+       </tr>
+<tr>
+  <td>20001000000100005867</td>
+</tr>
+<tr>
+<td>No. Certificado SAT</td>
+
+</tr>
+<tr>
+  <td>20001000000100005761</td>
+</tr>
+<tr>
+  <td>Fecha y Hora de Timbrado    </td>
+</tr>
+<tr>
+  <td>2016-07-19T17:21:04</td>
+</tr>
+      </tbody>
+</table>
+
+
+</div>
+</div>
+
+
+    <table class="table table-bordered table-params" style="transform: translate(0,-25px);">
+      <tbody>
+    <tr>
+       <td class="td-important">Folio SAT(UUID):</td>
+      <td>13E1C5CB-86CB-4183-BFD2-033877C52405</td>
+      <td class="td-important">Fecha de impresión</td>
+      <td>22 de octubre del 2017 12:12:12</td>
+    </tr>
+    <tr>
+        <td class="td-important">Método de Pago:</td>
+       <td>Efectivo</td>
+       <td class="td-important">Tipo de Comprobante</td>
+       <td>Ingreso</td>
+     </tr>
+     <tr>
+        <td class="td-important">Moneda:</td>
+       <td>MXN</td>
+       <td class="td-important">Tipo de Cambio</td>
+       <td>1.00</td>
+       
+     </tr>
+     <tr>
+       <td class="td-important">Num. Cuenta Pago</td>
+       <td>1234</td>
+     
+     </tr>
+
+      </tbody>
+ 
+    
+    
+    </table>
+    <div class="datos-cliente">
+<h4 class="header-important">
+  Datos del cliente
+</h4>
+<table class="table table-bordered" style="margin-top: -10px;">
+<tbody>
+<tr>
+<td>Nombre: Cristobal de Jesús Flores Iñiguez </td>
+<td>RFC: PIJASD123123123</td>
+</tr>
+<tr>
+    <td>Siempre Viva de la torre 1212 CP 1212 la pija Distrito Federal , DISTRITO FEDERAL</td>
+    <td>Telefono: 3335802929</td>
+
+</tr>
+
+
+</tbody>
+
+</div>
+<div class="conceptos">
+<table class="table table-bordered table-striped">
+<thead>
+<tr class="tr-important">
+  <td>Cantidad</td>
+  <td>No. Serie</td>
+  <td>Descripción</td>
+  <td>Unidad</td>
+  <td>Precio</td>
+  <td>Importe</td>
+</tr>
+</thead>
+<tbody>
+#conceptos
+
+</tbody>
+
+</table>
+
+
+</div>
+
+<table class="table table-bordered" style="margin-top: -35px;">
+<tr>
+  <td class="td-important col-xs-8">Importe con letra</td>
+  <td class="col-xs-2">Subtotal</td>
+  <td class="col-xs-2">$187,455,444</td>
+</tr>
+<tr>
+    <td class="col-xs-8 border-less">Ciento ochenta millones docientos mil</td>
+    <td class="col-xs-2">Descuento</td>
+    <td class="col-xs-2">$0.00</td>
+  </tr>
+  <tr>
+      <td class="col-xs-8 border-less"></td>
+      <td class="col-xs-2">Ret. Iva</td>
+      <td class="col-xs-2">$0.00</td>
+    </tr>
+    <tr>
+        <td class="col-xs-8 border-less"></td>
+        <td class="col-xs-2">Ret. ISR</td>
+        <td class="col-xs-2">$0.00</td>
+      </tr>
+      <tr>
+          <td class="col-xs-8 border-less"></td>
+          <td class="col-xs-2">Iva</td>
+          <td class="col-xs-2">$12,121</td>
+        </tr>
+        <tr>
+            <td class="col-xs-8 border-less"></td>
+            <td class="col-xs-2">Total</td>
+            <td class="col-xs-2">$12,121</td>
+          </tr>
+
+
+</table>
+
+<div class="row">
+  <div class="col-xs-3">
+<img  src="https://luxline.com.mx/joseO/LuxFacturacion/dompdf/11_2016_07_19_3.png" />
+  </div>
+  <div class="col-xs-9">
+    
+    <ul class="list-group cadenas">
+      <li class="list-group-item td-important">Sello Digital del CFDI</li>
+      <li class="list-group-item">
+          3pq+AMBqxnbXOvoXZkD5FC4Yt/Zcwq3M5bpLQvwcXbIUsqJ/5qu7OxRnY0CHhgN5
+          7l2If1oluA3HjFnF<br>
+          r11CbxWOa4eSGBbvGNsJj5KCq2qqdyWwuwYiqrxazNVwf2MvLCMK+eQM3FFnvY<br>
+          wZR8aI/ySra2Xo3/2fG3CsexZC08 KV8nxPF5ojlzpu4/<br>
+          gIK4W+EF9xnd/lSV+En23e3g7g+uT79OYvZly/CLJyyMGWGGtancOfzdZ4UHzPD<br>
+          /zuu5qj/mkegcvIqcZpvcu11x4bdbmLlXQIyyQ0mhQfiI218qv+cXKwGhIc0VJXr<br>
+          HpEA/9OlF+7<br>
+
+      </li>
+      <li class="list-group-item td-important">Sello Digital SAT</li>
+      <li class="list-group-item">
+          3pq+AMBqxnbXOvoXZkD5FC4Yt/Zcwq3M5bpLQvwcXbIUsqJ/5qu7O<br>
+          xRnY0CHhgN57l2If1oluA3HjFnFr11CbxWOa4eSGBbvGNsJj5KCq2qqdy<br>
+          WwuwYiqrxazNVwf2MvLCMK+eQM3FFnvYwZR8aI/ySra2Xo3/2fG3CsexZC<br>
+          08 KV8nxPF5ojlzpu4/gIK4W+EF9xnd/lSV+En23e3g7g+uT79OYvZly/CL<br>
+          JyyMGWGGtancOfzdZ4UHzPD/zuu5qj/mkegcvIqcZpvcu11x4bdbmLlXQIyyQ0<br>
+          mhQfiI218qv+cXKwGhIc0VJXrHpEA/9OlF+7
+      </li>   
+      <li class="list-group-item">
+          1.0|45110956-c0fd-4fb1-ae92-3d8340ef09b4|2017-05-18T12:26:04<br>
+          |PK3pq+AMBqxnbXOvoXZkD5FC4Yt/Zcwq3M5bpLQvwcXbIUsqJ/5qu7OxRn<br>
+          Y0CHhgN57l2If1oluA3HjFnFr11CbxWOa4eSGBbvGNsJj5KCq2qqdyWwuwY<br>
+          iqrxazNVwf2MvLCMK+eQM3FFnvYwZR8aI/y Sra2Xo3/2fG3CsexZC08K<br>
+          V8nxPF5ojlzpu4/gIK4W+EF9xnd/lSV+En23e3g7g+uT79OYvZly/CLJy<br>
+          yMGWGGtancOfzdZ4UHzPD/zuu5qj/mkegcvIqcZpvcu11x4bdbmLlXQIyyQ0m<br>
+          hQfiI218qv+cXKwGhIc0VJXrHpEA/9OlF+7mQg/n/8CYHC0PFLg==|200010000
+          00300022323||<br>
+      </li>        
+    </ul>
+    <label class="text-center">Esta es una representaciín impresa de un CFDI</label>
+
+    </div>
+  </div>
+</div>
+
+
+    
+    
+
+
+
+
+</body>
+</html>

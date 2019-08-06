@@ -1,0 +1,3 @@
+function ctrlOpcionesUsr($scope){
+    
+}

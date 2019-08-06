@@ -1,0 +1,1109 @@
+﻿<?php
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+
+
+    require_once("../Login/php/Functions.php");   
+    $link = linkDBLuxLine();
+    $luxlineObj = new luxlineWebLogin($link);
+
+    $luxlineObj->initialCheckUpSystems();
+
+if(isset($_GET['folio'])&&isset($_GET['tipo'])){
+    
+ $sql = createMysqliConnection();
+$query="SELECT cantidad,descripcion,unidad,precio,importe,noSerie,claveProdId,claveProdCodigo,claveProdDescripcion FROM `folio_conceptos` WHERE idFacturaPendiente = ?";
+ $conceptos_db = $sql->get_bind_results($query,array("i",$_GET['idPendiente']));
+$len = count($conceptos_db);$i = 0;
+
+ for(;$i<$len;$i++){
+     $c =$conceptos_db[$i];
+     $claveProd = array(
+    "id"=>$c['claveProdId'],
+    "codigo"=>$c['claveProdCodigo'],
+    "descripcion"=>$c['claveProdDescripcion'],
+     );
+     $conceptos_db[$i]['claveProdServ']=$claveProd;
+     
+
+
+ }
+ $_SESSION['conceptos'] =  $conceptos_db;
+}
+
+?>
+
+<!--Desarrollado por Luxline Solutions   acerca de aplazar el tiempo de desarrollo para hacerlo mas liviano y-->
+<html lang="es-mx">
+    <?php
+include("includes/head.php");
+
+    ?>
+    <script>
+    var idCliente = <?= $_GET['id'] ?>;
+    var metodoDePago = <?php (isset($_GET['metodoPago']))?print_r("'".$_GET['metodoPago']."'"):print_r('0'); ?>;
+    var formaDePago = <?php (isset($_GET['formaPago']))?print_r("'".$_GET['formaPago']."'"):print_r('0'); ?>;
+        
+    </script>
+    <script src="js/services/facturacion/facturarService.js"></script>
+    <script src="js/controllers/facturacion/ctrlFactura33.js"></script>
+    <script src="js/controllers/facturacion/ctrlGuardarTimbrar.js"></script>
+
+<script src="js/app.js"></script>
+<style>
+    .pedimentoSelected{
+        background-color: #3498db !important;
+        color: white;
+    }
+    </style>
+</head>
+
+<body ng-app="app" ng-controller="ctrlFactura" ng-cloak>  
+
+    <?php   if(!isset($_GET['id'])){echo "<script>location.href = 'index.html'</script>"; } ?>
+
+<div id = "i_modalBlur">
+
+<nav class="navbar navbar-default">
+  <div class="container-fluid">
+    <div class = "row visible-xs ">
+      <img src="img/luxline.png" style = "height:8%;" id = "i_navBarLogo" alt="lux_logo">
+    </div>
+    <div class="navbar-header" style = "margin:1%;">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span> 
+      </button>
+      <img src="img/luxline.png" class = "visible-md visible-lg visible-sm" id = "i_navBarLogo" alt="lux_logo">
+    </div>
+    <div class="collapse navbar-collapse" id="myNavbar">
+        <ul class="nav navbar-nav" style = "margin:1%;" >
+      <li><a href="index.html"> Facturar</a></li>
+      <li><a href="folios.html">Folios</a></li>
+      <li><a href="AgrModAtajo.html">Ajustes</a></li>
+    </ul>
+        <ul class="nav navbar-nav navbar-right">
+            <li data-toggle="modal" data-target="#i_modalOpcionesUsuarios"><a href="#"><span class="fa fa-user" style="font-size:20px;" aria-hidden="true"></span></a></li>
+      <li data-toggle= "modal"  data-target="#i_modalCerrarSesion"><a href="#"><span class="fa fa-sign-out" style = "font-size:20px;" aria-hidden="true"></span></a></li>
+    </ul>
+    </div>
+  </div>
+</nav>
+
+ <div class = "container-fluid" id = "i_content"> 
+    
+     <div class="row c_marginElement">
+
+        <div class="col-xs-12">
+
+            <h3 id="i_nombreCliente">{{cliente.nombre}}</h3>
+
+        </div>
+
+    </div> <!-- nombre cliente -->
+
+     <div class="row c_marginElement">
+
+         <div class="col-xs-12">
+
+             <div class="table-responsive" >
+
+                 <table class="table table-bordered">
+
+                     <thead>
+
+                         <tr>
+
+                             <th>RFC</th>
+
+                             <th>Email</th>
+
+                             <th>Domicilio</th>
+
+                             <th>Telefono</th>
+
+                         </tr>
+
+                     </thead>
+
+                     <tbody id="i_tableCliente">
+                        <tr>
+                        <td>{{cliente.RFC}}</td>   
+                        <td>{{cliente.email}}</td>    
+                        <td>{{cliente.domicilio}}</td>    
+                        <td>{{cliente.telefono}}</td>    
+ 
+                        </tr>
+                        
+                        </tbody>
+
+                 </table>
+
+             </div> <!-- table-responsive -->
+
+         </div>
+
+     </div> <!-- table head -->
+     <div class="row c_inputForm">
+        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+<label>Serie</label>
+<select ng-change="cambiarFolio()" class="c_input form-control" ng-model="params.serie">
+    <option value="{{s.serie}}" ng-repeat="s in series">{{s.serie}}</option>
+    </select>
+        </div>
+        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+            <label>Folio</label>
+       <input style="color:black;" readonly class="c_input form-control" ng-model="params.folio" />
+        </div>
+
+     </div>
+    <div class="row c_inputForm">
+
+        <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+
+            <label for="selectMetodoPago">Metodo de Pago</label>
+
+            <select ng-model="params.metodosPago" class="c_input form-control c_facturaParams" id="i_selectMetodoPago" >
+
+         <option ng-repeat="m in metodosPago" value="{{m.idMetodoPago}}">{{m.nombre}}</option>
+
+
+            </select>
+
+        </div>
+
+        <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+
+            <label>Forma de Pago</label>
+
+            <div id="divFormaPago">
+
+                <select ng-model="params.formasPago" id="i_selectFormaPago" class="c_input form-control c_facturaParams">
+                    <option ng-repeat="f in formasPago" value="{{f.id}}">{{f.nombre}}</option>
+                </select>
+            </div>
+        </div>
+        <div id="i_divNoCuenta" class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+            <label for="i_checkeCuenta">Número de cuenta</label>
+            <input ng-model="params.numCuenta" placeholder="Al menos los ultimos 4 dígitos" type="text" class="form-control c_input c_facturaParams" id="i_checkeCuenta" />
+
+        </div>
+
+        <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+
+            <label for="inputDescuento">Descuento</label>
+
+            <input ng-model="params.descuento" placeholder="% de Descuento" type="number" id="i_inputDescuento" class="c_input form-control c_facturaParams" />
+
+
+
+        </div>
+       
+
+        <div style="padding-top:25px;" class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+
+            <button class="btn btn-block c_Accept" data-toggle="modal"  data-target = "#i_modalSeguroAplicar"> Aplicar</button>
+
+        </div>
+
+
+
+    </div> <!-- tipos de conceptos y descuentos -->
+    <div class="row c_inputForm">
+     <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+        <label for="Condiciones">Condiciones de Pago</label>
+        <input id="Condiciones" type="text" class="form-control c_input" ng-model="params.condicionesPago">
+
+        </div>
+        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+            <label for="usoCFDI">Uso del CFDI</label>
+            <select id="usoCFDI" class="form-control c_input" ng-model="params.usoCFDI">
+                <option ng-repeat="u in usosCFDI" value="{{u.codigo}}">{{u.nombre}}</option>
+                </select>
+        </div>
+
+    </div>
+
+    <div class="row c_marginElement">
+        <div id="i_divPredial" class="col-lg-4 col-md-4 col-sm-4 col-xs-12" ng-if="config.tipo_factura==1">
+            <label>Predial</label>
+            <input ng-model="params.predial" type="text" id="i_inputPredial" class="c_facturaParams form-control c_input" />
+        </div>
+        <div  ng-class="{'col-lg-4 col-md-4 col-sm-4 col-xs-12': config.tipo_factura==1,'col-lg-6 col-md-6 col-sm-6 col-xs-12':config.tipo_factura!=1 }" >
+
+            <label style = "display:inline;" for="i_retenerIVA">Retener IVA</label>
+
+            <input ng-model="config.retencion_IVA" class="c_retencion" type="checkbox" id="i_retenerIVA"  />
+            
+            <i style = "display:inline; margin-left:inherit;" class="fa fa-question-circle" data-toggle="modal"  data-target = "#i_modalRetenerIVA"></i>
+    
+
+        </div>
+
+        <div  ng-class="{'col-lg-4 col-md-4 col-sm-4 col-xs-12': config.tipo_factura==1,'col-lg-6 col-md-6 col-sm-6 col-xs-12':config.tipo_factura!=1 }" >
+
+            <label style = "display:inline;" for="i_retenerISR">Retener ISR</label>
+
+            <input ng-model="config.retener_ISR"  class="c_retencion" type="checkbox" id="i_retenerISR" />
+            
+            <i style = "display:inline; margin-left:inherit;" class="fa fa-question-circle" data-toggle="modal"  data-target = "#i_modalRetenerISR"></i>
+            <div ng-show="config.retener_ISR" class="form-group">
+                <label>Tasa de ISR%</label>
+                <input ng-change="controlRangoIsr()" type="number" class="form-control c_input" ng-model="config.retencion_ISR" />
+                 <p style="color:#f1c40f;font-weight:bold" ng-show="config.retencion_ISR>35">La tase del isr NO puede ser mayor al 35%</p>
+
+                 </div>
+            
+  
+        </div>
+
+    </div><!--/check-boxes -->
+    <div class="row">
+<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+    <label class="radio-inline"><input value="I" ng-model="config.tipo" type="radio" name="optradio">Ingreso</label>
+<label class="radio-inline"><input value="E" ng-model="config.tipo" type="radio" name="optradio">Egreso(Nota de crédito)</label>
+
+</div>
+<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+    <label for="moneda">Moneda</label>
+<select id="moneda" ng-model="config.moneda" class="form-control c_input">
+    <option value="{{m.idMoneda}}" ng-repeat="m in monedas">{{m.nombre}} T.C {{m.tipo_cambio}}</option>
+    </select>
+
+</div>
+
+    </div>
+     <h3>Agregar concepto</h3>
+     <hr />
+    <div class="row">
+        <div class="col-xs-12">
+            <h4>Producto de Importación <input ng-model="nuevoConcepto.isImportado" id="chckImportacion" type="checkbox" /></h4>
+            <div  id="tableImportacion" ng-show="nuevoConcepto.isImportado">
+                <h4>Pedimentos <button ng-click="modalInfoMedimentos()" class="btn-trasnparent"><i class="fa fa-question-circle"></i></button></h4>
+                <ul class="list-group list-pedimentos">
+             
+
+                    <li ng-if="nuevoConcepto.pedimento==null" ng-class="{'pedimentoSelected':p.selected}" ng-click="setPedimento(p)" ng-repeat="p in pedimentos" class="list-group-item pedimento"><h4>{{p.numero_pedimento}}  <label class="label label-success">{{p.aduana}}</label></h4></li>
+                    <li ng-if="nuevoConcepto.pedimento!=null"  ng-click="unselectPedimento(p)"  class="pedimentoSelected list-group-item pedimento"><h4>{{nuevoConcepto.pedimento.numero_pedimento}}  <label class="label label-success">{{nuevoConcepto.pedimento.aduana}}</label></h4></li>
+
+                </ul>
+
+            </div>
+        </div>
+    </div>
+    <div class="row c_marginElement">
+        <div  class="col-xs-12 visible-lg visible-md">
+
+            <div class="table-responsive">
+
+                <table class="table table-bordered" ng-class="{'on-edit':accion==1}">
+
+                    <thead>
+
+                        <tr>
+
+                            <th class="col-xs-1">Atajo &nbsp&nbsp&nbsp<button onclick="window.open('AgrModAtajo.html')" class="btn btn-success"><i style="font-size:20px;" class="fa fa-share" aria-hidden="true"></i></button> </th>
+                            <th class="col-xs-2">
+                                Clave ProdServ.
+                                </th>
+                            <th class="col-xs-3">Descripción</th>
+                            <th class="col-xs-1">No.Serie</th>
+
+                            <th class="col-xs-1">Unidad de medida</th>
+
+                            <th class="col-xs-1">Cantidad</th>
+
+                            <th class="col-xs-1">Precio Unitario</th>
+
+                            <th class="col-xs-1">Importe</th>
+
+                            <th class="col-xs-1"><i style="font-size:22px;" class="fa fa-wrench" aria-hidden="true"></i></th>
+
+                        </tr>
+
+                    </thead>
+
+                    <tbody id="i_tableConceptos">
+
+                        <tr>
+
+                            <td>
+                              <input ng-change="buscarAtajo()" ng-model="atajo.q" type="text" class="form-control c_input" placeholder="Busca un atajo"  />
+                                
+                                <ul class="list-group list-claveprod">
+                                    <li ng-click="agregarAtajo(a)" style="color:black" class="list-group-item" ng-repeat="a in atajo.atajos">{{a.atajo}} <small>{{a.descripcion}}</small></li>
+                                    
+                                </ul>
+                                
+                                </td>
+                                <td>
+                                    <div class="input-group">
+                                        <span   class="input-group-addon"><i class="fa fa-search"></i></span>
+                                        <input ng-change="buscarProdServ()" ng-model="prodServ.q" type="text" class="form-control c_input" placeholder="Busca una clave prod."  />
+
+                                    </div>
+                                
+                                <ul  class="list-items-search list-group list-claveprod" ng-if="nuevoConcepto.claveProdServ==null&&prodServ.prods.length>0">
+                                    <li ng-click="agregarProdServ(a)" style="color:black" class="list-group-item" ng-repeat="a in prodServ.prods">{{a.codigo}} <small>{{a.descripcion}}</small></li> 
+                                </ul>
+                                <div class="alert alert-info" ng-if="nuevoConcepto.claveProdServ!=null">
+                                    <button ng-click="deselectClaveProd()" type="button" class="close"  aria-hidden="true">&times;</button>
+                                    <strong>{{nuevoConcepto.claveProdServ.codigo}}</strong> {{nuevoConcepto.claveProdServ.descripcion}}
+                                </div>
+                                
+                                </td>
+                            <td><textarea ng-model="nuevoConcepto.descripcion" rows="4" class="form-control c_input" id="i_inputDesc"></textarea>   </td>
+                            <td><input ng-model="nuevoConcepto.noSerie" id="i_inputNoSerie" type="text" class="form-control c_input" /></td>
+
+                            <td id="i_tdUniad">
+                                <select ng-model="nuevoConcepto.unidad" id="i_inputUnidad" class="form-control c_input">
+                                   <option ng-repeat="u in unidades" value="{{u.codigo}}">{{u.nombre}}</option>
+                                </select>
+                            </td>
+
+                            <td><input ng-change="calcularConcepto()" ng-model="nuevoConcepto.cantidad" class="form-control c_input" type="number" id="i_inputCantidad" /> </td>
+
+                            <td><input ng-change="calcularConcepto()" ng-model="nuevoConcepto.precio"  class="form-control c_input" type="number" id="i_inputPrecio" /> </td>
+
+                            <td><input style="background-color:transparent;color:white" readonly ng-model="nuevoConcepto.importe"  class="form-control c_input" type="number" id="i_inputImporte" /> </td>
+
+                            <td>
+                                <button ng-click="agregarConcepto()" id="i_btnAgregar" class="btn btn-block c_Accept "> 
+                                    <i  ng-if="accion==0"  style="font-size:22px;" class="fa fa-plus" aria-hidden="true"></i>
+                                    <i  ng-if="accion==1"  style="font-size:22px;" class="fa fa-check" aria-hidden="true"></i>
+
+                                    </button>
+
+                                <button ng-click="deshacerNuevo()" id="i_btnUnDo" class="btn btn-block c_Accept" > <i style="font-size:22px;" class="fa fa-refresh" aria-hidden="true"></i></button>
+
+                            </td>
+
+
+
+
+
+                        </tr>
+
+
+
+
+
+                    </tbody>
+
+                </table>
+
+            </div>                          
+        </div>
+      
+    </div>
+   
+
+     <div id="i_mobileAdd" class="visible-xs visible-sm">
+         <div style="padding-top:11px;" class="row">
+             <div class="col-xs-12"><strong>Atajo &nbsp&nbsp&nbsp<button onclick="window.open('AgrModAtajo.html')" class="btn btn-success"><i style="font-size:20px;" class="fa fa-share" aria-hidden="true"></i></button></strong></div>
+         </div>
+
+         <div style="padding-top:11px; color:black;" class="row">
+             <div class="col-xs-12">
+                <input ng-change="buscarAtajo()" ng-model="atajo.q" type="text" class="form-control c_input" placeholder="Busca un atajo"  />
+                                
+                                <ul class="list-group">
+                                    <li ng-click="agregarAtajo(a)" style="color:black" class="list-group-item" ng-repeat="a in atajo.atajos">{{a.atajo}} <small>{{a.descripcion}}</small></li>
+                                    
+                                </ul>
+                
+                </div>
+         </div>
+         <div class="row">
+          <div class="col-xs-12" style="padding-top:11px;position:relative" >
+                <div class="input-group">
+                                        <span   class="input-group-addon"><i class="fa fa-search"></i></span>
+                                        <input ng-change="buscarProdServ()" ng-model="prodServ.q" type="text" class="form-control c_input" placeholder="Busca una clave prod."  />
+
+                                    </div>
+                                
+                                <ul  class="list-items-search list-group list-claveprod" ng-if="nuevoConcepto.claveProdServ==null">
+                                    <li ng-click="agregarProdServ(a)" style="color:black" class="list-group-item" ng-repeat="a in prodServ.prods">{{a.codigo}} <small>{{a.descripcion}}</small></li> 
+                                </ul>
+                                <div class="alert alert-info" ng-if="nuevoConcepto.claveProdServ!=null">
+                                    <button ng-click="deselectClaveProd()" type="button" class="close"  aria-hidden="true">&times;</button>
+                                    <strong>{{nuevoConcepto.claveProdServ.codigo}}</strong> {{nuevoConcepto.claveProdServ.descripcion}}
+                                </div>
+          </div>
+         </div>
+
+         <div style="padding-top:11px;" class="row">
+             <strong>Descripción</strong>
+             <div class="col-xs-12"><textarea ng-model="nuevoConcepto.descripcion" class="c_mobileInps form-control c_input"></textarea></div>
+         </div>
+         <div style="padding-top:11px;" class="row">
+             <div class="col-xs-6"><strong>No.Serie</strong></div>
+             <div class="col-xs-6"><input ng-model="nuevoConcepto.noSerie" class="c_mobileInps form-control c_input"/></div>
+         </div>
+         <div style="padding-top:11px;" class="row">
+             <div class="col-xs-6"><strong>Unidad de medida</strong></div>
+             <div class="col-xs-6">
+                 <select ng-model="nuevoConcepto.unidad" id="i_inputMedidaMobile" class="c_input form-control c_mobileInps">
+                     <option ng-repeat="u in unidades" value="{{u.codigo}}">{{u.nombre}}</option>
+                 </select>
+             </div>
+         </div>
+         <div style="padding-top:11px;" class="row">
+             <div class="col-xs-6"><strong>Cantidad</strong></div>
+             <div class="col-xs-6"><input ng-change="calcularConcepto()"  ng-model="nuevoConcepto.cantidad" id="i_inputCantidadMob" type="number" class="form-control c_input c_mobileInps c_updateInputs" /></div>
+         </div>
+         <div style="padding-top:11px;" class="row">
+             <div class="col-xs-6"><strong>Precio</strong></div>
+             <div class="col-xs-6"><input ng-change="calcularConcepto()"  ng-model="nuevoConcepto.precio" id="i_inputPrecioMob" type="number" class="form-control c_input c_mobileInps c_updateInputs" /></div>
+         </div>
+         <div style="padding-top:11px;" class="row">
+             <div class="col-xs-6"><strong>Importe</strong></div>
+             <div class="col-xs-6"><input  ng-model="nuevoConcepto.importe" id="i_inputImporteMob" type="number" class="form-control c_input c_mobileInps c_updateInputs" /></div>
+         </div>
+         <div style="padding-top:11px;" class="row">
+             <div class="col-xs-6"><strong>Opciones</strong></div>
+             <div class="col-xs-6">
+                 <div class="btn-group-horizontal">
+                     <button ng-click="agregarConcepto()" id="i_btnMobileAgregar" class="btn btn-default">
+                        <i  ng-if="accion==0"  style="font-size:22px;" class="fa fa-plus" aria-hidden="true"></i>
+                        <i  ng-if="accion==1"  style="font-size:22px;" class="fa fa-check" aria-hidden="true"></i>
+
+                        </button>
+                     <button ng-click="deshacerNuevo()"  class="btn btn-default"><i style="font-size:20px;" class="fa fa-undo" aria-hidden="true"></i></button>
+                 </div>
+             </div>
+         </div>
+         </div>
+
+    <h3>Conceptos agregados</h3>
+     <div class="row visible-lg visible-md visible-sm">
+         <div class="col-xs-12">
+             <div class="table-responsive" ng-show="conceptos.length>0">
+                 <table id="i_tableConceptosAgregadosHideShow" class="table table-bordered">
+                     <thead>
+                         <tr>
+                            <th class="col-xs-1">Clave Prod.Serv.</th>
+                             <th class="col-xs-2">Descripción</th>
+                             <th class="col-xs-1">No.Serie</th>
+
+                             <th class="col-xs-2">Unidad de medida</th>
+                             <th class="col-xs-1">Cantidad</th>
+                             <th class="col-xs-2">Precio Unitario</th>
+                             <th class="col-xs-2">Importe</th>
+                             <th class="col-xs-1"><i style="font-size:20px;" class="fa fa-wrench" aria-hidden="true"></i></th>
+                         </tr>
+                     </thead>
+                     <tbody id="i_tableConceptosAgregados">
+                        <tr ng-repeat="c in conceptos">
+                            <td>{{c.claveProdServ.codigo}}</td>
+                            <td>{{c.descripcion}}
+                                <div ng-if="c.isImportado">
+                                    <a style="color:#3498db;cursor:pointer" data-toggle="popover" title="Producto de importación"  data-html="true" data-content="<label>Num. de pedimento: {{c.pedimento.numero_pedimento}}</label></label><br><label>Aduana:{{c.pedimento.aduana}}</label></label><br></label><br>">Importado</a>
+                                    </div>
+                                </td>
+                            <td>{{c.noSerie}}</td>
+                            <td>{{c.unidad}}</td>
+                            <td>{{c.cantidad}}</td>
+                            <td>{{c.precio |currency}}</td>
+                            <td>{{c.importe |currency}}</td>
+                            <td><div class="btn-group">
+                                <button ng-click="modConcepto($index)" class="btn btn-primary"><i class="fa fa-cog"></i></button>
+                                <button ng-click="eliminarConcepto(c)" class="btn btn-danger"><i class="fa fa-times"></i></button>
+
+                                </div>
+                                </td>
+
+
+
+                            </tr>
+                        
+                        </tbody>
+                 </table>
+             </div>
+         </div>
+     </div>
+    <div id="i_xsRowing" class="visible-xs">
+         
+         <div class="table-responsive" ng-repeat="c in conceptos">
+             <table class="table table-bordered">
+                 <thead>
+                        <tr>
+                         <th>Clave Prod.Serv</th>
+                         <td>{{c.claveProdServ.codigo}}</td>
+                     </tr>
+                     <tr>
+                         <th>Descripción</th>
+                         <td>
+                         {{c.descripcion}} <br>
+                         <div ng-if="c.isImportado">
+                                    <a style="color:#3498db;cursor:pointer" data-placement="top" data-toggle="popover" title="Producto de importación"  data-html="true" data-content="<label>Num. de Pedimento: {{c.pedimento.numero}}</label></label><br><label>Aduana:{{c.pedimento.aduana}}</label></label><br></label><br>">Importado</a>
+                                    </div>
+                         </td>
+                     </tr>
+                     <tr>
+                         <th>No.Serie</th>
+                         <td>{{c.noSerie}}</td>
+                     </tr>
+                     <tr>
+                         <th>Unidad</th>
+                         <td>{{c.unidad}}</td>
+                     </tr>
+                     <tr>
+                         <th>Cantidad</th>
+                         <td>{{c.cantidad}}</td>
+                     </tr>
+                     <tr>
+                         <th>Precio</th>
+                         <td>{{c.precio | currency}}</td>
+                     </tr>
+                     <tr>
+                         <th>Importe</th>
+                         <td>{{c.importe | currency}}</td>
+                     </tr>
+                 </thead>
+                 <tbody>
+                    <tr>
+                        <th>Opciones
+                        </th>
+                        <td>
+                            <div class="btn-group">
+                            <button class="btn btn-primary" ng-click="modConcepto($index)"><i class="fa fa-cog"></i></button>
+                            <button class="btn btn-danger" ng-click="eliminarConcepto(c)"><i class="fa fa-times"></i></button>
+                            </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                
+             </table>
+         </div>
+         
+        
+
+    </div>
+
+    <h3>Totales</h3>
+    <hr />
+     <div class="row c_marginElement visible-lg visible-md" style="margin: auto;border:5px;">
+
+         <table class="table table-bordered">
+             <thead>
+                 <tr>
+                     <th>Subtotal</th>
+                     <th ng-if="params.descuento>0"  id="i_thSubDescuento">Subtotal con descuento</th>
+                     <th>IVA(16%)</th>
+                     <th>Total</th>
+                 </tr>
+             </thead>
+             <tbody>
+                 <tr id="i_trTotales">
+                     <td>{{getSubtotal() | currency}}</td>
+                     <td ng-if="params.descuento>0" id="i_tdSubDescuento">{{getSubtotalConDescuento() | currency}}</td>
+                     <td>{{getIva()  | currency }}</td>
+                     <td>{{getTotal() | currency }}</td>
+
+                 </tr>
+             </tbody>
+
+         </table>
+     </div>
+         <div id="i_divTotales" class="row c_marginElement visible-xs visible-sm" style="margin: auto;border:5px;">
+             <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+
+                 <table class="table table-bordered">
+                     <thead>
+                         <tr>
+                             <th>Subtotal</th>
+                         </tr>
+                     </thead>
+                     <tbody>
+                         <tr>
+                             <td id="i_tdSubtotal">{{getSubtotal() | currency}}</td>
+                         </tr>
+
+                     </tbody>
+
+                 </table>
+
+             </div>
+             <div id="i_divSubDescuento" class="col-lg-3 col-md-3 col-sm-6 col-xs-12" ng-show="params.descuento>0">
+                 <table class="table table-bordered">
+                     <thead>
+                         <tr>
+                             <th id="i_tSubtotalDesc">Subtotal con descuento</th>
+                         </tr>
+                     </thead>
+                     <tbody>
+                         <tr>
+                             <td id="i_tdSubtotalDesc">{{getSubtotalConDescuento() | currency}}</td>
+                         </tr>
+
+                     </tbody>
+
+                 </table>
+
+             </div>
+             <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                 <table class="table table-bordered">
+                     <thead>
+                         <tr>
+                             <th>IVA(16%)</th>
+                         </tr>
+                     </thead>
+                     <tbody>
+                         <tr>
+                             <td id="i_tdIva">{{getIva() | currency}}</td>
+                         </tr>
+                     </tbody>
+
+                 </table>
+             </div>
+             <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                 <table class="table table-bordered">
+                     <thead>
+                         <tr>
+                             <th>Total</th>
+                         </tr>
+                     </thead>
+                     <tbody>
+                         <tr>
+                             <td id="i_tdTotal">{{getTotal() | currency}}</td>
+                         </tr>
+
+                     </tbody>
+
+                 </table>
+
+             </div>
+
+
+         </div>
+   
+    <div id="i_rowRetenciones" class="row c_marginElement" ng-show="config.retener_ISR ||config.retencion_IVA">
+        <div class="col-xs-12">
+            <h3>Retenciones</h3>
+            <hr />
+            <div class="table-responsive">
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th ng-show="config.retencion_IVA">Retencion IVA(2/3 partes)</th>
+                            <th ng-show="config.retener_ISR" id="i_tasaRet">Retencion de ISR <span>(%{{config.retencion_ISR}})</span></th>
+                        </tr>
+                    </thead>
+                    <tbody id="i_trRetenciones">
+                        <tr>
+                            <td ng-show="config.retencion_IVA">{{getRetencionIva() | currency}}</td>
+                            <td ng-show="config.retener_ISR">{{getRetencionIsr() | currency}}</td>
+
+                            </tr>
+                    </tbody>
+                </table>
+
+            </div>
+
+        </div>
+        
+    </div>
+
+         <div class="row c_marginElement">
+           
+             <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                 <button ng-click="nextStep()" type="submit" id="i_btnContinuar" class="btn btn-block c_Accept">Continuar</button>
+             </div>
+             <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                 <button ng-click="undoFactura()" id="btnUndoFactura" class="btn btn-block c_Accept">Deshacer</button>
+             </div>
+
+
+
+
+
+         </div>
+
+     </div> <!--/i_modalBlur-->
+
+     </div> <!--/Container--> 
+ 
+ <!--ModalLoader -->
+<div class="modal fade" id="modalPreview" role="dialog">
+        
+    
+     <div class="sk-cube-grid">
+      <div class="sk-cube sk-cube1"></div>
+      <div class="sk-cube sk-cube2"></div>
+      <div class="sk-cube sk-cube3"></div>
+      <div class="sk-cube sk-cube4"></div>
+      <div class="sk-cube sk-cube5"></div>
+      <div class="sk-cube sk-cube6"></div>
+      <div class="sk-cube sk-cube7"></div>
+      <div class="sk-cube sk-cube8"></div>
+      <div class="sk-cube sk-cube9"></div>
+     </div>
+     
+     
+    
+     
+     
+    
+</div><!--/ModalLoader -->
+
+<!--ModalMessageSeguro -->
+<div class="modal fade" id="i_modalSeguro" role="dialog">
+           <div class="container">
+             <div class="row">
+              <div class="col-sm-6 col-sm-offset-3 text-center modal-box">
+              <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                  
+                  <h3 style = "margin:4%;">¿Deseas aplicar esta opción?</h3>
+                  
+                  <h3>Cambiara la información en la factura</h3>
+                  
+                  <button type="button" class="btn btn-default c_modalDismiss c_Accept" data-dismiss="modal"  autofocus>Aceptar</button>
+             </div>
+            </div>
+           </div>
+</div><!--/ModalMessageSeguro -->
+
+
+    <!--ModalMessageActivarIVA -->
+    <div class="modal fade" id="i_modalActivarRetencionIVA" role="dialog">
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-6 col-sm-offset-3 text-center modal-box">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+
+                    <h3 style="margin:4%;">¿Deseas aplicar esta opción?</h3>
+
+                    <h3>Esto cambiará la configuración de retención de IVA en esta factura</h3>
+
+                    <button type="button" class="btn btn-default c_modalDismiss c_Accept" data-dismiss="modal" id="i_activarRetencionIVA" autofocus>Aceptar</button>
+                    <button type="button" class="btn btn-default c_modalDismiss c_Accept" data-dismiss="modal" autofocus>Cancelar</button>
+                </div>
+            </div>
+        </div>
+    </div><!--/ModalMessageActivarIVA -->
+
+    <!--ModalMessageActivarISR -->
+    <div class="modal fade" id="i_modalActivarRetencionISR" role="dialog">
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-6 col-sm-offset-3 text-center modal-box">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+
+                    <h3 style="margin:4%;">¿Deseas aplicar esta opción?</h3>
+
+                    <h3>Esto cambiará la configuración de retención de ISR en esta factura</h3>
+
+                    <button type="button" class="btn btn-default c_modalDismiss c_Accept" data-dismiss="modal" id="i_activarRetencionISR" autofocus>Aceptar</button>
+                    <button type="button" class="btn btn-default c_modalDismiss c_Accept" data-dismiss="modal" autofocus>Cancelar</button>
+                </div>
+            </div>
+        </div>
+    </div><!--/ModalMessageActivarISR -->
+
+
+    <div class="modal fade" id="i_deshacer_factura" role="dialog">
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-6 col-sm-offset-3 text-center modal-box">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+
+                    <h3 style="margin:4%;">¿Desea deshacer esta factura?</h3>
+                      <p>Todos los cambios se eliminaran</p>
+
+                    <button id="goUnDo" type="button" class="btn btn-default c_modalDismiss c_Accept" data-dismiss="modal" autofocus>Aceptar</button>
+                    <button type="button" class="btn btn-default c_modalDismiss c_Cancel" data-dismiss="modal" autofocus>Aceptar</button>
+
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+<!--ModalMessageAlertError -->
+<div class="modal fade" id="i_modalAlertError" role="dialog">
+           <div class="container">
+             <div class="row">
+              <div class="col-sm-6 col-sm-offset-3 text-center modal-box">
+              <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                  
+                  <h3 style = "margin:4%;">Error</h3>
+                  
+                  <h3 id="i_headerError">Valores invalidos</h3>
+                  
+                  <button type="button" class="btn btn-default c_modalDismiss c_Accept" data-dismiss="modal" autofocus>Aceptar</button>
+                  
+                  
+                  
+             </div>
+            </div>
+           </div>
+        </div><!--/ModalMessageAlertError -->
+        
+<!--ModalMessageSeguroAplicar -->
+<div class="modal fade" id="i_modalSeguroAplicar" role="dialog">
+           <div class="container">
+             <div class="row">
+              <div class="col-sm-6 col-sm-offset-3 text-center modal-box">
+              <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                  
+                  <h3 style = "margin:4%;">¿Deseas aplicar esta opción?</h3>
+                  
+                  <h3>Cambiara la información en la factura</h3>
+                  
+                  <button type="button" class="btn btn-default c_modalDismiss c_Accept" data-dismiss="modal" id="i_btnDescuento" autofocus>Aceptar</button>
+                  <button type="button" class="btn btn-default c_modalDismiss c_Cancel" data-dismiss="modal">Cancelar</button>
+                  
+             </div>
+            </div>
+           </div>
+        </div><!--/ModalMessageSeguroAplicar -->
+
+<!--ModalMessageRetenerIVA -->
+<div class="modal fade" id="i_modalRetenerIVA" role="dialog">
+           <div class="container">
+             <div class="row">
+              <div class="col-sm-6 col-sm-offset-3 text-center modal-box">
+              <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                  
+                  <h3 style = "margin:4%;">Retener IVA</h3>
+                  <h3>En caso de retener IVA </h3>
+                  <h3>Por ley se retienen las 2/3 partes del IVA y se especifica en la factura</h3>
+                  <h3>Se puede deshabilitar o habilitar la retención de IVA en Las configuraciones del usuario</h3>
+                  <h3>Se puede obtener más información acerca de la retención en:</h3>
+                  <h3><a target="_blank" href="http://www.sat.gob.mx/informacion_fiscal/devoluciones_compensaciones/Paginas/art_1a_liva.aspx">Articulo del IVA</a></h3>
+                  <button type="button" class="btn btn-default c_modalDismiss c_Accept" data-dismiss="modal" autofocus>Aceptar</button>
+                  
+                  
+             </div>
+            </div>
+           </div>
+        </div><!--/ModalMessageRetenerIVA -->
+    <div class="modal fade" id="i_modalOpcionesUsuarios" role="dialog">
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-6 col-sm-offset-3 text-center modal-box">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+
+                    <h3 style="margin:4%;">Confirmar</h3>
+                    <p>Seguro que desea salir?</p>
+                    
+                    <button onclick="location.href = 'opcionesUsuario.html'" type="button" class="btn btn-default c_modalDismiss c_Accept" data-dismiss="modal" autofocus>Aceptar</button>
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+<!--ModalMessageRetenerISR -->
+<div class="modal fade" id="i_modalRetenerISR" role="dialog">
+           <div class="container">
+             <div class="row">
+              <div class="col-sm-6 col-sm-offset-3 text-center modal-box">
+              <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                  
+                  <h3 style = "margin:4%;">Retención del ISR</h3>
+                  <h3>Se puede retener hasta una tasa del 30% del subtotal de la factura</h3>
+                  <h3>La tasa del ISR puede ser cambiada en las configuraciones del usuario</h3>
+                  <h3>Se puede obtener mas información acerca de las tasas de retención en:</h3>
+                  <h3><a target="_blank" href="http://www.sat.gob.mx/english/Paginas/tasas_de_retencion_de_interes.aspx">Tasas de retención de ISR</a></h3>
+                  <button type="button" class="btn btn-default c_modalDismiss c_Accept" data-dismiss="modal" autofocus>Aceptar</button>
+                  
+                  
+             </div>
+            </div>
+           </div>
+        </div><!--/ModalMessageRetenerISR -->
+
+<!--ModalMessageContinuar -->
+    <form id="i_formRedirect" hidden method="post" action="GuardarTimbrar.php">
+        <input type="text" hidden id="idCliente" name="id" value="" />
+        <input hidden type="text" name="factura_params" value="" id="facturaParams" />
+        <input hidden id="folioFactura" type="text" name="folioFactura" value="" />
+        <input hidden id="retenerIVA" name="retenerIVA" value="" />
+        <input hidden id="retenerISR" name="retenerISR" value="" />
+        <input hidden id="noCuenta" name="noCuenta" value="" />
+
+    </form>
+<div class="modal fade" id="i_modalContinuar" role="dialog">
+           <div class="container">
+             <div class="row">
+              <div class="col-sm-6 col-sm-offset-3 text-center modal-box">
+              <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                  
+                  <h3 id="i_headerContinuar" style = "margin:4%;">¿Esta seguro que desea Continuar?</h3>
+                  <p id="i_pContinuar">La factura se generara con la siguiente informacion</p>
+                 
+                  <button ng-click="nextStep()" id="trigger_next" class="btn btn-default c_modalDismiss c_Accept" autofocus>Aceptar</button>
+                  <button type="button" class="btn btn-default c_modalDismiss c_Cancel" data-dismiss="modal">Cancelar</button>
+                  
+             </div>
+            </div>
+           </div>
+        </div><!--/ModalMessageContinuar -->
+    <div class="modal fade" id="i_modalConceptoRepeater" role="dialog">
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-6 col-sm-offset-3 text-center modal-box">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+
+
+                    <h3>Ya ha agregado este concepto</h3>
+                    <p>¿Desea agrupar este concepto con el anterior?</p>
+                    <p>¿O desea eliminar el anterior?</p>
+
+                    <button id="i_btnAgrupar" type="button" class="btn btn-default c_modalDismiss c_Accept" data-dismiss="modal" autofocus>Agrupar</button>
+                    <button id="i_btnEliminarAnterior" type="button" class="btn btn-default c_modalDismiss c_Accept" data-dismiss="modal" autofocus>Eliminar Anterior</button>
+
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="modal fade" id="i_modalConceptoRepeaterMobile" role="dialog">
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-6 col-sm-offset-3 text-center modal-box">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+
+
+                    <h3>Ya ha agregado este concepto</h3>
+                    <p>¿Desea agrupar este concepto con el anterior?</p>
+                    <p>¿O desea eliminar el anterior?</p>
+
+                    <button id="i_btnAgruparMobile" type="button" class="btn btn-default c_modalDismiss c_Accept" data-dismiss="modal" autofocus>Agrupar</button>
+                    <button id="i_btnEliminarMobile" type="button" class="btn btn-default c_modalDismiss c_Accept" data-dismiss="modal" autofocus>Eliminar Anterior</button>
+
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+<!--ModalMessageVistaPrevia -->
+<div  class="modal fade" id="i_modalVistaPrevia" role="dialog">
+    <div class="container">
+      <div class="row">
+        <div class="col-xs-12 text-center modal-box">
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                  
+                  
+                <h3 id="i_headerPrevFact" style = "margin:4%;">Aqui se muestra una vista previa de la factura</h3>
+            <div id="embededpdf" class="embed-responsive embed-responsive-16by9">
+                <iframe id="i_previewSec" class="embed-responsive-item" src=""></iframe>
+            </div>
+                  
+                      <button type="button" class="btn btn-default c_modalDismiss c_Accept" data-dismiss="modal" autofocus>Aceptar</button>
+                      <button type="button" class="btn btn-default c_modalDismiss c_Cancel" data-dismiss="modal">Cancelar</button>
+
+          </div><!--/col-xs-12 --->
+        </div><!--/row -->
+      </div> <!--/container -->
+    </div><!--/ModalMessageVistaPrevia -->
+
+<!--ModalMessageDeshacer -->
+<div class="modal fade" id="i_modalDeshacer" role="dialog">
+           <div class="container">
+             <div class="row">
+              <div class="col-sm-6 col-sm-offset-3 text-center modal-box">
+              <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                  <h3 style = "margin:4%;">¿Esta seguro que desea deshacer los cambios realizados?</h3>
+                  <button id="i_btnUnDoFields" type="button" class="btn btn-default c_modalDismiss" data-dismiss="modal" autofocus>Aceptar</button>
+                  <button type="button" class="btn btn-default c_modalDismiss c_Cancel" data-dismiss="modal">Cancelar</button>
+                  
+                  
+             </div>
+            </div>
+           </div>
+        </div><!--/ModalMessageDeshacer -->
+        
+    <div class="modal fade" id="i_modalAgregarUnidad" role="dialog">
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-6 col-sm-offset-3 text-center modal-box">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    <h3 style="margin:4%;">Agregue una nueva unidad</h3>
+                    <label for="i_inputNewUnidad">Nueva unidad</label>
+                    <input type="text" class="form-control c_input" id="i_inputNewUnidad" />
+                    <button  id="i_btnAgrgearUnidad"  type="button" class="c_buttnsModal btn btn-default c_modalDismiss" data-dismiss="modal" autofocus>Aceptar</button>
+                    <button type="button" class="btn btn-default c_modalDismiss c_Cancel c_buttnsModal" data-dismiss="modal">Cancelar</button>
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+<!--ModalCerrarSesion-->
+<div class="modal fade" id="i_modalCerrarSesion" role="dialog">
+           <div class="container">
+             <div class="row">
+              <div class="col-sm-6 col-sm-offset-3 text-center modal-box">
+              <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                  <h3 class = "h3Modal">¿Esta seguro que desea cerrar sesión?</h3>
+                    <button type="button" class="btn  c_modalDismiss c_AcceptModal" data-dismiss="modal" autofocus id="signout-button">Aceptar</button>
+                    <button type="button" class="btn  c_modalDismiss c_Cancel" data-dismiss="modal">Cancelar</button>
+             </div>
+            </div>
+           </div>
+        </div><!--/ModalCerrarSesion -->
+    <div class="modal fade" id="i_modalAgregarUnidadNueva" role="dialog">
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-6 col-sm-offset-3 text-center modal-box">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    <h3 class="h3Modal">Agregar nueva unidad de media</h3>
+                    <input id="i_inputNewMedida" type="text" class="form-control c_input" />
+                    <button  type="button" class="btn  c_modalDismiss c_AcceptModal" data-dismiss="modal" autofocus id="i_btnAgregarNuevaMedida">Aceptar</button>
+                    <button type="button" class="btn  c_modalDismiss c_Cancel" data-dismiss="modal">Cancelar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+<!--ModalOpcionesUsuario-->
+<div class="modal fade" id="i_modalOpcionesUsuario" role="dialog">
+           <div class="container">
+             <div class="row">
+              <div class="col-sm-6 col-sm-offset-3 text-center modal-box">
+              <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                  <h3 class = "h3Modal">Introduzca su contraseña personalizada para acceder</h3>
+                   
+                   <form role="form">
+                   <div class="form-group">
+                     <label for="pwd">Contraseña</label>
+                     <input type="password" class="form-control c_input" id="pwd">
+                     <label style = "margin: 3%;">Mostrar Contraseña</label>
+
+                     <input type="checkbox" id="i_checkPass" />
+                   </div>
+                   </form>
+                  
+                  
+                  
+                    <button type="button" class="btn  c_modalDismiss c_AcceptModal" data-dismiss="modal" autofocus>Acceder</button>
+                    <button type="button" class="btn  c_modalDismiss c_Cancel" data-dismiss="modal">Regresar</button>
+                  
+             </div>
+            </div>
+           </div>
+        </div><!--/ModalOpcionesUsuario-->
+
+<script>
+    var modalVistaPrevia  = null;
+    var vistaPreviaEmbed = null;
+    $(document).ready(function(){
+
+        modalVistaPrevia = $("#i_modalVistaPrevia");
+        vistaPreviaEmbed = $("#i_previewSec");
+    });
+    </script>
+
+    
+</body>
+
+</html> 
+

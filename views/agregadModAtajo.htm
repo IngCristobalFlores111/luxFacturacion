@@ -1,0 +1,78 @@
+     
+                <div class="row" >
+                    <div class="col-xs-12">
+                        <div class = "table-responsive">
+                        <table id="tableAtajos" class="table table-bordered c_background">
+                            <thead>
+                                <tr>
+                                    <th>Nombre</th>
+                                    <th>Clave ProdServ</th>
+                                    <th>Descripción</th>
+                                    <th>No.Serie</th>
+                                    <th>Medida</th>
+                                    <th>Precio</th>
+                                    <th style="width:111px;">Opciones</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="a in atajos">
+                                   <td ng-if="!a.active">{{a.atajo}}</td>
+                                   <td ng-if="!a.active">{{a.claveProdServ}}</td>
+                                   <td ng-if="!a.active">{{a.descripcion}}</td>
+                                   <td ng-if="!a.active">{{a.noSerie}}</td>
+                                   <td ng-if="!a.active">{{a.medida}}</td>
+                                   <td ng-if="!a.active">{{a.precio}}</td>
+
+                                    <td ng-if="a.active">
+                                        <input ng-model="a.atajo" placeholder="Atajo Nuevo" class="form-control"  />
+                                    </td>
+                                    <td ng-if="a.active">
+                                    <div class="form-group">
+                                    <div class="input-group">
+                                        <span ng-click="buscarClaveProd(a)" class="input-group-addon"><i class="fa fa-search"></i></span>
+                                        <input class="form-control" ng-model="a.qProdServ"  />
+                                    </div>
+                                    </div> 
+                                    <div class="alert alert-info">
+                                            <strong>{{a.nombreProdServ}}</strong> {{a.claveProdServ}}
+                                    </div>  
+                                    <button ng-if="a.claveProdSelected" ng-click="undoBusqueda(a)" class="btn btn-warning btn-block"><i class="fa fa-undo"></i></button>
+                                    
+                                    <select ng-if="a.claveProdSelected" ng-model="a.claveProdSelected" class="form-control">
+                                        <option value="{{c.id}}" ng-repeat="c in clavesProd">{{c.descripcion}} <small>{{c.codigo}}</small>  </option>
+                                    </select> 
+                                    </td>
+                                    <td ng-if="a.active">
+                                      <textarea ng-model="a.descripcion" class="form-control"></textarea>
+                                    </td>
+                                    <td ng-if="a.active">
+                                            <input ng-model="a.noSerie" placeholder="No Serie Nuevo" class="form-control"  />
+                                        </td>
+                                        <td ng-if="a.active">
+                                                <input ng-model="a.medida" placeholder="Medida Nueva" class="form-control"  />
+                                            </td>
+                                            <td ng-if="a.active">
+                                                    <input ng-model="a.precio" placeholder="Precio Nueco" type="number" class="form-control"  />
+                                                </td>
+
+                                   <td>
+                                       <div class="btn-group" ng-if="!a.active">
+                                           <button ng-click="modificar(a)" class="btn btn-primary"><i class="fa fa-cog"></i></button>
+                                           <button ng-click="eliminar(a)" class="btn btn-danger"><i class="fa fa-trash"></i></button>
+                                           
+                                        </div>
+                                        <div class="btn-group"  ng-if="a.active">
+                                                <button ng-click="confirmarMod(a)" class="btn btn-success"><i class="fa fa-check"></i></button>
+                                                <button ng-click="deshacerMod($index)" class="btn btn-warning"><i class="fa fa-undo"></i></button>
+                                                
+                                        </div>
+                                   </td>
+                                   
+                                </tr>
+                             
+                            </tbody>
+                        </table>
+                        </div>
+                    </div>
+                </div>
+             

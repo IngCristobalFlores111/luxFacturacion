@@ -1,0 +1,542 @@
+<!--Desarrollado por Luxline Solutions   acerca de aplazar el tiempo de desarrollo para hacerlo mas liviano y-->
+<?php 
+    require_once("../Login/php/Functions.php");   
+     $link = linkDBLuxLine();
+     $luxlineObj = new luxlineWebLogin($link);
+
+     $luxlineObj->initialCheckUpSystems();
+     $ui = $_SESSION['uis'][0];
+     $folder = $ui['clientFolder'].'/'.$ui['serviceFolder'];
+     
+?>
+
+<html lang="es">
+    
+<head>  <!--HEAD-->
+    <title>Opciones de Factura Cancelada</title>
+    
+    <!--MetaArea-->
+    <meta charset="utf-8"> <!--Caracteres Codificados-->
+    <meta name="viewport" content="width=device-width, initial-scale=1"> <!--Para Dispositivos Moviles habilita touch-zoom etc-->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <!--/MetaArea-->
+    
+    <!--CSS-->
+    <script src="js/jquery.js"></script>
+    
+    <link href="css/bootstrap.min.css" rel="stylesheet"><!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="css/style.css" type="text/css" />
+    <link rel="stylesheet" href="font-awesome/css/font-awesome.min.css">
+    <link rel="icon" href="img/luxline1.ico" type="image/x-icon">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.6.6/angular.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" rel="stylesheet" type="text/css" />
+   <script src="js/bootbox.min.js"></script>
+    <script src="js/services/facturacion/facturarService.js"></script>
+    <script>
+     var app = angular.module("app",[]);
+     app.service("facturaService",facturarService);
+     app.controller("ctrlCancelada",function($scope,$http,facturaService){
+       var folio = '<?= $_GET["folio"] ?>';
+       var idCliente =  '<?= $_GET["id"] ?>';
+       $scope.correoNuevo = {email:"",asunto:"",cuerpo:""};
+       $scope.correos = [];
+       $scope.factura = {};
+       $scope.cliente = {};
+
+       $scope.coreoMod = {email:"",asunto:"",cuerpo:""};
+       $http.get("php/new/facturar/fetchData.php",{params:{accion:"getCorreosDefault"}}).then(function(resp){
+         $scope.correos = $scope.correos.concat(resp.data);
+
+       });
+
+
+       $http.get("php/new/facturar/fetchData.php",{params:{accion:"getFactura",folio:folio}}).then(function(resp){
+        var data = resp.data;
+        if(data==0){
+            location.href="index.html";
+        }else{
+            $scope.factura = data;
+             var xml = data.xml_file;
+             var tmp = xml.split(".");
+             var pdf = tmp[0]+".pdf";
+             xml = "../../<?=$folder?>/Facturacion/facturas/timbradas/xml/"+xml;
+             pdf= "../../<?=$folder?>/Facturacion/facturas/timbradas/pdf/"+pdf;
+             $scope.factura.xml = xml;    
+             $scope.factura.pdf= pdf;
+             
+        }
+
+       });
+       $http.get("php/new/facturar/fetchData.php",{params:{accion:"obtenerCliente",id:idCliente}}).then(function(resp){
+       var data = resp.data;
+       if(data==0){
+        location.href="index.html";
+       }else{
+        $scope.cliente = resp.data;
+        $scope.correos =$scope.correos.concat({email:resp.data.email});
+       }
+       });
+       $scope.eliminarCorreo = function(c){
+           $scope.correos.splice($scope.correos.indexOf(c),1);
+       }
+       $scope.modCorreo = function(c){
+        $scope.coreoMod = c;
+        modalCorreoSet.modal("show");
+       }
+       $scope.agregarCorreo = function(){
+        var re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+        var email = $scope.correoNuevo.email;
+        email = email.trim();
+        if(re.test(email)){
+        $scope.correos.push(angular.copy($scope.correoNuevo));
+    }else{
+        toastr.info("Correo invalido");
+    }
+
+       }
+
+       function checkCorreos(correos){
+var len = correos.length; var i = 0;
+for(;i<len;i++){
+    var c = correos[i];
+    if(c.email.email==$scope.correos[i].email){
+        if(c.error){
+            $scope.correos[i].status = 0;
+        }else{
+            $scope.correos[i].status= 1;
+            
+            
+        }
+    }
+}
+}
+
+$scope.enivarCorreos = function(){
+    var xml = $scope.factura.xml;    
+    var pdf =  $scope.factura.pdf;
+     xml = xml.split("/").pop();
+     pdf = pdf.split("/").pop();
+     btnEnviar.prop("disabled",true);
+     btnModalWaiting.modal("show");
+facturaService.sendMails($scope.correos,xml,pdf,"cancelado").then(function(resp){
+    checkCorreos(resp.data);
+    btnModalWaiting.modal("hide");
+
+    var html ="<h4>Correos Enviados</h4>";
+    html+="<div class='table-responsive'><table class='table table-bordered'>";
+    html+="<thead><tr>"
+    html+="<th>Correo</th>";
+    html+="<th>Status</th></tr>";
+    html+="<tbody>";
+   var correos = $scope.correos; var len = correos.length; var i = 0;
+   for(;i<len;i++){
+       var c = correos[i];
+       var fa = (c.status==1)?"<i class='fa fa-check'></i>":"<i class='fa fa-times'></i>";
+       html+="<tr><td>"+c.email+"</td>"+"<td>"+fa+"</td></tr>";
+   }
+   html+="</tbody></table></div>";
+   setTimeout(function(){
+    bootbox.alert({
+    message: html,
+    title:"Status de Envio",
+    callback: function () {
+        console.log('This was logged in the callback!');
+    }
+})
+
+   },500);
+
+    
+    
+    btnEnviar.prop("disabled",false);
+});
+    
+}
+
+     });
+     
+     </script>       
+    <!--/CSS-->
+   
+</head> 
+
+<body ng-app="app" ng-controller="ctrlCancelada">
+
+    <div id="i_modalBlur">
+
+        <nav class="navbar navbar-default">
+
+            <div class="container-fluid">
+
+                <div class="row visible-xs ">
+
+                    <img src="img/luxline.png" style="height:8%;" id="i_navBarLogo" alt="lux_logo">
+
+                </div>
+
+                <div class="navbar-header" style="margin:1%;">
+
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+
+                        <span class="icon-bar"></span>
+
+                        <span class="icon-bar"></span>
+
+                        <span class="icon-bar"></span>
+
+                    </button>
+
+                    <img src="img/luxline.png" class="visible-md visible-lg visible-sm" id="i_navBarLogo" alt="lux_logo">
+
+                </div>
+
+                <div class="collapse navbar-collapse" id="myNavbar">
+
+                    <ul class="nav navbar-nav" style="margin:1%;">
+
+                        <li><a href="index.html"> Facturar</a></li>
+
+                        <li><a href="folios.html">Folios</a></li>
+
+                        <li><a href="AgrModAtajo.html">Ajustes</a></li>
+
+                    </ul>
+
+                    <ul class="nav navbar-nav navbar-right">
+
+                        <li data-toggle="modal" data-target="#i_modalOpcionesUsuario"><a href="#"><span class="fa fa-user" style="font-size:20px;" aria-hidden="true"></span></a></li>
+
+                        <li data-toggle="modal" data-target="#i_modalCerrarSesion"><a href="#"><span class="fa fa-sign-out" style="font-size:20px;" aria-hidden="true"></span></a></li>
+
+                    </ul>
+
+                </div>
+
+            </div>
+
+        </nav>
+        
+
+        <div class="container" id="i_content">
+            <div class="row">
+             <div class="col-xs-12">
+                    <div class="c_roundedBackground c_background" style = "margin:0;">
+                            
+                                                <h3 style="margin-bottom:3%;">Cliente</h3>
+                    
+                    <div class="table-responsive table-responsiveCorreo">
+                        <table class="table table-hover table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>Nombre</th>
+                                    <th>RFC</th>
+                                    <th>Domicilio</th>
+                                    <th>Email</th>
+                                    <th>Telefono</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>{{cliente.nombre}}</td>
+                                    <td>{{cliente.RFC}}</td>
+                                    <td>{{cliente.calle}} {{cliente.noExterior}} {{cliente.noInterior}} {{cliente.colonia}} {{cliente.CodigoPostal}} {{cliente.municipio}},{{cliente.estado}}</td>
+                                    <td>{{cliente.email}}</td>
+                                    <td>{{cliente.telefono}}</td>
+                                    
+                                    
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    
+                                            </div>                            
+             </div>
+            </div>
+
+            <div class="row">
+                    <div class="col-xs-12">
+                           <div class="c_roundedBackground c_background" style = "margin:0;">
+                                   
+                                                       <h3 style="margin-bottom:3%;">Factura</h3>
+                        
+                        <div class="table-responsive table-responsiveCorreo">
+                            <table class="table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>Folio</th>
+                                        <th>Fecha Timbrada</th>
+                                        <th>Fecha Cancelada</th>
+                                        <th>Monto</th>
+                                        <th>UUID</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>{{factura.folio_factura}}</td>
+                                        <td>{{factura.fecha_timbrado}}</td>
+                                        <td>{{factura.fecha_cancelada}}</td>
+                                        <td>{{factura.montoTotal | currency}}</td>
+                                        <td>{{factura.uuid}}</td>
+                                        
+                                    </tr>
+                                </tbody>
+                                <tfoot>
+                                    <tr><td colspan="5" class="text-center">
+                                    <div class="btn-group">
+                                    <a target="_blank" href="{{factura.pdf}}" class="btn btn-primary"><i class="fa fa-file-pdf-o" aria-hidden="true"></i> PDF</a>
+                                    <a  target="_blank" href="{{factura.xml}}" class="btn btn-primary"><i class="fa fa-file-o" aria-hidden="true"></i> XML</a>
+                                    
+                                </div>    
+                                    </td></tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                        
+
+                           </div>
+                    </div> 
+                </div>           
+           <div class="row">
+
+            <div class="col-xs-12">
+
+                <div class="c_roundedBackground c_background">
+
+                    <h3>Correos para Enviar</h3>
+
+                    <div class="table-responsive table-responsiveCorreo">
+
+                        <table class="table table-bordered">
+
+                            <thead>
+
+                                <tr>
+
+                                    <th>
+
+                                        <input ng-model="correoNuevo.email" placeholder="Correo Electrónico" type="text" id="i_inputCorreo" class="form-control c_input" />
+
+                                    </th>
+
+                                    <th>
+
+                                        <button ng-click="agregarCorreo()" class="btn btn-block c_Accept" id="i_btnAgregarCorreo"><i class="fa fa-plus" style="font-size:20px;" aria-hidden="true"></i></button>
+
+                                    </th>
+
+                                </tr>
+
+                            </thead>
+
+                            <tbody id="i_tableCorreosAgregados">
+                             <tr ng-repeat="c in correos">
+                            <td>{{c.email}}</td>
+                            <td>
+                            <button ng-click="modCorreo(c)" class="btn btn-default c_Accept"><i class="fa fa-cog"></i></button>    
+                            <button ng-click="eliminarCorreo(c)" class="btn btn-default c_Cancel"><i class="fa fa-times"></i></button>    
+                            
+                            </td>     
+                            </tr>                                
+                            </tbody>
+
+
+
+                        </table>
+
+                    </div><!-- table-responsive -->
+
+
+
+                    <button ng-click="enivarCorreos()" id="i_btnEnviarTerminar" style = "margin-top: 5%;" class="btn btn-lg c_Accept" data-toggle="modal">Enviar y Terminar</button>
+
+
+
+                </div> <!--/c_roundedBackground -->
+
+
+
+            </div> <!--/col Correo Enviar -->
+
+           </div>
+
+
+
+        </div> <!--/Container-->
+
+
+
+    </div><!-- /i_modalBlur -->
+
+    <!--ModalPreview -->
+
+    <div class="modal fade" id="modalPreview" role="dialog">
+
+
+
+
+
+        <div class="sk-cube-grid">
+
+            <div class="sk-cube sk-cube1"></div>
+
+            <div class="sk-cube sk-cube2"></div>
+
+            <div class="sk-cube sk-cube3"></div>
+
+            <div class="sk-cube sk-cube4"></div>
+
+            <div class="sk-cube sk-cube5"></div>
+
+            <div class="sk-cube sk-cube6"></div>
+
+            <div class="sk-cube sk-cube7"></div>
+
+            <div class="sk-cube sk-cube8"></div>
+
+            <div class="sk-cube sk-cube9"></div>
+
+        </div>
+    </div>
+    <div class="modal" id="i_modalEnviarCorreo" role="dialog">
+
+                        <div class="container">
+
+                            <div class="row">
+
+                                <div class="col-sm-6 col-sm-offset-3 text-center modal-box">
+
+                                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+
+                                    <h3 id="h3Modal_mail">Correo Electrónico {{coreoMod.email}}</h3>
+
+                                    <hr />
+
+                                    <label for="i_inputAsunto">Asunto</label>
+
+                                    <input ng-model="coreoMod.asunto" type="text" id="i_inputAsunto" class="form-control c_input" />
+
+                                    <label for="i_inputCorreoMsg">Cuerpo</label>
+
+                                    <textarea ng-model="coreoMod.cuerpo" class="form-control c_input" id="i_inputCorreoMsg"></textarea>
+
+                                    <hr />
+
+                                    <button data-dismiss="modal" id="i_btnAceptarPlantillaMail" class="btn btn-primary c_Accept" style="margin-bottom: 3%;">Aceptar</button>
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                </div><!--/ModalMessageEnviadosPorDefault -->
+
+    <!--ModalCerrarSesion-->
+
+    <div class="modal fade" id="i_modalCerrarSesion" role="dialog">
+
+                    <div class="container">
+
+                        <div class="row">
+
+                            <div class="col-sm-6 col-sm-offset-3 text-center modal-box">
+
+                                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+
+                                <h3 class="h3Modal">¿Esta seguro que desea cerrar sesión?</h3>
+
+
+
+                                <button type="button" class="btn  c_modalDismiss c_AcceptModal" data-dismiss="modal" autofocus>Aceptar</button>
+
+                                <button type="button" class="btn  c_modalDismiss c_Cancel" data-dismiss="modal">Cancelar</button>
+
+
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div><!--/ModalCerrarSesion -->
+
+    <!--ModalOpcionesUsuario-->
+
+    <div class="modal fade" id="i_modalOpcionesUsuario" role="dialog">
+
+                    <div class="container">
+
+                        <div class="row">
+
+                            <div class="col-sm-6 col-sm-offset-3 text-center modal-box">
+
+                                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+
+                                <h3 class="h3Modal">¿Seguro que desea ir a ajustes?</h3>
+                                <p>Puede que la información no se haya guardado</p>
+
+                              <button onclick="location.href = 'opcionesUsuario.html'" type="button" class="btn  c_modalDismiss c_AcceptModal" data-dismiss="modal" autofocus>Acceder</button>
+
+                                <button type="button" class="btn  c_modalDismiss c_Cancel" data-dismiss="modal">Regresar</button>
+
+
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div><!--/ModalOpcionesUsuario-->
+                
+     <!--ModalMessageCorreoInvalido -->
+   <div class="modal fade" id="i_modalCorreoInvalido" role="dialog">
+           <div class="container">
+             <div class="row">
+              <div class="col-sm-6 col-sm-offset-3 text-center modal-box">
+              <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                  
+                  <h3 class = "h3Modal">Correo Invalido</h3>
+                  
+                  <p>Verifique que el correo corresponda adecuadamente.</p>
+                  
+                  <button type="button" class="btn btn-default c_modalDismiss c_Accept" data-dismiss="modal" autofocus>Aceptar</button>
+                  <button type="button" class="btn btn-default c_modalDismiss c_Cancel" data-dismiss="modal">Cancelar</button>
+                  
+                  
+             </div>
+            </div>
+           </div>
+        </div><!--/ModalMessageCorreoInvalido -->
+
+                
+                <!-- jQuery -->
+
+
+                <!-- Bootstrap Core JavaScript -->
+
+                <script src="js/bootstrap.min.js"></script>
+
+
+
+           <script>
+           var modalCorreoSet = null;
+           var btnEnviar = null;
+           var btnModalWaiting = null;
+           $(document).ready(function(){
+            modalCorreoSet = $("#i_modalEnviarCorreo");
+          btnEnviar = $("#i_btnEnviarTerminar");
+          btnModalWaiting = $("#modalPreview");
+
+
+           });
+           </script>
+
+</body>
+
+</html> 
+

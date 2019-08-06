@@ -1,0 +1,2941 @@
+﻿<?php
+require_once("../Login/php/Functions.php");   
+$link = linkDBLuxLine();
+$luxlineObj = new luxlineWebLogin($link);
+
+$luxlineObj->initialCheckUpSystems();
+?>
+
+<!--Desarrollado por Luxline Solutions   acerca de aplazar el tiempo de desarrollo para hacerlo mas liviano y-->
+<html lang="es-mx">
+    
+<head>  <!--HEAD-->
+    <title>Facturar Cliente</title>
+    
+    <!--MetaArea-->
+    <meta charset="utf-8"> <!--Caracteres Codificados-->
+    <meta name="viewport" content="width=device-width, initial-scale=1"> <!--Para Dispositivos Moviles habilita touch-zoom etc-->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <!--/MetaArea-->
+    
+    <!--CSS-->
+    <script src="js/jquery.js"></script>
+
+    <!-- Bootstrap Core JavaScript -->
+
+    <script src="js/bootstrap.min.js"></script> 
+   
+    <link href="css/bootstrap.min.css" rel="stylesheet"><!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="css/style.css" type="text/css" />
+    <link rel="stylesheet" href="font-awesome/css/font-awesome.min.css">
+    <link rel="icon" href="img/luxline1.ico" type="image/x-icon">
+    <link href="css/stacktable.css" rel="stylesheet" />
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.10.0/css/bootstrap-select.min.css">
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.10.0/js/bootstrap-select.min.js"></script>
+   
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" rel="stylesheet" type="text/css" />
+
+
+    <!--/CSS-->
+    <style>
+        .no-results{
+            color:black;
+
+        }
+           #embededpdf { overflow: auto; -webkit-overflow-scrolling: touch; height: 250px; }
+        select option {
+    /*background-color: rgba(255,255,255,0.25);*/
+        border-color: rgba(0,0,0,0.25);
+        color:black;
+}
+        table.tablesaw
+{
+    table-layout: fixed;
+    max-width: none;
+    width: auto;
+    min-width: 100%;
+}
+    </style>
+
+    <!--Google+ api-->
+    <script src="https://apis.google.com/js/api.js?onload=handleClientLoad"></script>
+    <!--Google+ api-->
+    <!--ApiLogIn-->
+    <script>
+        var ApiLogIn = function (btnSingIn, btnSignOut, msgContainer,phpLogin) {
+            //var test = 10; private variable
+            //var method = function(){} private method
+            //this.test = 10; public variable
+            //this.method = function(){} public method
+            var self = this;
+            var m_auth2 = null; // The Sign-In object.
+            var m_btnSignIn = btnSingIn;
+            var m_btnSignOut = btnSignOut;
+            var m_message = msgContainer;
+            var m_apiKey = 'accesssecurity-140019';
+            var m_clientId = "1043488027097-f77grlc3h5cli90m6c0b4urra6jmcakn.apps.googleusercontent.com";
+            var m_phpLogin = phpLogin;
+            // Enter one or more authorization scopes. Refer to the documentation for
+            // the API or https://developers.google.com/identity/protocols/googlescopes
+            // for details.
+            var m_scopes = 'profile https://www.googleapis.com/auth/userinfo.profile';
+            var m_cookie_policy = 'single_host_origin';
+
+            this.getStatus = function(){
+                return m_auth2.isSignedIn.get();
+            }
+
+            this.signIn = function () {
+                m_auth2.signIn();
+            }
+
+            this.logOut = function () {
+                var User = m_auth2.currentUser.get();
+                var l_RO = User.getAuthResponse();
+                var access_token = l_RO.access_token;
+
+                var location = (parseInt(screen.availWidth) / 2) - 290;
+                var revokeUrl = window.open('https://accounts.google.com/Logout', "Logout", "left=" + location + ",top=10 width=580,height=800");
+                revokeUrl.focus();
+                setTimeout(function () {
+                    revokeUrl.close();
+                }, 500);
+            }
+
+            var updateSigninStatus = function (isSignedIn) { //Callback function
+                if (isSignedIn) {
+                    //*****************googleUser**************
+                    //A GoogleUser object represents one user account.
+                    var User = m_auth2.currentUser.get()
+                    var profile = User.getBasicProfile();
+                    //*****************googleUser**************
+                    var user_id = profile.getId();
+
+                    //console.log('ID: ' + user_id); // Do not send to your backend! Use an ID token instead.
+                    //console.log('Name: ' + profile.getName());
+                    //console.log('Image URL: ' + profile.getImageUrl());
+                    //console.log('Email: ' + profile.getEmail());
+
+                    // The ID token you need to pass to your backend:
+                    var l_RO = User.getAuthResponse();
+
+                    var id_token = l_RO.id_token;
+                    //var access_token = l_RO.access_token;
+                    //var log_hint = l_RO.login_hint;
+                    //var scopes = l_RO.scope;
+                    //var expire_time = l_RO.expires_in;
+                    //var f_issued_at = l_RO.first_issued_at;
+                    //var expires_at = l_RO.expires_at;
+
+                    //console.log("ID Token: " + id_token);
+                    //console.log("Access Token: " + access_token);
+                    //console.log("Log Hint: " + log_hint);
+                    //console.log("Scopes: " + scopes);
+                    //console.log("Expire Time: " + expire_time);
+                    //console.log("f_issued_at: " + f_issued_at);
+                    //console.log("Expires at: " + expire_time);
+
+                    $.post(m_phpLogin, { ID_TOKEN: id_token }, function (data, status) {
+                        var indexer = parseInt(data);
+                        switch (indexer) {
+                            case 0:
+                                if (window.location.href === "http://www.luxline.com.mx") {
+                                    setTimeout(function () {
+                                        window.location.href = "http://www.luxline.com.mx/testLuxFact";
+                                    }, 1000);
+                                }
+
+                                if(m_btnSignIn !== null)
+                                    $(m_btnSignIn).hide();
+
+                                if(m_btnSignOut !== null)
+                                    $(m_btnSignOut).show();
+                                break;
+                            case -1:
+                                console.log("Token Invalido");
+                                break;
+                            case -2:
+                                console.log("Estampa de tiempo expirada");
+                                break;
+                            case -3:
+                                if(m_message !== null)
+                                    $(m_message).html("<h3>El usuario no existe en la base de datos. Ingrese a su cuenta de Google+ con un usuario válido.</h3>");
+                                else
+                                    console.log("El usuario no existe en la base de datos. Ingrese a su cuenta de Google+ con un usuario válido.");
+
+                                if (window.location.href !== "http://www.luxline.com.mx") {
+                                    setTimeout(function () {
+                                        window.location.href = "http://www.luxline.com.mx";
+                                    }, 1000);
+                                }
+
+
+                                if(m_btnSignOut !== null)
+                                    $(m_btnSignOut).hide();
+
+                                if(m_btnSignIn !== null)
+                                    $(m_btnSignIn).show();
+                                break;
+                            case -4:
+                                console.log("Hay inconsistencia en la base de datos");
+                                break;
+                            default:
+                                break;
+                        }
+                    });
+                }
+                else {
+                    if(m_message !== null)
+                        m_message.html("<h3>De click a Ingresar para comenzar</h3>")
+                    else
+                        console.log("De click a Ingresar para comenzar");
+
+                    if(m_btnSignIn !== null)
+                        $(m_btnSignIn).show();
+
+                    if(m_btnSignOut !== null)
+                        $(m_btnSignOut).hide();
+
+
+                    $.post("../../Login/php/clearSession.php", {}, function () {
+                    if (window.location.href !== "http://www.luxline.com.mx") {
+                        setTimeout(function () {
+                            window.location.href = "http://www.luxline.com.mx";
+                        }, 1000);
+                    }
+                    });
+
+                }
+            }
+
+           this.initAuth = function () {
+                //make gapi calls
+                gapi.client.setApiKey(m_apiKey);
+                gapi.auth2.init({
+                    client_id: m_clientId,
+                    scope: m_scopes,
+                    cookie_policy: m_cookie_policy
+                }).then(function () {
+                    //Obtener instancia de autorización
+
+                    //****************auth2***************************************
+                    //auth 2 is a GoogleAuth object that is a singleton class that provides methods to allow
+                    //the user to sign in with a Google account, get the user's current
+                    //sign-in status, get specific data from the user's Google profile,
+                    //request additional scopes, and sign out from the current account.
+                    m_auth2 = gapi.auth2.getAuthInstance();
+                    //****************auth2***************************************
+
+                    //Víncular un cambio de estado a una función
+
+                    m_auth2.isSignedIn.listen(updateSigninStatus);
+
+                    //Checar el estado inicial, podría ya estar loggeado
+                    updateSigninStatus(m_auth2.isSignedIn.get());
+
+                    //Listen to signin states
+                    if(m_btnSignIn !== null)
+                        m_btnSignIn.addEventListener("click", self.signIn);
+
+                    if(m_btnSignOut !== null)
+                        m_btnSignOut.addEventListener("click", self.logOut);
+                });
+            }
+
+        };
+    </script>
+    <!--ApiLogIn-->
+
+    <script>
+        var go_ApiLogIn = null;
+        var authorizeButton = null;
+        var signoutButton = null;
+        var g_message = null;
+        var g_signOutBtn = null;
+        var g_signInBtn = null;
+
+        $(document).ready(function () {
+            g_message = null;
+            g_signInBtn = null;
+            g_signOutBtn = document.getElementById('signout-button');
+
+            go_ApiLogIn = new ApiLogIn(g_signInBtn, g_signOutBtn, g_message, "../../Login/php/logInFacturacion.php");
+            gapi.load('client:auth2', go_ApiLogIn.initAuth);
+        });
+    </script>
+
+</head> 
+
+
+<body>  
+
+    <?php   if(!isset($_GET['id'])){echo "<script>location.href = 'index.html'</script>"; } ?>
+
+<div id = "i_modalBlur">
+
+<nav class="navbar navbar-default">
+  <div class="container-fluid">
+    <div class = "row visible-xs ">
+      <img src="img/luxline.png" style = "height:8%;" id = "i_navBarLogo" alt="lux_logo">
+    </div>
+    <div class="navbar-header" style = "margin:1%;">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span> 
+      </button>
+      <img src="img/luxline.png" class = "visible-md visible-lg visible-sm" id = "i_navBarLogo" alt="lux_logo">
+    </div>
+    <div class="collapse navbar-collapse" id="myNavbar">
+        <ul class="nav navbar-nav" style = "margin:1%;" >
+      <li><a href="index.html"> Facturar</a></li>
+      <li><a href="folios.html">Folios</a></li>
+      <li><a href="AgrModAtajo.html">Ajustes</a></li>
+    </ul>
+        <ul class="nav navbar-nav navbar-right">
+            <li data-toggle="modal" data-target="#i_modalOpcionesUsuarios"><a href="#"><span class="fa fa-user" style="font-size:20px;" aria-hidden="true"></span></a></li>
+      <li data-toggle= "modal"  data-target="#i_modalCerrarSesion"><a href="#"><span class="fa fa-sign-out" style = "font-size:20px;" aria-hidden="true"></span></a></li>
+    </ul>
+    </div>
+  </div>
+</nav>
+
+ <div class = "container-fluid" id = "i_content"> 
+    
+     <div class="row c_marginElement">
+
+        <div class="col-xs-12">
+
+            <h3 id="i_nombreCliente">Cargando...</h3>
+
+        </div>
+
+    </div> <!-- nombre cliente -->
+
+     <div class="row c_marginElement">
+
+         <div class="col-xs-12">
+
+             <div class="table-responsive" >
+
+                 <table class="table table-bordered">
+
+                     <thead>
+
+                         <tr>
+
+                             <th>RFC</th>
+
+                             <th>Email</th>
+
+                             <th>Domicilio</th>
+
+                             <th>Telefono</th>
+
+                         </tr>
+
+                     </thead>
+
+                     <tbody id="i_tableCliente"></tbody>
+
+                 </table>
+
+             </div> <!-- table-responsive -->
+
+         </div>
+
+     </div> <!-- table head -->
+
+    <div class="row c_inputForm">
+
+        <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+
+            <label for="selectMetodoPago">Metodo de Pago</label>
+
+            <select class="c_input form-control c_facturaParams" id="i_selectMetodoPago" >
+
+                <option>Efectivo</option>
+
+                <option>Cheque</option>
+
+                <option>Tarjeta de Credito</option>
+
+                <option>Transferencia Bancaria</option>
+
+                <option>No. Identificado</option>
+
+
+
+            </select>
+
+        </div>
+
+        <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+
+            <label>Forma de Pago</label>
+
+            <div id="divFormaPago">
+
+                <select id="i_selectFormaPago" class="c_input form-control c_facturaParams">
+
+                    <option>Pago en una sola Exhibición</option>
+
+                    <option>Credito</option>
+
+                    <option>Otro</option>
+
+
+
+                </select>
+            </div>
+        </div>
+        <div id="i_divNoCuenta" class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+            <label for="i_checkeCuenta">Número de cuenta</label>
+            <input placeholder="Al menos los ultimos 4 dígitos" type="text" class="form-control c_input c_facturaParams" id="i_checkeCuenta" />
+
+        </div>
+
+        <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+
+            <label for="inputDescuento">Descuento</label>
+
+            <input placeholder="% de Descuento" type="number" id="i_inputDescuento" class="c_input form-control c_facturaParams" />
+
+
+
+        </div>
+       
+
+        <div style="padding-top:25px;" class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+
+            <button class="btn btn-block c_Accept" data-toggle="modal"  data-target = "#i_modalSeguroAplicar"> Aplicar</button>
+
+        </div>
+
+
+
+    </div> <!-- tipos de conceptos y descuentos -->
+   
+
+    <div class="row c_marginElement">
+        <div id="i_divPredial" class="col-xs-4">
+            <label>Predial</label>
+            <input type="text" id="i_inputPredial" class="c_facturaParams form-control c_input" />
+        </div>
+        <div class="col-xs-4">
+
+            <label style = "display:inline;" for="i_retenerIVA">Retener IVA</label>
+
+            <input class="c_retencion" type="checkbox" id="i_retenerIVA" data-toggle="modal" data-target="#i_modalActivarRetencionIVA" />
+            
+            <i style = "display:inline; margin-left:inherit;" class="fa fa-question-circle" data-toggle="modal"  data-target = "#i_modalRetenerIVA"></i>
+    
+
+        </div>
+
+        <div class="col-xs-4">
+
+            <label style = "display:inline;" for="i_retenerISR">Retener ISR</label>
+
+            <input class="c_retencion" type="checkbox" id="i_retenerISR" data-toggle="modal" data-target="#i_modalActivarRetencionISR" />
+            
+            <i style = "display:inline; margin-left:inherit;" class="fa fa-question-circle" data-toggle="modal"  data-target = "#i_modalRetenerISR"></i>
+    
+
+        </div>
+
+    </div><!--/check-boxes -->
+     <h3>Agregar concepto</h3>
+     <hr />
+    <div class="row">
+        <div class="col-xs-12">
+            <h4>Producto de Importación <input id="chckImportacion" type="checkbox" /></h4>
+            <div  id="tableImportacion">
+                <?php
+                   include("php/new/functions.php");
+                                $sql = createMysqliConnection();
+                                $query ="SELECT pedimentos.`idPedimento` AS id,pedimentos.numero,pedimentos.fecha,aduanas.nombre AS aduana FROM `pedimentos` INNER JOIN aduanas ON aduanas.idAduana = pedimentos.idAduana ORDER BY fecha ASC";
+                                $pedimentos = $sql->executeQuery($query);
+                ?>
+                <h4>Pedimentos</h4>
+                <ul class="list-group list-pedimentos">
+                    <?php
+
+                    foreach($pedimentos as $p){
+
+                    ?>
+
+                    <li data-id="<?= $p['id'] ?>" class="list-group-item pedimento"><h4><?= $p['numero'] ?>   <label class="label label-success"><?= $p['aduana'] ?></label></h4> <span class="badge"><?= $p['fecha'] ?></span></li>
+                <?php  } ?>
+                </ul>
+
+            </div>
+        </div>
+    </div>
+    <div class="row c_marginElement">
+        <div  class="col-xs-12 visible-lg visible-md">
+
+            <div class="table-responsive">
+
+                <table class="table table-bordered">
+
+                    <thead>
+
+                        <tr>
+
+                            <th class="col-xs-2">Atajo &nbsp&nbsp&nbsp<button onclick="window.open('AgrModAtajo.html')" class="btn btn-success"><i style="font-size:20px;" class="fa fa-share" aria-hidden="true"></i></button> </th>
+
+                            <th class="col-xs-3">Descripción</th>
+                            <th class="col-xs-2">No.Serie</th>
+
+                            <th class="col-xs-1">Unidad de medida</th>
+
+                            <th class="col-xs-1">Cantidad</th>
+
+                            <th class="col-xs-1">Precio Unitario</th>
+
+                            <th class="col-xs-1">Importe</th>
+
+                            <th class="col-xs-1"><i style="font-size:22px;" class="fa fa-wrench" aria-hidden="true"></i></th>
+
+                        </tr>
+
+                    </thead>
+
+                    <tbody id="i_tableConceptos">
+
+                        <tr>
+
+                            <td><select data-live-search="true" class="form-control c_input selectpicker" id="i_trinputAtajos"></select> </td>
+                            <td><textarea rows="4" class="form-control c_input" id="i_inputDesc"></textarea>   </td>
+                            <td><input id="i_inputNoSerie" type="text" class="form-control c_input" /></td>
+
+                            <td id="i_tdUniad">
+                                <select id="i_inputUnidad" class="form-control c_input">
+                                    <option>PIEZA</option>
+                                    <option>KILOS</option>
+                                    <option>LITROS</option>
+                                    <option>GRAMOS</option>
+                                    <option>N/A</option>
+                                    <option>Otro..</option>
+                                </select>
+                            </td>
+
+                            <td><input class="form-control c_input" type="number" id="i_inputCantidad" /> </td>
+
+                            <td><input class="form-control c_input" type="number" id="i_inputPrecio" /> </td>
+
+                            <td><input class="form-control c_input" type="number" id="i_inputImporte" /> </td>
+
+                            <td>
+                                <button id="i_btnAgregar" class="btn btn-block c_Accept "> <i style="font-size:22px;" class="fa fa-plus" aria-hidden="true"></i></button>
+
+                                <button id="i_btnUnDo" class="btn btn-block c_Accept" data-toggle="modal" data-target="#i_modalDeshacer"> <i style="font-size:22px;" class="fa fa-refresh" aria-hidden="true"></i></button>
+
+                            </td>
+
+
+
+
+
+                        </tr>
+
+
+
+
+
+                    </tbody>
+
+                </table>
+
+            </div>                          
+        </div>
+      
+    </div>
+   
+
+     <div id="i_mobileAdd" class="visible-xs visible-sm">
+         <div style="padding-top:11px;" class="row">
+             <div class="col-xs-12"><strong>Atajo &nbsp&nbsp&nbsp<button onclick="window.open('AgrModAtajo.html')" class="btn btn-success"><i style="font-size:20px;" class="fa fa-share" aria-hidden="true"></i></button></strong></div>
+         </div>
+
+         <div style="padding-top:11px; color:black;" class="row">
+             <div class="col-xs-12"><select data-live-search="true" class="form-control c_input selectpicker" id="i_trinputAtajosMobile"></select></div>
+         </div>
+
+         <div style="padding-top:11px;" class="row">
+             <strong>Descripción</strong>
+             <div class="col-xs-12"><textarea class="c_mobileInps form-control c_input"></textarea></div>
+         </div>
+         <div style="padding-top:11px;" class="row">
+             <div class="col-xs-6"><strong>No.Serie</strong></div>
+             <div class="col-xs-6"><input class="c_mobileInps form-control c_input"/></div>
+         </div>
+         <div style="padding-top:11px;" class="row">
+             <div class="col-xs-6"><strong>Unidad de medida</strong></div>
+             <div class="col-xs-6">
+                 <select id="i_inputMedidaMobile" class="c_input form-control c_mobileInps">
+                     <option>PIEZA</option>
+                     <option>KILOS</option>
+                     <option>LITROS</option>
+                     <option>GRAMOS</option>
+                     <option>N/A</option>
+                     <option>Otro..</option>
+                 </select>
+             </div>
+         </div>
+         <div style="padding-top:11px;" class="row">
+             <div class="col-xs-6"><strong>Cantidad</strong></div>
+             <div class="col-xs-6"><input id="i_inputCantidadMob" type="number" class="form-control c_input c_mobileInps c_updateInputs" /></div>
+         </div>
+         <div style="padding-top:11px;" class="row">
+             <div class="col-xs-6"><strong>Precio</strong></div>
+             <div class="col-xs-6"><input id="i_inputPrecioMob" type="number" class="form-control c_input c_mobileInps c_updateInputs" /></div>
+         </div>
+         <div style="padding-top:11px;" class="row">
+             <div class="col-xs-6"><strong>Importe</strong></div>
+             <div class="col-xs-6"><input id="i_inputImporteMob" type="number" class="form-control c_input c_mobileInps c_updateInputs" /></div>
+         </div>
+         <div style="padding-top:11px;" class="row">
+             <div class="col-xs-6"><strong>Opciones</strong></div>
+             <div class="col-xs-6">
+                 <div class="btn-group-horizontal">
+                     <button id="i_btnMobileAgregar" class="btn btn-default"><i style="font-size:20px;" class="fa fa-plus" aria-hidden="true"></i></button>
+                     <button onclick="$('#i_modalDeshacer').modal()" class="btn btn-default"><i style="font-size:20px;" class="fa fa-undo" aria-hidden="true"></i></button>
+                 </div>
+             </div>
+         </div>
+         </div>
+
+    <h3>Conceptos agregados</h3>
+     <div class="row visible-lg visible-md visible-sm">
+         <div class="col-xs-12">
+             <div class="table-responsive">
+                 <table id="i_tableConceptosAgregadosHideShow" class="table table-bordered">
+                     <thead>
+                         <tr>
+                             <th class="col-xs-3">Descripción</th>
+                             <th class="col-xs-1">No.Serie</th>
+
+                             <th class="col-xs-2">Unidad de medida</th>
+                             <th class="col-xs-1">Cantidad</th>
+                             <th class="col-xs-2">Precio Unitario</th>
+                             <th class="col-xs-2">Importe</th>
+                             <th class="col-xs-1"><i style="font-size:20px;" class="fa fa-wrench" aria-hidden="true"></i></th>
+                         </tr>
+                     </thead>
+                     <tbody id="i_tableConceptosAgregados"></tbody>
+                 </table>
+             </div>
+         </div>
+     </div>
+    <div id="i_xsRowing" class="visible-xs">
+        
+    </div>
+
+    <h3>Totales</h3>
+    <hr />
+     <div class="row c_marginElement visible-lg visible-md" style="margin: auto;border:5px;">
+
+         <table class="table table-bordered">
+             <thead>
+                 <tr>
+                     <th>Subtotal</th>
+                     <th id="i_thSubDescuento">Subtotal con descuento</th>
+                     <th>IVA(16%)</th>
+                     <th>Total</th>
+                 </tr>
+             </thead>
+             <tbody>
+                 <tr id="i_trTotales">
+                     <td>$0</td>
+                     <td id="i_tdSubDescuento">$0</td>
+                     <td>$0</td>
+                     <td>$0</td>
+
+                 </tr>
+             </tbody>
+
+         </table>
+     </div>
+         <div id="i_divTotales" class="row c_marginElement visible-xs visible-sm" style="margin: auto;border:5px;">
+             <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+
+                 <table class="table table-bordered">
+                     <thead>
+                         <tr>
+                             <th>Subtotal</th>
+                         </tr>
+                     </thead>
+                     <tbody>
+                         <tr>
+                             <td id="i_tdSubtotal">$0</td>
+                         </tr>
+
+                     </tbody>
+
+                 </table>
+
+             </div>
+             <div id="i_divSubDescuento" class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                 <table class="table table-bordered">
+                     <thead>
+                         <tr>
+                             <th id="i_tSubtotalDesc">Subtotal con descuento</th>
+                         </tr>
+                     </thead>
+                     <tbody>
+                         <tr>
+                             <td id="i_tdSubtotalDesc">$0</td>
+                         </tr>
+
+                     </tbody>
+
+                 </table>
+
+             </div>
+             <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                 <table class="table table-bordered">
+                     <thead>
+                         <tr>
+                             <th>IVA(16%)</th>
+                         </tr>
+                     </thead>
+                     <tbody>
+                         <tr>
+                             <td id="i_tdIva">$0</td>
+                         </tr>
+                     </tbody>
+
+                 </table>
+             </div>
+             <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                 <table class="table table-bordered">
+                     <thead>
+                         <tr>
+                             <th>Total</th>
+                         </tr>
+                     </thead>
+                     <tbody>
+                         <tr>
+                             <td id="i_tdTotal">$0</td>
+                         </tr>
+
+                     </tbody>
+
+                 </table>
+
+             </div>
+
+
+         </div>
+   
+    <div id="i_rowRetenciones" class="row c_marginElement">
+        <div class="col-xs-12">
+            <h3>Retenciones</h3>
+            <hr />
+            <div class="table-responsive">
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>Retencion IVA(2/3 partes)</th>
+                            <th id="i_tasaRet">Retencion de ISR</th>
+                        </tr>
+                    </thead>
+                    <tbody id="i_trRetenciones">
+
+                    </tbody>
+                </table>
+
+            </div>
+
+        </div>
+        
+    </div>
+
+         <div class="row c_marginElement">
+           
+             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                 <button type="submit" id="i_btnContinuar" class="btn btn-block c_Accept" data-toggle="modal" data-target="#i_modalContinuar">Continuar</button>
+
+
+
+
+             </div>
+
+             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+
+                 <button id="i_btnVistaPrevia" class="btn btn-block c_Accept" data-toggle="modal" data-target="#i_modalVistaPrevia">Vista Previa</button>
+
+
+
+             </div>
+             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                 <button id="btnUndoFactura" class="btn btn-block c_Accept">Deshacer</button>
+
+             </div>
+
+
+
+
+
+         </div>
+
+     </div> <!--/i_modalBlur-->
+
+     </div> <!--/Container--> 
+ 
+ <!--ModalLoader -->
+<div class="modal fade" id="modalPreview" role="dialog">
+        
+    
+     <div class="sk-cube-grid">
+      <div class="sk-cube sk-cube1"></div>
+      <div class="sk-cube sk-cube2"></div>
+      <div class="sk-cube sk-cube3"></div>
+      <div class="sk-cube sk-cube4"></div>
+      <div class="sk-cube sk-cube5"></div>
+      <div class="sk-cube sk-cube6"></div>
+      <div class="sk-cube sk-cube7"></div>
+      <div class="sk-cube sk-cube8"></div>
+      <div class="sk-cube sk-cube9"></div>
+     </div>
+     
+     
+    
+     
+     
+    
+</div><!--/ModalLoader -->
+
+<!--ModalMessageSeguro -->
+<div class="modal fade" id="i_modalSeguro" role="dialog">
+           <div class="container">
+             <div class="row">
+              <div class="col-sm-6 col-sm-offset-3 text-center modal-box">
+              <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                  
+                  <h3 style = "margin:4%;">¿Deseas aplicar esta opción?</h3>
+                  
+                  <h3>Cambiara la información en la factura</h3>
+                  
+                  <button type="button" class="btn btn-default c_modalDismiss c_Accept" data-dismiss="modal"  autofocus>Aceptar</button>
+             </div>
+            </div>
+           </div>
+</div><!--/ModalMessageSeguro -->
+
+
+    <!--ModalMessageActivarIVA -->
+    <div class="modal fade" id="i_modalActivarRetencionIVA" role="dialog">
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-6 col-sm-offset-3 text-center modal-box">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+
+                    <h3 style="margin:4%;">¿Deseas aplicar esta opción?</h3>
+
+                    <h3>Esto cambiará la configuración de retención de IVA en esta factura</h3>
+
+                    <button type="button" class="btn btn-default c_modalDismiss c_Accept" data-dismiss="modal" id="i_activarRetencionIVA" autofocus>Aceptar</button>
+                    <button type="button" class="btn btn-default c_modalDismiss c_Accept" data-dismiss="modal" autofocus>Cancelar</button>
+                </div>
+            </div>
+        </div>
+    </div><!--/ModalMessageActivarIVA -->
+
+    <!--ModalMessageActivarISR -->
+    <div class="modal fade" id="i_modalActivarRetencionISR" role="dialog">
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-6 col-sm-offset-3 text-center modal-box">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+
+                    <h3 style="margin:4%;">¿Deseas aplicar esta opción?</h3>
+
+                    <h3>Esto cambiará la configuración de retención de ISR en esta factura</h3>
+
+                    <button type="button" class="btn btn-default c_modalDismiss c_Accept" data-dismiss="modal" id="i_activarRetencionISR" autofocus>Aceptar</button>
+                    <button type="button" class="btn btn-default c_modalDismiss c_Accept" data-dismiss="modal" autofocus>Cancelar</button>
+                </div>
+            </div>
+        </div>
+    </div><!--/ModalMessageActivarISR -->
+
+
+    <div class="modal fade" id="i_deshacer_factura" role="dialog">
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-6 col-sm-offset-3 text-center modal-box">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+
+                    <h3 style="margin:4%;">¿Desea deshacer esta factura?</h3>
+                      <p>Todos los cambios se eliminaran</p>
+
+                    <button id="goUnDo" type="button" class="btn btn-default c_modalDismiss c_Accept" data-dismiss="modal" autofocus>Aceptar</button>
+                    <button type="button" class="btn btn-default c_modalDismiss c_Cancel" data-dismiss="modal" autofocus>Aceptar</button>
+
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+<!--ModalMessageAlertError -->
+<div class="modal fade" id="i_modalAlertError" role="dialog">
+           <div class="container">
+             <div class="row">
+              <div class="col-sm-6 col-sm-offset-3 text-center modal-box">
+              <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                  
+                  <h3 style = "margin:4%;">Error</h3>
+                  
+                  <h3 id="i_headerError">Valores invalidos</h3>
+                  
+                  <button type="button" class="btn btn-default c_modalDismiss c_Accept" data-dismiss="modal" autofocus>Aceptar</button>
+                  
+                  
+                  
+             </div>
+            </div>
+           </div>
+        </div><!--/ModalMessageAlertError -->
+        
+<!--ModalMessageSeguroAplicar -->
+<div class="modal fade" id="i_modalSeguroAplicar" role="dialog">
+           <div class="container">
+             <div class="row">
+              <div class="col-sm-6 col-sm-offset-3 text-center modal-box">
+              <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                  
+                  <h3 style = "margin:4%;">¿Deseas aplicar esta opción?</h3>
+                  
+                  <h3>Cambiara la información en la factura</h3>
+                  
+                  <button type="button" class="btn btn-default c_modalDismiss c_Accept" data-dismiss="modal" id="i_btnDescuento" autofocus>Aceptar</button>
+                  <button type="button" class="btn btn-default c_modalDismiss c_Cancel" data-dismiss="modal">Cancelar</button>
+                  
+             </div>
+            </div>
+           </div>
+        </div><!--/ModalMessageSeguroAplicar -->
+
+<!--ModalMessageRetenerIVA -->
+<div class="modal fade" id="i_modalRetenerIVA" role="dialog">
+           <div class="container">
+             <div class="row">
+              <div class="col-sm-6 col-sm-offset-3 text-center modal-box">
+              <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                  
+                  <h3 style = "margin:4%;">Retener IVA</h3>
+                  <h3>En caso de retener IVA </h3>
+                  <h3>Por ley se retienen las 2/3 partes del IVA y se especifica en la factura</h3>
+                  <h3>Se puede deshabilitar o habilitar la retención de IVA en Las configuraciones del usuario</h3>
+                  <h3>Se puede obtener más información acerca de la retención en:</h3>
+                  <h3><a target="_blank" href="http://www.sat.gob.mx/informacion_fiscal/devoluciones_compensaciones/Paginas/art_1a_liva.aspx">Articulo del IVA</a></h3>
+                  <button type="button" class="btn btn-default c_modalDismiss c_Accept" data-dismiss="modal" autofocus>Aceptar</button>
+                  
+                  
+             </div>
+            </div>
+           </div>
+        </div><!--/ModalMessageRetenerIVA -->
+    <div class="modal fade" id="i_modalOpcionesUsuarios" role="dialog">
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-6 col-sm-offset-3 text-center modal-box">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+
+                    <h3 style="margin:4%;">Confirmar</h3>
+                    <p>Seguro que desea salir?</p>
+                    
+                    <button onclick="location.href = 'opcionesUsuario.html'" type="button" class="btn btn-default c_modalDismiss c_Accept" data-dismiss="modal" autofocus>Aceptar</button>
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+<!--ModalMessageRetenerISR -->
+<div class="modal fade" id="i_modalRetenerISR" role="dialog">
+           <div class="container">
+             <div class="row">
+              <div class="col-sm-6 col-sm-offset-3 text-center modal-box">
+              <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                  
+                  <h3 style = "margin:4%;">Retención del ISR</h3>
+                  <h3>Se puede retener hasta una tasa del 30% del subtotal de la factura</h3>
+                  <h3>La tasa del ISR puede ser cambiada en las configuraciones del usuario</h3>
+                  <h3>Se puede obtener mas información acerca de las tasas de retención en:</h3>
+                  <h3><a target="_blank" href="http://www.sat.gob.mx/english/Paginas/tasas_de_retencion_de_interes.aspx">Tasas de retención de ISR</a></h3>
+                  <button type="button" class="btn btn-default c_modalDismiss c_Accept" data-dismiss="modal" autofocus>Aceptar</button>
+                  
+                  
+             </div>
+            </div>
+           </div>
+        </div><!--/ModalMessageRetenerISR -->
+
+<!--ModalMessageContinuar -->
+    <form id="i_formRedirect" hidden method="post" action="GuardarTimbrar.php">
+        <input type="text" hidden id="idCliente" name="id" value="" />
+        <input hidden type="text" name="factura_params" value="" id="facturaParams" />
+        <input hidden id="folioFactura" type="text" name="folioFactura" value="" />
+        <input hidden id="retenerIVA" name="retenerIVA" value="" />
+        <input hidden id="retenerISR" name="retenerISR" value="" />
+        <input hidden id="noCuenta" name="noCuenta" value="" />
+
+    </form>
+<div class="modal fade" id="i_modalContinuar" role="dialog">
+           <div class="container">
+             <div class="row">
+              <div class="col-sm-6 col-sm-offset-3 text-center modal-box">
+              <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                  
+                  <h3 id="i_headerContinuar" style = "margin:4%;">¿Esta seguro que desea Continuar?</h3>
+                  <p id="i_pContinuar">La factura se generara con la siguiente informacion</p>
+                 
+                  <button id="trigger_next" class="btn btn-default c_modalDismiss c_Accept" autofocus>Aceptar</button>
+                  <button type="button" class="btn btn-default c_modalDismiss c_Cancel" data-dismiss="modal">Cancelar</button>
+                  
+             </div>
+            </div>
+           </div>
+        </div><!--/ModalMessageContinuar -->
+    <div class="modal fade" id="i_modalConceptoRepeater" role="dialog">
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-6 col-sm-offset-3 text-center modal-box">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+
+
+                    <h3>Ya ha agregado este concepto</h3>
+                    <p>¿Desea agrupar este concepto con el anterior?</p>
+                    <p>¿O desea eliminar el anterior?</p>
+
+                    <button id="i_btnAgrupar" type="button" class="btn btn-default c_modalDismiss c_Accept" data-dismiss="modal" autofocus>Agrupar</button>
+                    <button id="i_btnEliminarAnterior" type="button" class="btn btn-default c_modalDismiss c_Accept" data-dismiss="modal" autofocus>Eliminar Anterior</button>
+
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="modal fade" id="i_modalConceptoRepeaterMobile" role="dialog">
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-6 col-sm-offset-3 text-center modal-box">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+
+
+                    <h3>Ya ha agregado este concepto</h3>
+                    <p>¿Desea agrupar este concepto con el anterior?</p>
+                    <p>¿O desea eliminar el anterior?</p>
+
+                    <button id="i_btnAgruparMobile" type="button" class="btn btn-default c_modalDismiss c_Accept" data-dismiss="modal" autofocus>Agrupar</button>
+                    <button id="i_btnEliminarMobile" type="button" class="btn btn-default c_modalDismiss c_Accept" data-dismiss="modal" autofocus>Eliminar Anterior</button>
+
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+<!--ModalMessageVistaPrevia -->
+<div  class="modal fade" id="i_modalVistaPrevia" role="dialog">
+    <div class="container">
+      <div class="row">
+        <div class="col-xs-12 text-center modal-box">
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                  
+                  
+                <h3 id="i_headerPrevFact" style = "margin:4%;">Aqui se muestra una vista previa de la factura</h3>
+            <div id="embededpdf" class="embed-responsive embed-responsive-16by9">
+                <iframe id="i_previewSec" class="embed-responsive-item" src=""></iframe>
+            </div>
+                  
+                      <button type="button" class="btn btn-default c_modalDismiss c_Accept" data-dismiss="modal" autofocus>Aceptar</button>
+                      <button type="button" class="btn btn-default c_modalDismiss c_Cancel" data-dismiss="modal">Cancelar</button>
+
+          </div><!--/col-xs-12 --->
+        </div><!--/row -->
+      </div> <!--/container -->
+    </div><!--/ModalMessageVistaPrevia -->
+
+<!--ModalMessageDeshacer -->
+<div class="modal fade" id="i_modalDeshacer" role="dialog">
+           <div class="container">
+             <div class="row">
+              <div class="col-sm-6 col-sm-offset-3 text-center modal-box">
+              <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                  <h3 style = "margin:4%;">¿Esta seguro que desea deshacer los cambios realizados?</h3>
+                  <button id="i_btnUnDoFields" type="button" class="btn btn-default c_modalDismiss" data-dismiss="modal" autofocus>Aceptar</button>
+                  <button type="button" class="btn btn-default c_modalDismiss c_Cancel" data-dismiss="modal">Cancelar</button>
+                  
+                  
+             </div>
+            </div>
+           </div>
+        </div><!--/ModalMessageDeshacer -->
+        
+    <div class="modal fade" id="i_modalAgregarUnidad" role="dialog">
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-6 col-sm-offset-3 text-center modal-box">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    <h3 style="margin:4%;">Agregue una nueva unidad</h3>
+                    <label for="i_inputNewUnidad">Nueva unidad</label>
+                    <input type="text" class="form-control c_input" id="i_inputNewUnidad" />
+                    <button  id="i_btnAgrgearUnidad"  type="button" class="c_buttnsModal btn btn-default c_modalDismiss" data-dismiss="modal" autofocus>Aceptar</button>
+                    <button type="button" class="btn btn-default c_modalDismiss c_Cancel c_buttnsModal" data-dismiss="modal">Cancelar</button>
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+<!--ModalCerrarSesion-->
+<div class="modal fade" id="i_modalCerrarSesion" role="dialog">
+           <div class="container">
+             <div class="row">
+              <div class="col-sm-6 col-sm-offset-3 text-center modal-box">
+              <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                  <h3 class = "h3Modal">¿Esta seguro que desea cerrar sesión?</h3>
+                    <button type="button" class="btn  c_modalDismiss c_AcceptModal" data-dismiss="modal" autofocus id="signout-button">Aceptar</button>
+                    <button type="button" class="btn  c_modalDismiss c_Cancel" data-dismiss="modal">Cancelar</button>
+             </div>
+            </div>
+           </div>
+        </div><!--/ModalCerrarSesion -->
+    <div class="modal fade" id="i_modalAgregarUnidadNueva" role="dialog">
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-6 col-sm-offset-3 text-center modal-box">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    <h3 class="h3Modal">Agregar nueva unidad de media</h3>
+                    <input id="i_inputNewMedida" type="text" class="form-control c_input" />
+                    <button  type="button" class="btn  c_modalDismiss c_AcceptModal" data-dismiss="modal" autofocus id="i_btnAgregarNuevaMedida">Aceptar</button>
+                    <button type="button" class="btn  c_modalDismiss c_Cancel" data-dismiss="modal">Cancelar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+<!--ModalOpcionesUsuario-->
+<div class="modal fade" id="i_modalOpcionesUsuario" role="dialog">
+           <div class="container">
+             <div class="row">
+              <div class="col-sm-6 col-sm-offset-3 text-center modal-box">
+              <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                  <h3 class = "h3Modal">Introduzca su contraseña personalizada para acceder</h3>
+                   
+                   <form role="form">
+                   <div class="form-group">
+                     <label for="pwd">Contraseña</label>
+                     <input type="password" class="form-control c_input" id="pwd">
+                     <label style = "margin: 3%;">Mostrar Contraseña</label>
+
+                     <input type="checkbox" id="i_checkPass" />
+                   </div>
+                   </form>
+                  
+                  
+                  
+                    <button type="button" class="btn  c_modalDismiss c_AcceptModal" data-dismiss="modal" autofocus>Acceder</button>
+                    <button type="button" class="btn  c_modalDismiss c_Cancel" data-dismiss="modal">Regresar</button>
+                  
+             </div>
+            </div>
+           </div>
+        </div><!--/ModalOpcionesUsuario-->
+
+
+    <!-- jQuery -->
+    
+     <script charset="utf-8">
+
+        var gn_idCliente = 0;
+        var gd_trAtajos = $("#i_trinputAtajos");
+        var gd_tableConceptos = $("#i_tableConceptos");
+        var gd_chechCiVA = $("#i_checkConceptosIVA");
+        var gd_tableConceptosAgregados = $("#i_tableConceptosAgregados");
+        var gf_iva = 0;
+        var gf_subtotal = 0;
+        var gf_total = 0;
+        var ga_conceptos = [];
+        var gn_folioFactura = 0;
+        var gb_showConfirm = true;
+        var ret_iva = 0;
+        var ret_isr = 0;
+        var g_ntasaISR = 0;
+         // mobile mods
+        var gd_trAtajos_mobile = null;
+        var gd_inputsMobile = null;
+        var gd_textAreas = null;
+
+        function checkInputsMobile(rowInputs,rowNumbers){
+            var len = rowInputs.length; var i = 0;
+            for (; i < len; i++) {
+                if (rowInputs[i].value.trim() == "") {
+                    return false;
+                }
+            }
+            len = rowNumbers.length; i = 0;
+            for (; i < len; i++) {
+                if (isNaN(rowNumbers[i].value)) {
+                    return false;
+                } else {
+                    var n = parseFloat(rowNumbers[i].value);
+                    if (n <= 0) {
+                        return false;
+                    }
+                }
+            }
+
+
+            return true;
+        }
+        var gd_inputImporteMobile = null;
+        $(".c_updateInputs").on("input", function () {
+
+            var id = $(this).attr("id");
+            if (id == "i_inputCantidadMob") {
+                var cantidad = this.value;
+                var precio = $("#i_inputPrecioMob").val();
+                cantidad = parseFloat(cantidad);
+                precio = parseFloat(precio);
+                var importe = cantidad * precio;
+                gd_inputImporteMobile.val(importe.toFixed(3));
+            }
+            if (id == "i_inputPrecioMob") {
+                var cantidad = $("#i_inputCantidadMob").val();
+                var precio = this.value;
+                cantidad = parseFloat(cantidad);
+                precio = parseFloat(precio);
+                var importe = cantidad * precio;
+                gd_inputImporteMobile.val(importe.toFixed(3));
+            }
+        });
+
+
+        $("#i_btnMobileAgregar").click(function () {
+            var inputs = gd_inputsMobile;
+            var descripcion = inputs[0].value;
+            var index_found = is_concepto_repeated(descripcion);
+
+            if (index_found!=-1) {
+                $("#i_btnAgruparMobile").val(index_found);
+                $("#i_btnEliminarMobile").val(index_found);
+                $("#i_modalConceptoRepeaterMobile").modal("show");
+
+
+
+
+
+            } else {
+                if (checkInputsMobile(inputs, $(".c_updateInputs"))) {
+                    var noSerie = inputs[1].value;
+                    var unidad = inputs[2].value;
+                    var cantidad =parseFloat( inputs[3].value);
+                    var precio =parseFloat(inputs[4].value);
+                    var importe = parseFloat(inputs[5].value);
+                    if (conceptos_iva) {
+                        precio = parseFloat(precio) / 1.16;
+                        importe = parseFloat(importe) / 1.16;
+
+                    }
+                    var isImportacion = false;
+                    if($("#chckImportacion").is(":checked")){
+                        if (!pedimentoSelected){
+                            toastr.info("Debes de selccionar un pedimento");
+                          }
+
+                        isImportacion = true;
+                    }
+                    var lj_Concepto = {};
+                    if (isImportacion) {
+
+                        lj_Concepto = { "idPedimento": pedimentoSelected.id, "aduana": pedimentoSelected.aduana, "numPedimento": pedimentoSelected.numero, "fechaPedimento": pedimentoSelected.fecha, "noSerie": noSerie, "descripcion": descripcion, "unidad": unidad, "cantidad": cantidad, "precio_unitario": precio.toFixed(3), "importe": importe.toFixed(3) };
+
+                    } else {
+
+                         lj_Concepto = { "noSerie": noSerie, "descripcion": descripcion, "unidad": unidad, "cantidad": cantidad, "precio_unitario": precio, "importe": importe };
+                    }
+                    agregar_concepto(lj_Concepto);
+                    ga_conceptos.push(lj_Concepto);
+
+
+
+                    importe = parseFloat(importe);
+                    gf_subtotal += importe;
+                    porcentaje = parseFloat(porcentaje);
+
+                    var descuento = gf_subtotal * (porcentaje / 100);
+                    var sub_descuento = gf_subtotal - descuento;
+                    gf_iva = sub_descuento * 0.16;
+                    gf_total = (sub_descuento) + gf_iva;
+                    updateTotals();
+                    update_table_conceptos();
+                    inputs.val("");
+
+                    pedimentoSelected = null;
+                    $(".list-pedimentos li").removeClass("selected");
+                } else {
+                   toastr.info("Valores Invalidos");
+                }
+            }
+
+        });
+
+        $(".selectpicker").on("changed.bs.select", function () {
+            var id_atajo = this.value;
+            update_concepto_data_xs(id_atajo);
+            update_concepto_data(id_atajo);
+           // alert(id_atajo);
+
+        });
+
+
+
+        $(document).on("input", "#i_mobileAdd .bs-searchbox input", function () {
+                var element = $(this);
+                //    $(".table-responsive").animate({ scrollTop: $(document).height() }, 1000);
+
+                $.post("php/atajosPicker.php", { query: element.val() }, function (data) {
+                    try {
+                        var lj_results = JSON.parse(data);
+                        var len = lj_results.result.length; var i = 0; var buf = [];
+                        //     buf.push("<select id='i_select' class='form-control c_input'>");
+                        for (; i < len; i++) {
+                            buf.push("<option value='" + lj_results.result[i].idatajo + "'>" + lj_results.result[i].descripcion.slice(0, 25) + "...</option>");
+                        }
+                        //   buf.push("</select>");
+                        //if (len == 1) {
+                        update_concepto_data_xs(lj_results.result[0].idatajo);
+
+                        gd_trAtajos_mobile.html(buf.join("")).selectpicker('refresh');
+
+                        gd_trAtajos_mobile.show();
+                    } catch (err) {
+
+                    }
+                });
+
+
+            });
+
+
+
+
+
+            //
+
+
+
+            $("#i_selectMetodoPago").on("change", function () {
+                var metodo_pago = this.value;
+                if (metodo_pago == "Cheque" || metodo_pago=="Transferencia Bancaria") {
+                    $("#i_divNoCuenta").show();
+
+                } else {
+                    $("#i_divNoCuenta").hide();
+
+                }
+            });
+
+            $("#i_btnAgregarNuevaMedida").click(function () {
+                var medida = $("#i_inputNewMedida").val();
+                var selec = $("#i_inputUnidad");
+                selec.append("<option>" + medida + "</option>");
+                selec.val(medida);
+                selec = $("#i_inputMedidaMobile");
+                selec.append("<option>" + medida + "</option>");
+                selec.val(medida);
+            });
+
+            $(document).on("change", "#i_inputMedidaMobile", function () {
+                var item = this.value;
+                //  alert(item);
+                if (item == "Otro..") {
+                    // $("#i_tdUniad").html("<input type='text' class='form-control c_input' id='i_inputUnidad' />");
+                    $("#i_modalAgregarUnidadNueva").modal();
+
+                }
+
+            });
+
+            $(document).on("change", "#i_inputUnidad", function () {
+                var item = this.value;
+              //  alert(item);
+                if (item == "Otro..") {
+                   // $("#i_tdUniad").html("<input type='text' class='form-control c_input' id='i_inputUnidad' />");
+                    $("#i_modalAgregarUnidadNueva").modal();
+
+                }
+
+            });
+
+            $("#i_btnUnDoFields").click(function () {
+                $("#i_tableConceptos tr input[type=number],input[type=text],textarea").val("");
+                gd_inputsMobile.val("");
+            });
+
+            function unDoFactura()
+            {
+                var idCliente = "<?php if(isset($_GET['id'])){echo $_GET['id'];}else{echo 'me_cago';} ?>";
+
+                if (idCliente.trim() == "me_cago") {
+                    location.href = "index.html";
+                }
+                $.post("php/unDoFactura.php", { idCliente: idCliente, folio: gn_folioFactura });
+
+            }
+            $("#goUnDo").click(function () {
+                $.post("php/eliminarSession.php", { folio: gn_folioFactura }, function (data) {
+                    gf_iva = 0; gf_subtotal = 0; gf_total = 0;
+
+                    ga_conceptos = [];
+                    update_table_conceptos();
+                    updateTotals();
+                });
+
+            });
+            $("#btnUndoFactura").click(function () {
+
+                $("#i_deshacer_factura").modal();
+            });
+
+            $(window).on('beforeunload', function () {
+                if(gb_showConfirm && go_ApiLogIn.getStatus())
+                    return 'Seguro que deseas salir?';
+            });
+
+            $(window).on('unload', function () {
+                if (ga_conceptos.length == 0) {
+                    $.post("php/deleteNullConceptos.php", { folio: gn_folioFactura, idCliente: gn_idCliente });
+                }
+            });
+
+
+
+
+
+
+            $("#trigger_next").click(function () {
+                if (ga_conceptos.length > 0 && !gb_showConfirm) {
+                    // alert("submitting...");
+
+                    $("#noCuenta").val($("#i_checkeCuenta").val());
+                    $("#i_formRedirect").submit();
+
+                } else {
+                    $("#i_modalContinuar").modal("hide");
+                }
+            });
+
+            $("#i_btnContinuar").click(function () {
+
+                var a_doms = $(".c_facturaParams");
+
+                var metodo_pago = a_doms[0].value;
+                var forma_pago = a_doms[1].value;
+
+                var no_cuenta = a_doms[2].value;
+                var predial = a_doms[4].value;
+
+
+                gn_idCliente = "<?php echo $_GET['id']; ?>";
+                $("#idCliente").val(gn_idCliente);
+                var d = 0;
+
+                d = parseFloat(porcentaje);
+                if (isNaN(d)) { d = ""; }
+
+
+                var f = { noCuenta: no_cuenta, predial: predial, forma_pago: forma_pago, metodo_pago: metodo_pago, descuento: d };
+                $("#facturaParams").val(JSON.stringify(f));
+                //$("#folioFactura").val(gn_folioFactura);
+                // $("form").submit();
+
+                var noCuenta_fail = false;
+                var predial_fail = false;
+                ld_divCuenta = $("#i_divNoCuenta");
+                if (ld_divCuenta.is(":visible")) {
+                    var no_cuenta = ld_divCuenta.find("input").val();
+                    if (no_cuenta.trim() == "") {
+                        noCuenta_fail = true;
+                    }
+                }
+
+                var ld_divPredial = $("#i_divPredial");
+                if (ld_divPredial.is(":visible")) {
+                    var predial = ld_divPredial.find("input").val();
+                    if (predial.trim() == "") {
+                        predial_fail = true;
+                    }
+                }
+
+                var msj_noCuenta = '';
+                if (noCuenta_fail)
+                {
+                    $("#i_headerContinuar").html("No se puede continuar");
+
+                    msj_noCuenta = "Debes de introducir tu número de cuenta";
+                    $("#i_pContinuar").html(msj_noCuenta);
+                    gb_showConfirm = true;
+                }
+                if (predial_fail)
+                {
+                    $("#i_headerContinuar").html("No se puede continuar");
+
+                    msj_noCuenta = "Debes de introducir el predial para la factura de arrendamiento";
+                    $("#i_pContinuar").html(msj_noCuenta);
+                    gb_showConfirm = true;
+
+                }
+
+                if (ga_conceptos.length == 0) {
+                    $("#i_headerContinuar").html("No se puede continuar");
+
+                    $("#i_pContinuar").html("Debes de introducir conceptos primero");
+                    gb_showConfirm = true;
+                }
+                if (ga_conceptos.length > 0 && !noCuenta_fail && !predial_fail) {
+                    gb_showConfirm = false;
+                    $("#i_headerContinuar").html("¿Esta seguro que desea continuar?");
+                    $("#i_pContinuar").html("Seguira la factura con los conceptos introducidos");
+                }
+
+
+            });
+
+
+            $(document).on("input", "#i_tableConceptos .bs-searchbox input", function () {
+
+                var element = $(this);
+                if (element.attr("id") != 'i_inputUnidad')  // input en bootstrap-select
+                {
+                    $(".table-responsive").animate({ scrollTop: $(document).height() }, 1000);
+
+                    $.post("php/atajosPicker.php", { query: element.val() }, function (data) {
+                        try{
+                            var lj_results = JSON.parse(data);
+
+                            var len = lj_results.result.length; var i = 0; var buf = [];
+
+                            //     buf.push("<select id='i_select' class='form-control c_input'>");
+
+                            for (; i < len; i++) {
+
+                                buf.push("<option value='" + lj_results.result[i].idatajo + "'>" + lj_results.result[i].descripcion.slice(0, 25) + "...</option>");
+
+
+
+                            }
+
+
+
+                            //   buf.push("</select>");
+
+
+
+
+                            if (len == 1)
+
+                                update_concepto_data(lj_results.result[0].idatajo);
+
+
+
+                            gd_trAtajos.html(buf.join("")).selectpicker('refresh');
+
+                            gd_trAtajos.show();
+                        } catch (err) {
+
+                        }
+                    });
+                }
+            });
+
+
+            $("#i_btnVistaPrevia").click(function () {
+
+
+                if (ga_conceptos.length == 0) {
+                    $("#i_headerPrevFact").html("Debe primero introducir conceptos para<br>la vista previa");
+                    $("#i_previewSec").attr("src", "");
+                } else {
+
+                    var f = { forma_pago: $("#i_selectFormaPago").val(), metodo_pago: $("#i_selectMetodoPago").val(), descuento: $("#i_inputDescuento").val() };
+
+                    $.get("Facturacion/vistaPrevia.php", { factura_params: JSON.stringify(f), idCliente: <?= $_GET['id'] ?> }, function (data) {
+                        //  window.open("printPDF.php?pdfFile=preview" + gn_folioFactura + ".pdf");
+                        //alert(data);
+                        $("#i_headerPrevFact").html("Aqui se muestra una vista previa de la factura");
+                        $("#i_previewSec").attr("src", "Facturacion/preview.pdf");
+
+                    });
+                }
+            });
+
+
+            $("#i_inputDescuento").on("input", function () {
+
+
+
+
+
+                var num = parseFloat(this.value);
+                if (num <= 0) { $(this).val(0); }
+                if (num >= 100) { $(this).val(100);}
+
+            });
+
+            var porcentaje = 0;
+            $("#i_btnDescuento").click(function () {
+                recalculate_totals();
+
+                var descuento = parseFloat($("#i_inputDescuento").val());
+                porcentaje = descuento;
+                $("#i_thSubDescuento").html("Subtotal con descuento (%" + porcentaje + ")");
+                $("#i_tSubtotalDesc").html("Subtotal con descuento (%" + porcentaje + ")");
+                descuento = parseFloat(descuento / 100);
+
+                gf_subtotal = parseFloat(gf_subtotal);
+
+
+                var lf_descuento = descuento;
+
+                descuento = gf_subtotal * descuento;
+
+
+                gf_iva = parseFloat(gf_iva);
+                gf_total = parseFloat(gf_total);
+                gf_iva = (gf_subtotal - descuento) * 0.16;
+
+                gf_total = (gf_subtotal - descuento) + gf_iva;
+
+                updateTotals();
+                $.post("php/ActualizarDescuento.php",{DESCUENTO : lf_descuento, ID : gn_folioFactura},function(data,status){
+                    //  alert(data);
+                });
+
+            });
+
+            function agregar_concepto(concepto)
+            {
+
+
+
+                $.post("php/saveConceptsSession.php", { concepto:JSON.stringify(concepto), idCliente: gn_idCliente,total_importe: gf_total }, function (data) {
+
+                    //   alert(data);
+                });
+
+
+
+            }
+            function is_concepto_repeated(descripcion)
+            {
+
+                var len = ga_conceptos.length; var i = 0;
+                var found_index = -1;
+                for (; i < len; i++) {
+
+                    if (ga_conceptos[i].descripcion == descripcion.trim()) {
+                        found_index = i;
+                        return found_index;
+
+
+
+                    }
+
+                }
+
+                return found_index;
+
+            }
+            $("#i_btnAgruparMobile").click(function () {
+               // var ld_unidad = $("#i_inputUnidad");
+                var row_inserted = gd_inputsMobile;
+                var index_found = this.value;
+
+                var len = ga_conceptos.length; var i = 0;
+                var descripcion = row_inserted[0].value;
+                descripcion = descripcion.trim();
+                var noSerie = row_inserted[1].value;
+                var unidad = row_inserted[2].value;
+                var cantidad = parseFloat(row_inserted[3].value);
+                var precio = parseFloat(row_inserted[4].value);
+                var importe = parseFloat(row_inserted[5].value);
+                var lj_concepto = null;
+                for (; i < len; i++) {
+                    if (ga_conceptos[i].descripcion.trim() == descripcion) {
+                        ga_conceptos[i].noSerie = noSerie;
+                        ga_conceptos[i].unidad = unidad;
+
+                        var prev_cantidad = parseFloat(ga_conceptos[i].cantidad);
+                        ga_conceptos[i].cantidad = prev_cantidad + cantidad;
+                        ga_conceptos[i].precio_unitario = precio.toFixed(3);
+                        importe = precio * (prev_cantidad + cantidad);
+                        gf_subtotal = gf_subtotal - ga_conceptos[i].importe;
+
+                        ga_conceptos[i].importe = importe.toFixed(3);
+                        gf_subtotal = gf_subtotal + parseFloat(ga_conceptos[i].importe);
+                        lj_concepto = { "noSerie": noSerie, "descripcion": descripcion, "unidad": unidad, "cantidad": ga_conceptos[i].cantidad, "precio_unitario": ga_conceptos[i].precio_unitario, "importe": ga_conceptos[i].importe };
+
+                        break;
+                    }
+                }
+                row_inserted.val("");
+                porcentaje = parseFloat(porcentaje);
+
+                    var descuento = (porcentaje / 100) * gf_subtotal;
+                    gf_iva = (gf_subtotal - descuento) * 0.16;
+                    gf_total = gf_iva + (gf_subtotal - descuento);
+
+
+                update_table_conceptos()
+                updateTotals();
+                $.post("php/agruparConceptoSession.php", {updated_concepto:JSON.stringify(lj_concepto),index:index_found});
+            });
+
+            var gd_inputFields = $("#i_tableConceptos tr .c_input");
+            $("#i_btnAgrupar").click(function () {
+                var index_found = this.value;
+               // var ld_unidad = $("#i_inputUnidad");
+
+                var len = ga_conceptos.length; var i = 0;
+                var descripcion = gd_inputFields[1].value;
+                descripcion = descripcion.trim();
+                var noSerie = gd_inputFields[2].value;
+                var unidad = gd_inputFields[3].value;
+                var cantidad = parseFloat(gd_inputFields[4].value);
+                var precio = parseFloat(gd_inputFields[5].value);
+                var importe = parseFloat(gd_inputFields[6].value);
+                var lj_concepto = null;
+                for (; i < len; i++) {
+                    if (ga_conceptos[i].descripcion.trim() == descripcion) {
+                        ga_conceptos[i].unidad = unidad;
+                        ga_conceptos[i].noSerie = noSerie;
+                        var prev_cantidad = parseFloat(ga_conceptos[i].cantidad);
+                        ga_conceptos[i].cantidad = prev_cantidad + cantidad;
+                        ga_conceptos[i].precio_unitario = precio.toFixed(3);
+                        importe = precio * (prev_cantidad + cantidad);
+                        gf_subtotal = gf_subtotal - ga_conceptos[i].importe;
+
+                        ga_conceptos[i].importe = importe.toFixed(3);
+                        gf_subtotal = gf_subtotal + parseFloat(ga_conceptos[i].importe);
+
+                        lj_concepto = { "noSerie": noSerie, "descripcion": descripcion, "unidad": unidad, "cantidad": ga_conceptos[i].cantidad, "precio_unitario": ga_conceptos[i].precio_unitario, "importe": ga_conceptos[i].importe };
+
+                        break;
+                    }
+                }
+                gd_inputFields.val("");
+                porcentaje = parseFloat(porcentaje);
+                if (porcentaje>0) {
+                    var descuento = (porcentaje / 100) * gf_subtotal;
+                    gf_iva = (gf_subtotal - descuento) * 0.16;
+                    gf_total = gf_iva + (gf_subtotal - descuento);
+                } else {
+                    gf_iva = (gf_subtotal) * 0.16;
+                    gf_total = gf_iva + gf_subtotal;
+                }
+
+
+                update_table_conceptos()
+                updateTotals();
+                // actualizar variables de session....
+                $.post("php/agruparConceptoSession.php", {updated_concepto:JSON.stringify(lj_concepto),index:index_found}, function (data) {
+                    //alert(data);
+                });
+
+            });
+
+            $("#i_btnEliminarMobile").click(function(){
+                var index_found = this.value;
+                var len = ga_conceptos.length; var i = 0;
+                var descripcion = gd_inputsMobile[0].value;
+                descripcion = descripcion.trim();
+                var noSerie = gd_inputsMobile[1].value;
+                var unidad = gd_inputsMobile[2].value;
+                var cantidad = parseFloat(gd_inputsMobile[3].value);
+                var precio = parseFloat(gd_inputsMobile[4].value);
+                var importe = parseFloat(gd_inputsMobile[5].value);
+                var lj_concepto = null;
+                for (; i < len; i++) {
+                    if (ga_conceptos[i].descripcion.trim() == descripcion) {
+                        ga_conceptos[i].noSerie = noSerie;
+                        ga_conceptos[i].unidad = unidad;
+                        ga_conceptos[i].cantidad = cantidad;
+                        ga_conceptos[i].precio_unitario = precio.toFixed(3);
+                        gf_subtotal = gf_subtotal - parseFloat(ga_conceptos[i].importe);
+                        ga_conceptos[i].importe = importe.toFixed(3);
+                        gf_subtotal = gf_subtotal + parseFloat(ga_conceptos[i].importe);
+                        lj_concepto = {"noSerie":noSerie, "descripcion": descripcion, "unidad": unidad, "cantidad": ga_conceptos[i].cantidad, "precio_unitario": ga_conceptos[i].precio_unitario, "importe": ga_conceptos[i].importe };
+
+                        break;
+                    }
+                }
+                gd_inputsMobile.val("");
+
+                porcentaje = parseFloat(porcentaje);
+
+                    var descuento = gf_subtotal * (porcentaje / 100);
+                    gf_iva = (gf_subtotal - descuento) * 0.16;
+                    gf_total = gf_iva + (gf_subtotal - descuento);
+
+
+
+                update_table_conceptos()
+                updateTotals();
+                $.post("php/agruparConceptoSession.php", {updated_concepto:JSON.stringify(lj_concepto),index:index_found});
+            });
+
+            $("#i_btnEliminarAnterior").click(function () {
+            //    var ld_unidad = $("#i_inputUnidad");
+                var index_found = this.value;
+                var len = ga_conceptos.length; var i = 0;
+                var descripcion = gd_inputFields[1].value;
+                descripcion = descripcion.trim();
+                var noSerie = gd_inputFields[2].value;
+                var unidad = gd_inputFields[3].value;
+                var cantidad = parseFloat(gd_inputFields[4].value);
+                var precio = parseFloat(gd_inputFields[5].value);
+                var importe = parseFloat(gd_inputFields[6].value);
+                var lj_concepto = null;
+                for (; i < len; i++) {
+                    if (ga_conceptos[i].descripcion.trim() == descripcion) {
+                        ga_conceptos[i].noSerie = noSerie;
+                        ga_conceptos[i].unidad = unidad;
+                        ga_conceptos[i].cantidad = cantidad;
+                        ga_conceptos[i].precio_unitario = precio.toFixed(3);
+                        gf_subtotal = gf_subtotal - parseFloat(ga_conceptos[i].importe);
+                        ga_conceptos[i].importe = importe.toFixed(3);
+                        gf_subtotal = gf_subtotal + parseFloat(ga_conceptos[i].importe);
+                        lj_concepto = { "noSerie": noSerie, "descripcion": descripcion, "unidad": unidad, "cantidad": ga_conceptos[i].cantidad, "precio_unitario": ga_conceptos[i].precio_unitario, "importe": ga_conceptos[i].importe };
+
+                        break;
+                    }
+                }
+                gd_inputFields.val("");
+
+                porcentaje = parseFloat(porcentaje);
+
+                    var descuento = gf_subtotal * (porcentaje / 100);
+                    gf_iva = (gf_subtotal - descuento) * 0.16;
+                    gf_total = gf_iva + (gf_subtotal - descuento);
+
+                update_table_conceptos()
+                updateTotals();
+                $.post("php/agruparConceptoSession.php", {updated_concepto:JSON.stringify(lj_concepto),index:index_found}, function (data) {
+
+                });
+
+            });
+
+
+            $("#i_btnAgregar").click(function () {
+                var descripcion = gd_inputFields[1].value;
+                var noSerie = gd_inputFields[2].value
+                var ld_unidad = gd_inputFields[3].value;
+                var unidad = ld_unidad;
+                var cantidad = gd_inputFields[4].value;
+                var precio = gd_inputFields[5].value;
+                var importe = gd_inputFields[6].value;
+
+                var went_fine = true;
+                var isImportacion = false;
+
+                if ($("#chckImportacion").is(":checked")) {
+                    if(!pedimentoSelected){
+                        toastr.info("Debes de seleccionar un pedimento");
+                        went_fine = false;
+                    }
+                    isImportacion = true;
+                }
+
+
+                if ( importe<=0||precio<=0||cantidad<=0|| !isNaN(unidad) || descripcion.trim() == '' || unidad.trim() == '' || cantidad.trim() == '' || precio.trim() == '' || importe.trim() == '') {
+                    //   $("#i_headerError").html("valores invalidos");
+                    toastr.info("Valores invalidos");
+                    went_fine = false;
+                }
+                var found_index = is_concepto_repeated(descripcion);
+                if (found_index != -1 && went_fine) {
+                    went_fine = false;
+                    $("#i_btnAgrupar").val(found_index);
+                    $("#i_btnEliminarAnterior").val(found_index);
+                    $("#i_modalConceptoRepeater").modal("show");
+                }
+                if (went_fine) {
+                    // checar si es importe con iva o sin iva
+                    if (conceptos_iva) {
+                        importe = parseFloat(importe) / 1.16;
+                        cantidad = parseFloat(cantidad);
+                        precio = parseFloat(precio) / 1.16;
+                    } else {
+                        importe = parseFloat(importe);
+                        cantidad = parseFloat(cantidad);
+                        precio = parseFloat(precio);
+                    }
+
+                    porcentaje = parseFloat(porcentaje);
+                    gf_subtotal += importe;
+                    if (porcentaje > 0) {
+                        var descuento = gf_subtotal * (porcentaje / 100);
+                        gf_iva = (gf_subtotal - descuento) * 0.16;
+                        gf_total = (gf_subtotal - descuento) + gf_iva;
+
+                    } else {
+                        gf_iva = (gf_subtotal) * 0.16;
+                        gf_total = (gf_subtotal) + gf_iva;
+                    }
+                    var lj_Concepto = {};
+                    if (isImportacion) {
+
+                        var lj_Concepto = { "idPedimento": pedimentoSelected.id, "aduana": pedimentoSelected.aduana, "numPedimento": pedimentoSelected.numero, "fechaPedimento": pedimentoSelected.fecha, "noSerie": noSerie, "descripcion": descripcion, "unidad": unidad, "cantidad": cantidad, "precio_unitario": precio.toFixed(3), "importe": importe.toFixed(3) };
+
+                    } else {
+                        var lj_Concepto = { "noSerie": noSerie, "descripcion": descripcion, "unidad": unidad, "cantidad": cantidad, "precio_unitario": precio.toFixed(3), "importe": importe.toFixed(3) };
+                    }
+                    agregar_concepto(lj_Concepto);
+                    ga_conceptos.push(lj_Concepto);
+                    //gd_tableConceptos.append("<tr><td></td> <td>" +descripcion + "</td><td>" +unidad + "</td><td>" +cantidad.toFixed(3) + "</td><td>" +precio.toFixed(3) + "</td><td>" +importe.toFixed(3) + "</td><td><button id='btn_eliminar_concepto' class='btn btn-block btn-primary c_btnEliminarConcepto'>Eliminar</button></td></tr>");
+                    update_table_conceptos();
+                    gd_inputFields.val("");
+                   // $("#i_tdUniad").html("<select id='i_inputUnidad' class='form-control c_input'><option>PIEZA</option><option>KILOS</option><option>LITROS</option><option>GRAMOS</option><option>N/A</option><option value='1'>Otro...</option> </select>");
+                    updateTotals();
+                    $(".list-pedimentos li").removeClass("selected");
+                    pedimentoSelected = null;
+                }
+            });
+
+            function eliminar_conepto(index)
+            {
+
+
+
+                // actualizar totales
+
+                gf_subtotal = gf_subtotal - ga_conceptos[index].importe;
+
+                gf_iva = gf_subtotal * 0.16;
+
+                gf_total = gf_iva + gf_subtotal;
+
+
+                ga_conceptos.splice(index, 1);
+
+
+                $.post("php/eliminarSessionConcepto.php", { conceptos:ga_conceptos }, function (data) {
+                    // alert(data);
+                });
+                // console.log(data);
+
+
+
+                update_table_conceptos();
+                updateTotals();
+
+
+
+
+
+
+
+
+
+
+
+
+            }
+            function recalculate_totals()
+            {
+
+                gf_subtotal = 0; gf_total = 0; gf_iva = 0;
+
+                var len = ga_conceptos.length; var i = 0;
+
+                for (; i < len; i++)
+
+                {
+
+                    gf_subtotal += parseFloat(ga_conceptos[i].importe);
+
+
+
+                }
+
+                gf_iva = gf_subtotal * 0.16;
+
+                gf_total = gf_iva + gf_subtotal;
+
+            }
+            var gj_rowSelected = null;
+
+            $(document).on("input", "#i_selectedPrecio", function () {
+                var precio = this.value;
+                var cantidad = $("#i_selectedCantidad")[0].value;
+                if (cantidad.trim() != '' && precio.trim() != '') {
+                    if (!isNaN(cantidad) && !isNaN(precio)) {
+                        var importe = parseFloat(cantidad) * parseFloat(precio);
+                        $("#i_selectedImporte").val(importe.toFixed(3));
+                    }
+                }
+            });
+
+            $(document).on("input", "#i_selectedCantidad", function () {
+                var cantidad = this.value;
+                var precio = $("#i_selectedPrecio")[0].value;
+                if (cantidad.trim() != '' && precio.trim() != '') {
+                    if (!isNaN(cantidad) && !isNaN(precio)) {
+                        var importe = parseFloat(cantidad) * parseFloat(precio);
+                        $("#i_selectedImporte").val(importe.toFixed(3));
+                    }
+                }
+
+            });
+            function checkInputs_Row(row) {
+                var len = row.length; var i = 0;
+                for (; i < len; i++) {
+                    if (row[i].value.trim() == "") {
+                        return false;
+                    }
+                    if (!isNaN(row[i].value.trim())) {
+                        var n = parseFloat(row[i].value.trim());
+                        if (n <= 0) {
+                            return false;
+                        }
+                    }
+
+
+                }
+
+                return true;
+            }
+
+            function getPedimentoByID(id) {
+                var len = pedimentos.length; var i = 0;
+                for (; i < len; i++) {
+                    var p = pedimentos[i];
+                    if(p.id==id){
+                        return p;
+                       }
+                }
+                return null;
+
+            }
+            $(document).on("click", "#i_btnRowAccept", function () {
+                //   var ld_row_inputs = gd_rowSelected.find("input,textarea,select");
+                var dom_row = gj_rowSelected.dom;
+                var index = parseInt(gj_rowSelected.index);
+                var ld_inputs = dom_row.find("input,select,textarea");
+
+
+                //var lj_Concepto = { "descripcion": obj[i].descripcion, "unidad": obj[i].unidad, "cantidad": obj[i].cantidad, "precio_unitario": obj[i].precio_unitario, "importe": obj[i].importe };
+                var idPedimento = 0;
+
+                if (checkInputs_Row(ld_inputs)) {
+                    var new_descripcion = '';
+                    var new_noSerie = '';
+                    var new_unidad = '';
+                    var new_cantidad = '';
+                    var new_precio = '';
+                    var new_importe = '';
+                    var new_aduana = '';
+                    var new_pedimento = '';
+                    var new_fecha = '';
+                    if (ga_conceptos[index].aduana) {
+                        new_descripcion = ld_inputs[0].value;
+                         idPedimento = ld_inputs[1].value;
+                        var pedimento = getPedimentoByID(idPedimento);
+
+                        new_pedimento = pedimento.numero;
+                        new_aduana = pedimento.aduana;
+                        new_fecha = pedimento.fecha;
+
+                        new_noSerie = ld_inputs[2].value;
+                        new_unidad = ld_inputs[3].value;
+                        new_cantidad = ld_inputs[4].value;
+                        new_precio = ld_inputs[5].value;
+                        new_importe = ld_inputs[6].value;
+                    } else {
+                        new_descripcion = ld_inputs[0].value;
+                        new_noSerie = ld_inputs[1].value;
+                        new_unidad = ld_inputs[2].value;
+                        new_cantidad = ld_inputs[3].value;
+                        new_precio = ld_inputs[4].value;
+                        new_importe = ld_inputs[5].value;
+                    }
+
+                    if (conceptos_iva) {
+                        new_precio = parseFloat(new_precio) / 1.16;
+                        new_importe = parseFloat(new_importe) / 1.16;
+                    } else {
+                        new_precio = parseFloat(new_precio);
+                        new_importe = parseFloat(new_importe);
+                    }
+                    var old_importe = ga_conceptos[index].importe;
+                    gf_subtotal = gf_subtotal - parseFloat(old_importe);
+                    ga_conceptos[index].noSerie = new_noSerie;
+                    ga_conceptos[index].descripcion = new_descripcion;
+                    ga_conceptos[index].unidad = new_unidad;
+                    ga_conceptos[index].cantidad = new_cantidad;
+                    ga_conceptos[index].precio_unitario = new_precio.toFixed(3);
+                    ga_conceptos[index].importe = new_importe.toFixed(3);
+                    if (new_aduana != '') {
+                        ga_conceptos[index].aduana = new_aduana;
+                        ga_conceptos[index].fechaPedimento = new_fecha;
+                        ga_conceptos[index].numPedimento = new_pedimento;
+                        ga_conceptos[index].idPedimento = idPedimento;
+
+                    }
+
+         porcentaje = parseFloat(porcentaje);
+                    gf_subtotal += new_importe;
+
+                        var descuento = gf_subtotal * (porcentaje / 100);
+
+                        gf_iva = (gf_subtotal - descuento) * 0.16;
+                        gf_total = (gf_subtotal - descuento) + gf_iva;
+
+
+                    update_table_conceptos();
+                    updateTotals();
+                    $("button").prop("disabled", false);
+
+                    $.post("php/updateSessionConcetos.php", { updatedConcepto: JSON.stringify(ga_conceptos[index]), index: index }, function (data) {
+                    });
+                } else {
+                    //$("#i_modalAlertError").modal("show");
+                    toastr.warning("Valores invalidos");
+
+                }
+
+            });
+
+         function getIdPedimento(num){
+             var len = pedimentos.length; var i = 0;
+             for(;i<len;i++){
+                 var p = pedimentos[i];
+                 if(p.numero==num){
+                     return p.id;
+                      }
+             }
+             return null;
+
+           }
+
+            $(document).on("click", ".c_Ajustes", function () {
+                var index = $(this).data("index");
+                var concepto = ga_conceptos[index];
+
+                var ld_row = $(this).parent().parent().parent();
+                //  alert(ld_row.html());
+                var ld_row_elements = ld_row;
+                ld_row = ld_row.find("td");
+                var btnAceptar = ld_row_elements.find("button#i_btnRowAccept");
+
+                gj_rowSelected = { dom: ld_row,index:btnAceptar.val() };
+                var precio = ld_row[4].innerHTML;
+                precio = precio.slice(1, precio.length);
+                var importe = ld_row[5].innerHTML;
+                importe = importe.slice(1, importe.length);
+                var lj_prevData = { descripcion: concepto.descripcion, noSerie: concepto.noSerie, unidad: concepto.unidad, cantidad: concepto.cantidad, precio: concepto.precio_unitario, importe: concepto.importe };
+                var html_desc = "<textarea rows='4' class='form-control c_input c_config'>"+lj_prevData.descripcion+"</textarea>";
+                var idPed = 0;
+                if (concepto.numPedimento) {
+                    html_desc += "<select class='c_input form-control' id='pedimentoMod'>";
+                    var len = pedimentos.length; var i = 0;
+                    for(;i<len;i++){
+                        var p = pedimentos[i];
+                        html_desc += "<option value='" + p.id + "'>" + p.numero + "</option>";
+                    }
+                    html_desc += "</select>";
+                     idPed = getIdPedimento(concepto.numPedimento);
+                    ld_row[0].innerHTML = html_desc;
+                    $("#pedimentoMod").val(idPed);
+
+                } else {
+                    ld_row[0].innerHTML = html_desc;
+                }
+
+
+
+
+                $("#pedimentoMod").val();
+                var arr_options = [lj_prevData.unidad.trim(), "PIEZA", "KILOS", "LITROS", "GRAMOS", "N/A", "Otro.."];
+                arr_options = $.unique(arr_options); var len = arr_options.length; var i = 0;
+                //console.log(arr_options);
+                var options_formats = [];
+                for (; i < len; i++) {
+                    if (arr_options[i] == "Otro..") {
+                        options_formats.push("<option value='1'>" + arr_options[i] + "</option>");
+
+                    } else {
+                        options_formats.push("<option>" + arr_options[i] + "</option>");
+                    }
+                }
+
+                ld_row[1].innerHTML = "<input class='form-control c_input c_config' value='" + lj_prevData.noSerie + "' />"
+                ld_row[2].innerHTML = "<select value='" + lj_prevData.unidad + "' class='c_selectChange form-control c_input c_config'>" + options_formats.join("") + "</select>";
+
+                ld_row[3].innerHTML = "<input value='"+lj_prevData.cantidad+"' id='i_selectedCantidad' type='number' class='form-control c_input c_config' />";
+                ld_row[4].innerHTML = "<input value='"+lj_prevData.precio+"' id='i_selectedPrecio' type='number' class='form-control c_input c_config' />";
+                ld_row[5].innerHTML = "<input value='"+lj_prevData.importe+"' id='i_selectedImporte' type='number' class='form-control c_input c_config' />";
+                ld_row_elements.find(".c_divOpts").hide();
+                btnAceptar.show();
+                $("button").not("#i_btnRowAccept").prop("disabled", true);
+            });
+            function printTableRowing(row,i)
+            {
+                var popOver = '';
+
+                if (row[i].numPedimento) {
+                    var content = "<div class='popover-info'>";
+                    content += "<label>Pedimento:</label> " + row[i].numPedimento+"<br>";
+                    content += "<label>Aduana:</label> " + row[i].aduana + "<br>";
+                    content += "<label>Fecha:</label> " + row[i].fechaPedimento + "<br></div>";
+                    popOver = '<a class="a-pop-over" data-placement="top" data-toggle="popover" title="Datos de importación" data-html="true" data-content="' + content + '">Importación</a>';
+
+                }
+                var out = '';
+                out += "<table class='table table-bordered table-condensed'>";
+                out += "<tbody><tr>";
+                out += "<td style='font-weight: 900;'>Descripción</td>";
+                out += "<td>"+ row[i].descripcion +"<br>"+popOver+"</td>";
+                out + "</tr>"
+
+                out += "<tr>";
+                out += "<td style='font-weight: 900;'>No.Serie</td>";
+                out += "<td>" + row[i].noSerie + "</td>";
+                out + "</tr>"
+
+                out += "<tr>";
+                out += "<td style='font-weight: 900;'>Unidad</td>";
+                out += "<td>" + row[i].unidad + "</td>";
+                out + "</tr>"
+                out += "<tr>";
+                out += "<td style='font-weight: 900;'>Cantidad</td>";
+                out += "<td>" + row[i].cantidad + "</td>";
+                out + "</tr>"
+                out += "<tr>";
+                out += "<td style='font-weight: 900;'>Precio</td>";
+                out += "<td>$" + parseFloat(row[i].precio_unitario).toFixed(3) + "</td>";
+                out + "</tr>"
+                out += "<tr>";
+                out += "<td style='font-weight: 900;'>Importe</td>";
+                out += "<td>$" + parseFloat(row[i].importe).toFixed(3) + "</td>";
+                out += "</tr>";
+                out += "<td style='font-weight: 900;'><i style='padding-top:9px;' class='fa fa-wrench' aria-hidden='true'></i></td>";
+                out += "<td><div class='btn-group-horizontal c_divOpts'> <button onclick='eliminar_conepto(" + i + ")' class='btn btn-default c_Cancel' ><i class='fa fa-trash' style='font-size:20px;' aria-hidden='true'></i></button><button data-index='"+i+"' class='btn btn-default  c_ajustesRowing'><i class='fa fa-cog' style='font-size:20px;' aria-hidden='true'></i></button></div><button value='" + i + "' id='i_btnRowAcceptxs' style='display: none;' class='btn btn-success'>Aceptar</button></td></tr>";
+                out += "</tbody></table>";
+                return out;
+
+
+            }
+
+            $(document).on("click", "#i_btnRowAcceptxs", function () {
+                var row = gj_rowSelected.dom;
+                var index = gj_rowSelected.index;
+                index = parseInt(index);
+
+
+
+                var inputs = row.find("input,select,textarea");
+
+
+
+                if (checkInputs_Row(inputs)) {
+                    var new_descripcion  ='';
+                    var new_noSerie = '';
+                    var new_unidad = '';
+                    var new_cantidad = '';
+                    var new_precio = '';
+                    var new_importe = '';
+                    var new_aduana = '';
+                    var new_pedimento = '';
+                    var new_fecha = '';
+                    var concepto = ga_conceptos[index];
+                    var idPedimento = 0;
+                    if (concepto.aduana) {
+                        new_descripcion = inputs[0].value;
+                        idPedimento =row.find("#pedModXs").val();
+                        var pedimento = getPedimentoByID(idPedimento);
+
+                        new_pedimento = pedimento.numero;
+                        new_aduana = pedimento.aduana;
+                        new_fecha = pedimento.fecha;
+
+                        new_noSerie = inputs[2].value;
+                        new_unidad = inputs[3].value;
+                        new_cantidad = inputs[4].value;
+                        new_precio = inputs[5].value;
+                        new_importe = inputs[6].value;
+                    } else {
+                       new_descripcion = inputs[0].value;
+                       new_noSerie = inputs[1].value;
+                       new_unidad = inputs[2].value;
+                       new_cantidad = inputs[3].value;
+                       new_precio = inputs[4].value;
+                       new_importe = inputs[5].value;
+                    }
+                    if (conceptos_iva) {
+
+                        new_importe = parseFloat(new_importe);
+                        new_importe = new_importe / 1.16;
+                        new_precio = parseFloat(new_precio);
+                        new_precio = new_precio / 1.16;
+                    }
+
+
+                    //buff.push("<tr><td>" + ga_conceptos[i].descripcion + "</td><td>" + ga_conceptos[i].unidad + "</td><td>" + ga_conceptos[i].cantidad + "</td><td>$" + parseFloat(ga_conceptos[i].precio_unitario).toFixed(3) + "</td><td>$" + parseFloat(ga_conceptos[i].importe).toFixed(3) + "</td><td><div class='btn-group-horizontal c_divOpts'> <button onclick='eliminar_conepto(" + i + ")' class='btn btn-default c_Cancel' ><i class='fa fa-trash' style='font-size:20px;' aria-hidden='true'></i></button><button class='btn btn-default c_Ajustes'><i class='fa fa-cog' style='font-size:20px;' aria-hidden='true'></i></button></div><button value='" + i + "' id='i_btnRowAccept' style='display: none;' class='btn btn-success'>Aceptar</button></td></tr>");
+
+                    var prev_importe = parseFloat(ga_conceptos[index].importe);
+                    ga_conceptos[index].descripcion = new_descripcion;
+                    ga_conceptos[index].noSerie = new_noSerie;
+                    ga_conceptos[index].unidad = new_unidad;
+                    ga_conceptos[index].cantidad = new_cantidad;
+                    ga_conceptos[index].precio_unitario = new_precio;
+                    ga_conceptos[index].importe = new_importe;
+                    if (new_pedimento != '') {
+                        ga_conceptos[index].numPedimento = new_pedimento;
+                        ga_conceptos[index].fechaPedimento = new_fecha;
+                        ga_conceptos[index].aduana = new_aduana;
+                        ga_conceptos[index].idPedimento = idPedimento;
+                    }
+
+                    gf_subtotal = gf_subtotal - prev_importe;
+
+
+
+                    gf_subtotal += parseFloat(new_importe)
+                    if (parseFloat(porcentaje) > 0) {
+                        var descuento = parseFloat(porcentaje);
+                        var descuento = gf_subtotal * (descuento / 100);
+                        gf_iva = (gf_subtotal - descuento) * 0.16;
+                        gf_total = (gf_subtotal - descuento) + gf_iva;
+                    } else {
+                        gf_iva = gf_subtotal * 0.16;
+                        gf_total = gf_subtotal + gf_iva;
+                    }
+
+                    $.post("php/updateSessionConcetos.php", { updatedConcepto: JSON.stringify(ga_conceptos[index]), index: index }, function (data) {
+                        //console.log(data);
+                    });
+
+                    updateTotals();
+                    update_table_conceptos();
+                    $("button").prop("disabled", false);
+                } else {
+                    $("#i_modalAlertError").modal("show");
+
+
+                }
+            });
+
+
+
+            $("#i_btnAgrgearUnidad").click(function () {
+
+                var new_unidad = $("#i_inputNewUnidad").val();
+                var s = $(".c_selectChange");
+                s.append("<option>" + new_unidad + "</option>");
+                s.val(new_unidad);
+            });
+
+            $(document).on("change", ".c_selectChange", function () {
+                if (this.value == 1) {
+                    $("#i_modalAgregarUnidad").modal();
+                    $(".c_buttnsModal").prop("disabled", false);
+                }
+
+
+            });
+            $(document).on("click", ".c_ajustesRowing", function () {
+                var index = $(this).data("index");
+
+                var ld_row = $(this).parent().parent().parent().parent();
+                //alert(ld_row.html());
+                var ld_row_elements = ld_row;
+                ld_row = ld_row.find("td");
+
+                //console.log(ld_row);
+                var btnAceptar = ld_row_elements.find("button#i_btnRowAcceptxs");
+
+                gj_rowSelected = { dom: ld_row, index: btnAceptar.val() };
+                var precio = ld_row[9].innerHTML;
+                precio = precio.slice(1, precio.length);
+                var importe = ld_row[11].innerHTML;
+                importe = importe.slice(1, importe.length);
+                var concepto = ga_conceptos[index];
+
+                var lj_prevData = { noSerie: concepto.noSerie, descripcion: concepto.descripcion, unidad: concepto.unidad, cantidad: concepto.cantidad, precio: concepto.precio_unitario, importe: concepto.importe };
+
+
+                    var html_desc= "<textarea class='form-control c_input c_config'>" + lj_prevData.descripcion + "</textarea>";
+                    if (concepto.numPedimento) {
+                        html_desc += "<select id='pedModXs' class='c_input form-control'>";
+                        var len = pedimentos.length; var i = 0;
+                        for (; i < len; i++) {
+                            var p = pedimentos[i];
+                            html_desc += "<option value='" + p.id + "'>" + p.numero + "</option>";
+                        }
+                        html_desc += "</select>";
+
+                        ld_row[1].innerHTML = html_desc;
+                        var idPed = getIdPedimento(concepto.numPedimento);
+                        ld_row_elements.find("#pedModXs").val(idPed);
+                    } else {
+                        ld_row[1].innerHTML = html_desc;
+
+                    }
+                var arr_options = [lj_prevData.unidad.trim(), "PIEZA", "KILOS", "LITROS", "GRAMOS", "N/A", "Otro.."];
+                arr_options = $.unique(arr_options); var len = arr_options.length; var i = 0;
+                //console.log(arr_options);
+                var options_formats = [];
+                for (; i < len; i++) {
+                    if (arr_options[i] == "Otro..") {
+                        options_formats.push("<option value='1'>" + arr_options[i] + "</option>");
+
+                    } else {
+                        options_formats.push("<option>" + arr_options[i] + "</option>");
+                    }
+                }
+                ld_row[3].innerHTML = "<input value='" + lj_prevData.noSerie + "' id='i_selectedNoSerie' type='text' class='form-control c_input c_config' />";
+                ld_row[5].innerHTML = "<select value='" + lj_prevData.unidad + "' class='c_selectChange form-control c_input c_config'>"+options_formats.join("")+"</select>";
+                ld_row[7].innerHTML = "<input value='" + lj_prevData.cantidad + "' id='i_selectedCantidad' type='number' class='form-control c_input c_config' />";
+                ld_row[9].innerHTML = "<input value='" + lj_prevData.precio + "' id='i_selectedPrecio' type='number' class='form-control c_input c_config' />";
+                ld_row[11].innerHTML = "<input value='" + lj_prevData.importe + "' id='i_selectedImporte' type='number' class='form-control c_input c_config' />";
+                ld_row_elements.find(".c_divOpts").hide();
+                btnAceptar.show();
+                btnAceptar.data("index", index);
+                $("button").not("#i_btnRowAcceptxs").prop("disabled", true);
+                var ta = $("textarea.c_config");
+                var count = countLines(ta[0]);
+                ta.attr("rows", count.toString());
+
+
+
+            });
+
+
+
+            function update_table_conceptos()
+            {
+
+                var len = ga_conceptos.length; var i = 0; var buff = []; var buff2 = [];
+
+                gf_iva = parseFloat(gf_iva);
+                gf_subtotal = parseFloat(gf_subtotal);
+                gf_total = parseFloat(gf_total);
+                if (len == 0) {
+                    gd_conceptosAgregadosHideShow.hide();
+                } else {
+                    gd_conceptosAgregadosHideShow.show();
+
+                }
+                for (; i < len; i++) {
+                    var popOver = '';
+                    if (ga_conceptos[i].aduana) {
+                        var content = "<div class='popover-info'>";
+                        content += "<label>Pedimento:</label> " + ga_conceptos[i].numPedimento + "<br>";
+                        content += "<label>Aduana:</label> " + ga_conceptos[i].aduana + "<br>";
+                        content += "<label>Fecha:</label> " + ga_conceptos[i].fechaPedimento + "<br></div>";
+                        popOver = '<a class="a-pop-over" data-placement="top" data-toggle="popover" title="Datos de importación" data-html="true" data-content="' + content + '">Importación</a>';
+
+                    }
+
+                    buff.push("<tr><td>" + ga_conceptos[i].descripcion + "<br>"+popOver+"</td><td>" + ga_conceptos[i].noSerie + "</td><td>" + ga_conceptos[i].unidad + "</td><td>" + ga_conceptos[i].cantidad + "</td><td>$" + parseFloat(ga_conceptos[i].precio_unitario).toFixed(3) + "</td><td>$" + parseFloat(ga_conceptos[i].importe).toFixed(3) + "</td><td><div class='btn-group-horizontal c_divOpts'> <button onclick='eliminar_conepto(" + i + ")' class='btn btn-default c_Cancel' ><i class='fa fa-trash' style='font-size:20px;' aria-hidden='true'></i></button><button data-index='"+i+"'  class='btn btn-default c_Ajustes'><i class='fa fa-cog' style='font-size:20px;' aria-hidden='true'></i></button></div><button value='" + i + "' id='i_btnRowAccept' style='display: none;' class='btn btn-success'>Aceptar</button></td></tr>");
+                    buff2.push("<div class='row'><div class='col-xs-12'> " + printTableRowing(ga_conceptos,i) + "</div></div>");
+                }
+                gd_xsRowing.html(buff2.join("<hr>"));
+                gd_tableConceptosAgregados.html( buff.join(""));
+                $('[data-toggle="popover"]').popover();
+
+
+
+            }
+            $("#i_inputPrecio").on("input", function () {
+                var s_precio = this.value;
+                var s_cantiad = $("#i_inputCantidad").val();
+
+                s_precio = s_precio.trim();
+                s_cantiad = s_cantiad.trim();
+                if (s_precio != "" && s_cantiad != "") {
+                    var precio = parseFloat(s_precio);
+                    var cantidad = parseFloat(s_cantiad);
+                    var importe = precio * cantidad;
+                    if (isNaN(importe)) { $("#i_inputImporte").val("*"); }
+                    else { $("#i_inputImporte").val(importe.toFixed(3)); }
+
+                }
+            });
+
+
+            gd_inputCandidad = $("#i_inputCantidad");
+
+            gd_inputCandidad.on("input", function () {
+                var s_precio = $("#i_inputPrecio").val();
+                var s_cantidad = parseInt(this.value);
+                if (s_cantidad < 1)
+                    gd_inputCandidad.val(1);
+
+                if (s_precio.trim() != "" && s_cantidad!="") {
+                    var precio = parseFloat(s_precio);
+                    var importe = parseFloat(s_cantidad) * precio;
+                    if (isNaN(importe)) { $("#i_inputImporte").val("*"); }
+                    else
+                        $("#i_inputImporte").val(importe.toFixed(3));
+                }
+            });
+            function update_concepto_data_xs(id) {
+                $.post("php/searchAtajoId.php", { idAtajo: id }, function (data) {
+                    var concepto = JSON.parse(data);
+                    concepto = concepto.result[0];
+                    var inputs = gd_inputsMobile;
+
+                    inputs[0].value = concepto.descripcion;
+                    // inputs[1].value = concepto.medida;
+                    inputs[1].value = concepto.noSerie;
+                    inputs[4].value = concepto.precio;
+                    var arr_options = [];
+                    var o = $(inputs[2]).find("option");
+                    o.each(function (i, e) { arr_options.push(e.innerHTML);});
+                     arr_options.push(concepto.medida);
+
+                    arr_options = $.unique(arr_options); var len = arr_options.length; var i = 0;
+                    //console.log(arr_options);
+                    var options_formats = [];
+                    for (; i < len; i++) {
+                            options_formats.push("<option>" + arr_options[i] + "</option>");
+                    }
+                    inputs[2].innerHTML = options_formats.join("");
+                    inputs[2].value = concepto.medida;
+
+                    if(concepto.precio === null || concepto.precio === ""){
+                        inputs[3].value = '';
+                        inputs[5].value = '';
+                    }else{
+                        inputs[3].value = 1;
+                        inputs[5].value = concepto.precio;
+                    }
+                });
+            }
+
+            function update_concepto_data(id)
+            {
+
+                $.post("php/searchAtajoId.php", { idAtajo: id }, function (data) {
+                    var concepto = JSON.parse(data);
+                    concepto = concepto.result[0];
+
+                    gd_inputFields[1].value =concepto.descripcion;
+                    gd_inputFields[5].value = concepto.precio;
+                    gd_inputFields[2].value = concepto.noSerie;
+                    var unidades = [];
+                    var o = $(gd_inputFields[3]).find("option");
+                    o.each(function (i, e) { unidades.push(e.innerHTML); });
+
+                    unidades.push(concepto.medida)
+                    unidades = $.unique(unidades); var buf = '';
+                    var len = unidades.length; var i = 0;
+                    for (; i < len; i++) {
+                        buf += "<option>"+unidades[i]+"</option>";
+                    }
+                    gd_inputFields[3].innerHTML = buf;
+                    gd_inputFields[3].value = concepto.medida;
+
+                    if(concepto.precio === null || concepto.precio === ''){
+                        gd_inputFields[4].value = '';
+                        gd_inputFields[6].value = '';
+                    }
+                    else {
+                        gd_inputFields[4].value = 1;
+                        gd_inputFields[6].value = concepto.precio;
+                    }
+                });
+
+
+            }
+
+
+            gd_trAtajos.on("change", function () {
+
+                var idatajo = this.value;
+                update_concepto_data(idatajo);
+
+            });
+
+
+
+
+            $("#i_selectFormaPago").on("change", function () {
+
+
+                if ($(this).prop("selectedIndex") == 2) {
+
+                    $("#divFormaPago").html("<input class='c_input form-control' type='text' id='i_selectFormaPago'  />");
+
+                }
+            });
+
+            var conceptos_iva = false;
+            var gd_totales = $("#i_trTotales");
+            var gd_ret = $("#i_trRetenciones");
+
+            function updateTotals()
+            {
+                lf_subDescuento = 0;
+                if(parseFloat(porcentaje) > 0)
+                {
+                    lf_subDescuento = gf_subtotal - (gf_subtotal * porcentaje / 100);
+                    gd_totales.html("<td>$" + gf_subtotal.toFixed(3) + "</td><td id='i_tdSubDescuento'>$" + lf_subDescuento.toFixed(3) + "</td><td>$" + gf_iva.toFixed(3) + "</td><td>$" + gf_total.toFixed(3) + "</td>");
+                    $("#i_thSubDescuento").show();
+                    $("#i_tdSubDescuento").show();
+                    $("#i_divSubDescuento").show();
+                } else {
+                    gd_totales.html("<td>$" + gf_subtotal.toFixed(3) + "</td><td id='i_tdSubDescuento'>$" + lf_subDescuento.toFixed(3) + "</td><td>$" + gf_iva.toFixed(3) + "</td><td>$" + gf_total.toFixed(3) + "</td>");
+                    $("#i_thSubDescuento").hide();
+                    $("#i_tdSubDescuento").hide();
+                    $("#i_divSubDescuento").hide();
+                }
+                var ld_tds = $("#i_divTotales td");
+                if(ret_iva==0 && ret_isr==0)
+                {
+                    var subtotal_descuento = gf_subtotal - (gf_subtotal*porcentaje/100);
+                    gf_total = subtotal_descuento + gf_iva;
+                    gd_totales.html("<td>$" + gf_subtotal.toFixed(3) + "</td><td id='i_tdSubDescuento'>$" + lf_subDescuento.toFixed(3) + "</td><td>$" + gf_iva.toFixed(3) + "</td><td>$" + gf_total.toFixed(3) + "</td>");
+                    setTimeout(function () {
+                        $("#i_rowRetenciones").hide();
+                        $("#i_thSubDescuento").hide();
+                        $("#i_tdSubDescuento").hide();
+                        $("#i_divSubDescuento").hide();
+                    },10);
+                }
+                else {
+                    $("#i_rowRetenciones").show();
+                    var subtotal_descuento = gf_subtotal-(gf_subtotal*porcentaje/100);
+                    var isr = parseFloat(ret_isr) * (subtotal_descuento * (g_ntasaISR / 100));
+                    var iva_retenido = parseFloat(ret_iva)* gf_iva * (2 / 3);
+                    gd_ret.html("<tr><td>$" + iva_retenido.toFixed(3)+"</td><td>$"+isr.toFixed(3)+"</td></tr>")
+                    gf_total = subtotal_descuento - isr - iva_retenido + gf_iva;
+                    if (parseFloat(porcentaje) > 0) {
+                        gd_totales.html("<td>$" + gf_subtotal.toFixed(3) + "</td><td id='i_tdSubDescuento'>$" + lf_subDescuento.toFixed(3) + "</td><td>$" + gf_iva.toFixed(3) + "</td><td>$" + gf_total.toFixed(3) + "</td>");
+                        $("#i_thSubDescuento").show();
+                        $("#i_tdSubDescuento").show();
+                        $("#i_divSubDescuento").show();
+
+                    } else {
+                        gd_totales.html("<td>$" + gf_subtotal.toFixed(3) + "</td><td id='i_tdSubDescuento'>$" + lf_subDescuento.toFixed(3) + "</td><td>$" + gf_iva.toFixed(3) + "</td><td>$" + gf_total.toFixed(3) + "</td>");
+                        $("#i_thSubDescuento").hide();
+                        $("#i_tdSubDescuento").hide();
+                        $("#i_divSubDescuento").hide();
+                    }
+                }
+
+                ld_tds[0].innerHTML = "$" + gf_subtotal.toFixed(3);
+                ld_tds[1].innerHTML = "$" + lf_subDescuento.toFixed(3);
+                ld_tds[2].innerHTML = "$" + gf_iva.toFixed(3);
+                ld_tds[3].innerHTML = "$" + gf_total.toFixed(3);
+            }
+            var gd_xsRowing = null;
+            var gd_conceptosAgregadosHideShow = null;
+         // para contar los rows de una ta
+            function countLines(theArea) {
+                var theLines = theArea.value.replace((new RegExp(".{" + theArea.cols + "}", "g")), "\n").split("\n");
+                if (theLines[theLines.length - 1] == "") theLines.length--;
+                return theLines.length;
+            }
+         //
+            $(document).on("input", "textarea.c_config,textarea.c_mobileInps", function () {
+
+                var count = countLines(this);
+                $(this).attr("rows", count.toString());
+            });
+
+
+            var pedimentoSelected = null;
+            var pedimentos = JSON.parse('<?= json_encode($pedimentos,JSON_UNESCAPED_UNICODE|JSON_HEX_APOS|JSON_HEX_QUOT); ?>');
+
+            $(document).ready(function () {
+
+                $(".list-pedimentos").on("click", ".pedimento", function () {
+                    $(this).parent().find("li").removeClass("selected");
+                    $(this).addClass("selected");
+                    var len = pedimentos.length;
+                    var i = 0; var id = $(this).data("id");
+                    for (; i < len; i++) {
+                        var p = pedimentos[i];
+                        if (p.id == id) {
+                            pedimentoSelected = p;
+                            break;
+                        }
+                    }
+                });
+
+
+                dom_numPedimento = $("#numPedimento");
+                dom_aduana = $("#aduana");
+                dom_fechaPedimento = $("#fechaPedimento");
+                //$("#i_modalActivarRetencionIVA");
+
+                gd_activarRetencionIVA = $("#i_activarRetencionIVA");
+
+                gd_activarRetencionISR = $("#i_activarRetencionISR");
+
+                gd_inputImporteMobile = $("#i_inputImporteMob");
+                gd_inputsMobile = $(".c_mobileInps");
+                gd_conceptosAgregadosHideShow = $("#i_tableConceptosAgregadosHideShow");
+
+                gd_trAtajos_mobile = $("#i_trinputAtajosMobile");
+                $("#i_divNoCuenta").hide();
+                $("#i_divPredial").hide();
+                gd_trAtajos.hide();
+                $("#i_divSubDescuento").hide();
+                $("#i_thSubDescuento").hide();
+                $("#i_tdSubDescuento").hide();
+                gd_xsRowing = $("#i_xsRowing");
+
+                function checkRetenciones() {
+                    $.post("php/checkRetenciones.php", function (data) {
+                        //console.log(data);
+                        var lj_ret = JSON.parse(data);
+                        lj_ret = lj_ret.result[0];
+                        var tipo_factura = lj_ret.tipo_factura;
+                        if (tipo_factura == '0') {
+                            ret_iva = 0;
+                            ret_isr = 0;
+                            g_ntasaISR = 0;
+                        } if (tipo_factura == '1') {
+                            ret_iva = lj_ret.retencion_IVA;
+                            ret_isr = lj_ret.retener_ISR;
+                            g_ntasaISR = lj_ret.retencion_ISR;
+                            $("#i_divPredial").show();
+                        }
+                        if (tipo_factura == '2') {
+                            ret_iva = lj_ret.retencion_IVA;
+                            ret_isr = lj_ret.retener_ISR;
+                            g_ntasaISR = lj_ret.retencion_ISR;
+                            //  $("#i_divPredial").show();
+                            $("#i_divPredial").hide();
+                        }
+                        $("#i_tasaRet").html("Retencion de ISR (" + g_ntasaISR + "%)");
+                    });
+
+                }
+                function getRetenciones() {
+                    $.post("php/getRetencionFactura.php", function (data) {
+                        var lj_retenciones = JSON.parse(data);
+                        lj_retenciones = lj_retenciones.result[0];
+
+                        if (lj_retenciones.conceptos_iva == "1") {
+                            conceptos_iva = true;
+                        }
+                        var checks_Retenciones = $(".c_retencion");
+
+                        if (lj_retenciones.retencion_IVA == "1") {
+                            $(checks_Retenciones[0]).prop("checked", true);
+                            //  $(checks_Retenciones[0]).val("1");
+
+                        } else {
+                            $(checks_Retenciones[0]).prop("checked", false);
+                            //$(checks_Retenciones[0]).val("0");
+
+                        }
+                        if (lj_retenciones.retener_ISR == "1") {
+                            $(checks_Retenciones[1]).prop("checked", true);
+                            //$(checks_Retenciones[1]).val("1");
+                        } else {
+                            $(checks_Retenciones[1]).prop("checked", false);
+                            // $("#retenerISR").val("0");
+                        }
+                    });
+                }
+
+                function forceRetencionIVA() {
+                    var checks_Retenciones = $($(".c_retencion")[0]);
+                    if (checks_Retenciones.prop("checked")){
+                        checks_Retenciones.prop("checked", true);
+                        ret_iva = 1;
+                    }
+                    else{
+                        checks_Retenciones.prop("checked", false);
+                        ret_iva = 0;
+                    }
+                    updateTotals();
+                }
+
+                function forceRetencionISR() {
+                    var checks_Retenciones = $($(".c_retencion")[1]);
+                    if (checks_Retenciones.prop("checked")){
+                        checks_Retenciones.prop("checked", true);
+                        ret_isr = 1;
+                    }
+                    else{
+                        checks_Retenciones.prop("checked", false);
+                        ret_isr = 0;
+                    }
+                    updateTotals();
+                }
+
+                gd_activarRetencionISR.on('click', function (event) {
+                    forceRetencionISR();
+                });
+                gd_activarRetencionIVA.on('click', function (event) {
+                    forceRetencionIVA();
+                });
+                var gn_idCliente = "<?php if(isset($_GET['id'])){ echo $_GET['id']; }else{echo 'se_cago';} ?>";
+                if (gn_folioFactura == "se_cago") {
+                    location.href = "index.html";
+                }
+
+                checkRetenciones();
+                getRetenciones();
+
+                $.post("php/getClient.php", { id: gn_idCliente }, function (data) {
+                    try{
+                        var obj = JSON.parse(data);
+                        obj = obj.result[0];
+                        var domicilio = obj.calle + " " + obj.noExterior + " " + obj.noInterior + " " + obj.colonia + " " + obj.municipio + " " + obj.estado;
+                        var table_html = "<tr><td>" + obj.RFC + "</td><td>" + obj.email + "</td><td>" + domicilio + "</td><td>" + obj.telefono + "</td></tr>";
+                        $("#i_tableCliente").html(table_html);
+                        $("#i_nombreCliente").html(obj.nombre);
+                    }
+                    catch (err) {
+                        $("#i_nombreCliente").html("No se ha encontrado cliente...");
+                        location.href = "index.html";
+                    }
+                });
+                $.post("php/getSessionConceptos.php", function (data) {
+
+                    if (data.trim() != "") {
+
+                            var obj = JSON.parse(data);
+                            console.log(obj);
+                            var subtotal = 0;
+                            for (var i in obj) {
+                                subtotal += parseFloat(obj[i].importe);
+
+                                //   ga_conceptos.push(lj_Concepto);
+                            }
+                            console.log(obj);
+                            ga_conceptos = obj;
+                            update_table_conceptos();
+
+                            gf_subtotal = subtotal;
+                            gf_iva = gf_subtotal * 0.16;
+                            gf_total = gf_subtotal + gf_iva;
+                            updateTotals();
+
+
+                    }
+
+                });
+            });
+
+            $("#i_inputAtajos").keydown(function (e) {
+
+                if (e.keyCode == 40) {
+
+                    var ld_inputAtajos =  $("#i_trinputAtajos");
+
+                    var lj_inputAtajos = ld_inputAtajos[0];
+
+                    var ln_index = lj_inputAtajos.selectedIndex;
+
+                    ln_index++;
+
+                    if (ln_index == ld_inputAtajos.children().length)
+
+                        ln_index = 0;
+
+
+
+                    lj_inputAtajos.selectedIndex = ln_index;
+
+
+
+
+
+
+
+
+
+                }
+                if(e.keyCode==38)
+                {
+
+                    var ld_inputAtajos = $("#i_trinputAtajos");
+
+                    var lj_inputAtajos = ld_inputAtajos[0];
+
+                    var ln_index = lj_inputAtajos.selectedIndex;
+
+                    ln_index--;
+
+                    if (ln_index < 0)
+
+                        ln_index = ld_inputAtajos.children().length-1;
+
+
+
+                    lj_inputAtajos.selectedIndex = ln_index;
+
+
+
+
+
+
+
+
+
+
+
+
+
+                }
+
+            });
+
+
+
+    </script>
+    <script>
+        // agregado productos de importacion 7/13/2017 cristobal
+        (function () {
+            var chckImportacion = null;
+            var tableContainer = null;
+            function chckState() {
+                if (chckImportacion.is(":checked")) {
+                    tableContainer.slideDown();
+
+                } else {
+                    tableContainer.slideUp();
+                }
+            }
+            $(document).ready(function () {
+                chckImportacion = $("#chckImportacion");
+                tableContainer = $("#tableImportacion");
+                chckImportacion.on("click", chckState);
+                tableContainer.hide();
+
+
+            });
+
+
+
+        })()
+ 
+    </script>
+    
+</body>
+
+</html> 
+

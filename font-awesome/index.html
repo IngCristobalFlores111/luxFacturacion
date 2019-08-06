@@ -1,0 +1,181 @@
+﻿<!--Desarrollado por Luxline Solutions-->
+
+<html lang="en">  
+<head>  
+    <title>index.html</title>
+    
+    <!--MetaArea-->
+    <meta charset="utf-8"> <!--Caracteres Codificados-->
+    <meta name="viewport" content="width=device-width, initial-scale=1"> <!--Para Dispositivos Moviles habilita touch-zoom etc-->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <!--/MetaArea-->
+    
+    <!--CSS-->
+    <link href="css/bootstrap.min.css" rel="stylesheet"><!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="css/style.css" type="text/css" />
+    <link rel="stylesheet" href="font-awesome/css/font-awesome.min.css">
+    <link rel="icon" href="img/luxline1.ico" type="image/x-icon">
+    
+    <script src="js/JAGS.js"></script>            
+    
+    <!-- jQuery -->
+    <script src="js/jquery.js"></script>
+
+    <!-- Bootstrap Core JavaScript -->
+    <script src="js/bootstrap.min.js"></script>
+
+    <!--/JS-->
+    
+   
+</head> 
+
+<body onload="body_loadClientes()"> 
+
+<div id = "i_modalBlur">
+
+<nav class="navbar navbar-default">
+  <div class="container-fluid">
+    <div class = "row visible-xs ">
+      <img src="img/luxline.png" style = "height:8%;" id = "i_navBarLogo" alt="lux_logo">
+    </div>
+    <div class="navbar-header" style = "margin:1%;">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span> 
+      </button>
+      <img src="img/luxline.png" class = "visible-md visible-lg visible-sm" id = "i_navBarLogo" alt="lux_logo">
+    </div>
+    <div class="collapse navbar-collapse" id="myNavbar">
+        <ul class="nav navbar-nav" style = "margin:1%;" >
+      <li class = "c_navBarActivo"><a href="index.html"> Facturar</a></li>
+      <li><a href="folios.html">Folios</a></li>
+      <li><a href="ArgModAtajo.html">Ajustes</a></li>
+    </ul>
+        <ul class="nav navbar-nav navbar-right">
+      <li data-toggle= "modal"  data-target="#i_modalOpcionesUsuario"><a href="#"><span class="fa fa-user" style = "font-size:20px;" aria-hidden="true"></span></a></li>
+      <li data-toggle= "modal"  data-target="#i_modalCerrarSesion"><a href="#"><span class="fa fa-sign-out" style = "font-size:20px;" aria-hidden="true"></span></a></li>
+    </ul>
+    </div>
+  </div>
+</nav>
+
+<div class="container" id="i_content">
+        <div class="row c_inputForm">
+            <div class="col-xs-6">
+              <input onkeyup="nombreCliente_AutoSearch(event)"  class="form-control c_input" placeholder = "Buscar Cliente" type="text" id="i_nombreCliente">
+            </div>
+            <div class="col-xs-3">
+              <button style="background-color: rgba(255,255,255,0.25);" onclick="nombreCliente_buscarCliente()" type="button" class="btn btn-block c_faSize"><i class="fa fa-search" aria-hidden="true"></i></button>
+            </div>
+            <div class="col-xs-3">
+              <a href="agregarCliente.html" role="button" style = "background-color: rgba(255,255,255,0.25);" class="btn btn-lg"><i class="fa fa-plus" aria-hidden="true"></i></a>
+            </div>
+        </div> <!-- Buscar Clientes-->
+        <div class = "row">
+     <div class = "col-xs-12">
+       <h3>Clientes</h3>
+       <hr>
+     </div> 
+   
+   </div> <!-- Clientes-->
+
+        <div class = "table-responsive">
+          <table class="table table-bordered c_background">
+
+                            <thead>
+
+                                <tr>
+
+                                    <th></th>
+
+                                    <th>Nombre</th>
+
+                                    <th>RFC</th>
+
+                                    <th>Tel</th>
+
+                                    <th>Cel</th>
+
+                                    <th>Correo</th>
+
+                                    <th>No.facturas</th>
+
+                                    <th>Opciones</th>
+
+                                </tr>
+
+                            </thead>
+
+                            <tbody id="i_tableTbody">
+
+                            </tbody>
+
+                        </table>
+                        
+        </div>
+                        
+</div> <!--/container -->
+ 
+
+</div><!-- /i_modalBlur -->
+ 
+
+<!--ModalCerrarSesion-->
+<div class="modal fade" id="i_modalCerrarSesion" role="dialog">
+           <div class="container">
+             <div class="row">
+              <div class="col-sm-6 col-sm-offset-3 text-center modal-box">
+              <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                  <h3 class = "h3Modal">¿Esta seguro que desea cerrar sesión?</h3>
+                  
+                    <button type="button" class="btn  c_modalDismiss c_AcceptModal" data-dismiss="modal" autofocus>Aceptar</button>
+                    <button type="button" class="btn  c_modalDismiss c_Cancel" data-dismiss="modal">Cancelar</button>
+                  
+             </div>
+            </div>
+           </div>
+        </div><!--/ModalCerrarSesion -->
+
+<!--ModalOpcionesUsuario-->
+<div class="modal fade" id="i_modalOpcionesUsuario" role="dialog">
+           <div class="container">
+             <div class="row">
+              <div class="col-sm-6 col-sm-offset-3 text-center modal-box">
+              <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                  <h3 class = "h3Modal">Introduzca su contraseña personalizada para acceder</h3>
+                   
+                   <form role="form">
+                   <div class="form-group">
+                     <label for="pwd">Contraseña</label>
+                     <input type="password" class="form-control c_input" id="pwd">
+                     <label style = "margin: 3%;">Mostrar Contraseña</label>
+
+                     <input type="checkbox" id="i_checkPass" />
+                   </div>
+                   </form>
+                  
+                  
+                  
+                    <button type="button" class="btn  c_modalDismiss c_AcceptModal" data-dismiss="modal" autofocus>Acceder</button>
+                    <button type="button" class="btn  c_modalDismiss c_Cancel" data-dismiss="modal">Regresar</button>
+                  
+             </div>
+            </div>
+           </div>
+        </div><!--/ModalOpcionesUsuario-->
+
+   <script>
+       $(document).on("click", ".c_modificarBtn", function () {
+
+           var ls_id = this.value;
+
+           location.href = "facturar.html?id="+ls_id;
+
+       });
+   </script>
+
+
+</body> <!--Termina BODY-->
+</html> <!--Termina HTML-->
+

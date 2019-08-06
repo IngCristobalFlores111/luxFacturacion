@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<cfdi:Comprobante xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:cfdi="http://www.sat.gob.mx/cfd/3" xsi:schemaLocation="http://www.sat.gob.mx/cfd/3 http://www.sat.gob.mx/sitio_internet/cfd/3/cfdv33.xsd " Version="3.3" Serie="A" Folio="630" Fecha="2017-12-31T12:37:40" MetodoPago="PUE" FormaPago="01" TipoDeComprobante="I" CondicionesDePago="Sin condiciones" Moneda="MXN" TipoCambio="1" LugarExpedicion="45188" SubTotal="9100" Descuento="0" Total="10556" Certificado="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" NoCertificado="00001000000407489457" Sello="QtAZSYOOyZ9mhw+1vA3Vy1vHZks06otF+KJUZjRpcPR7W0Y+ECsHNhsKf4lMYoQE98CSoqoLhRzPg+R6vJOzBuUbRk3R0lCNQpxKAd5OQKx6gyBT2mqcFYYXh5ZdLP3uvKuzgh/uFVK1fFlbAdUAHydkMGWrrEMXYOjX4UGnsD3sIWv2YUU3wIZf7pgIfqrLDCQTiTek/GgybEOnFrh9NAqS6qwN03d4kMKi1QuTJD07n/KgBhcymCgqZ8GyMWr7Q5sybi9s+2Ts+9JHKnzhMsWVTFsWIyVmjBDyeNa3QgYEbs4Vv/6GS8ExspMINb8PH5G4aQXk1gmyyZcgMQGw6Q==">
+  <cfdi:Emisor Rfc="GONM540312B43" RegimenFiscal="612" Nombre="Miguel Ángel González Navarro"/>
+  <cfdi:Receptor UsoCFDI="G01" Rfc="XAXX010101000" Nombre="PUBLICO EN GENERAL"/>
+  <cfdi:Conceptos>
+    <cfdi:Concepto Cantidad="1" ClaveUnidad="H87" NoIdentificacion="N/A" Descripcion="LENTE OFTALMICO EFECTIVO" ValorUnitario="5172" ClaveProdServ="42142901" Importe="5172">
+      <cfdi:Impuestos>
+        <cfdi:Traslados>
+          <cfdi:Traslado Base="5172" Impuesto="002" TipoFactor="Tasa" TasaOCuota="0.160000" Importe="827.52"/>
+        </cfdi:Traslados>
+      </cfdi:Impuestos>
+    </cfdi:Concepto>
+    <cfdi:Concepto Cantidad="1" ClaveUnidad="H87" NoIdentificacion="N/A" Descripcion="Paño para limpiar lentes TC 6602" ValorUnitario="99" ClaveProdServ="42142907" Importe="99">
+      <cfdi:Impuestos>
+        <cfdi:Traslados>
+          <cfdi:Traslado Base="99" Impuesto="002" TipoFactor="Tasa" TasaOCuota="0.160000" Importe="15.84"/>
+        </cfdi:Traslados>
+      </cfdi:Impuestos>
+    </cfdi:Concepto>
+    <cfdi:Concepto Cantidad="1" ClaveUnidad="H87" NoIdentificacion="N/A" Descripcion="LENTE OFTALMICO TC 5477" ValorUnitario="603" ClaveProdServ="42142901" Importe="603">
+      <cfdi:Impuestos>
+        <cfdi:Traslados>
+          <cfdi:Traslado Base="603" Impuesto="002" TipoFactor="Tasa" TasaOCuota="0.160000" Importe="96.48"/>
+        </cfdi:Traslados>
+      </cfdi:Impuestos>
+    </cfdi:Concepto>
+    <cfdi:Concepto Cantidad="1" ClaveUnidad="H87" NoIdentificacion="N/A" Descripcion="Solución para limpiar anteojos TC 9471" ValorUnitario="137" ClaveProdServ="42142908" Importe="137">
+      <cfdi:Impuestos>
+        <cfdi:Traslados>
+          <cfdi:Traslado Base="137" Impuesto="002" TipoFactor="Tasa" TasaOCuota="0.160000" Importe="21.92"/>
+        </cfdi:Traslados>
+      </cfdi:Impuestos>
+    </cfdi:Concepto>
+    <cfdi:Concepto Cantidad="1" ClaveUnidad="H87" NoIdentificacion="N/A" Descripcion="LENTE OFTALMICO TC 1321" ValorUnitario="362" ClaveProdServ="42142901" Importe="362">
+      <cfdi:Impuestos>
+        <cfdi:Traslados>
+          <cfdi:Traslado Base="362" Impuesto="002" TipoFactor="Tasa" TasaOCuota="0.160000" Importe="57.92"/>
+        </cfdi:Traslados>
+      </cfdi:Impuestos>
+    </cfdi:Concepto>
+    <cfdi:Concepto Cantidad="1" ClaveUnidad="H87" NoIdentificacion="N/A" Descripcion="LENTE OFTALMICO TC 1928" ValorUnitario="862" ClaveProdServ="42142901" Importe="862">
+      <cfdi:Impuestos>
+        <cfdi:Traslados>
+          <cfdi:Traslado Base="862" Impuesto="002" TipoFactor="Tasa" TasaOCuota="0.160000" Importe="137.92"/>
+        </cfdi:Traslados>
+      </cfdi:Impuestos>
+    </cfdi:Concepto>
+    <cfdi:Concepto Cantidad="1" ClaveUnidad="H87" NoIdentificacion="N/A" Descripcion="Solución para limpiar anteojos TC8664" ValorUnitario="181" ClaveProdServ="42142908" Importe="181">
+      <cfdi:Impuestos>
+        <cfdi:Traslados>
+          <cfdi:Traslado Base="181" Impuesto="002" TipoFactor="Tasa" TasaOCuota="0.160000" Importe="28.96"/>
+        </cfdi:Traslados>
+      </cfdi:Impuestos>
+    </cfdi:Concepto>
+    <cfdi:Concepto Cantidad="1" ClaveUnidad="H87" NoIdentificacion="N/A" Descripcion="Paño para limpiar lentes TC 9713" ValorUnitario="93" ClaveProdServ="42142907" Importe="93">
+      <cfdi:Impuestos>
+        <cfdi:Traslados>
+          <cfdi:Traslado Base="93" Impuesto="002" TipoFactor="Tasa" TasaOCuota="0.160000" Importe="14.88"/>
+        </cfdi:Traslados>
+      </cfdi:Impuestos>
+    </cfdi:Concepto>
+    <cfdi:Concepto Cantidad="1" ClaveUnidad="H87" NoIdentificacion="N/A" Descripcion="LENTE OFTALMICO TC9686" ValorUnitario="1406" ClaveProdServ="42142901" Importe="1406">
+      <cfdi:Impuestos>
+        <cfdi:Traslados>
+          <cfdi:Traslado Base="1406" Impuesto="002" TipoFactor="Tasa" TasaOCuota="0.160000" Importe="224.96"/>
+        </cfdi:Traslados>
+      </cfdi:Impuestos>
+    </cfdi:Concepto>
+    <cfdi:Concepto Cantidad="1" ClaveUnidad="H87" NoIdentificacion="N/A" Descripcion="Paño para limpiar lentes TC 4282" ValorUnitario="185" ClaveProdServ="42142907" Importe="185">
+      <cfdi:Impuestos>
+        <cfdi:Traslados>
+          <cfdi:Traslado Base="185" Impuesto="002" TipoFactor="Tasa" TasaOCuota="0.160000" Importe="29.6"/>
+        </cfdi:Traslados>
+      </cfdi:Impuestos>
+    </cfdi:Concepto>
+  </cfdi:Conceptos>
+  <cfdi:Impuestos TotalImpuestosTrasladados="1456">
+    <cfdi:Traslados>
+      <cfdi:Traslado Impuesto="002" TasaOCuota="0.160000" Importe="1456" TipoFactor="Tasa"/>
+    </cfdi:Traslados>
+  </cfdi:Impuestos>
+  <cfdi:Complemento>
+    <tfd:TimbreFiscalDigital xmlns:tfd="http://www.sat.gob.mx/TimbreFiscalDigital" xsi:schemaLocation="http://www.sat.gob.mx/TimbreFiscalDigital http://www.sat.gob.mx/sitio_internet/cfd/TimbreFiscalDigital/TimbreFiscalDigitalv11.xsd" Version="1.1" UUID="81bc077f-6b54-4163-9726-9cf25076bd9b" FechaTimbrado="2017-12-31T12:39:42" RfcProvCertif="LSO1306189R5" SelloCFD="QtAZSYOOyZ9mhw+1vA3Vy1vHZks06otF+KJUZjRpcPR7W0Y+ECsHNhsKf4lMYoQE98CSoqoLhRzPg+R6vJOzBuUbRk3R0lCNQpxKAd5OQKx6gyBT2mqcFYYXh5ZdLP3uvKuzgh/uFVK1fFlbAdUAHydkMGWrrEMXYOjX4UGnsD3sIWv2YUU3wIZf7pgIfqrLDCQTiTek/GgybEOnFrh9NAqS6qwN03d4kMKi1QuTJD07n/KgBhcymCgqZ8GyMWr7Q5sybi9s+2Ts+9JHKnzhMsWVTFsWIyVmjBDyeNa3QgYEbs4Vv/6GS8ExspMINb8PH5G4aQXk1gmyyZcgMQGw6Q==" NoCertificadoSAT="00001000000408254801" SelloSAT="aWiep7gYRErbhDFUoJYtozkpkEVmE+YqkrKxRFlFW/2qfuXSxmHwsKdIPfwqhPra2s3X1owotv7TeqkXBdxgKNPlon1aplD1eJ80+2B9AVAyMxo38JtK3KGp8rsb2AjE+3a491YScXaiw/0ypNqKK2fabYH3GpmN0FVBHT60GbMtSJ+E315PXXb8LGxekZROS3iqlC0QWvDY+tz22GVp8+WQdXTU2RJobbKf6kwF3FpPQ7adN/+SzVcqFqAlwIAuwH5PBw+yv9kqa20etnrXdX42nlorZ5/Y1KTTBiLCQSVW2y6v3qNqwnQkwaXWA3KEQSSGVo2Axm9Meo8mfIGnbw=="/>
+  </cfdi:Complemento>
+</cfdi:Comprobante>

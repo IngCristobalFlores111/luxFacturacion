@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Factura</title>
+  <meta name="dompdf.view" content="FitH">
+  
+  <meta charset="utf-8">
+  <link href="https://fonts.googleapis.com/css?family=Caveat+Brush|Dosis|Indie+Flower|Lobster|Fjalla+One|Open+Sans+Condensed:300|Roboto|Sansita" rel="stylesheet">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<link rel="stylesheet" href="https://luxline.com.mx/joseO/LuxFacturacion/wkWorks/style.css"/>
+
+</head>
+<body>
+<div class="container-fluid">
+<div class="row">
+<div class="col-xs-4">
+<img style="height:175px;width:400px;"  class="img-responsive"  src="#logoEmisor" />
+</div>
+<div class="col-xs-4">
+  <div class="info-emisor">
+<h4>Miguel Ángel González Navarro</h4>
+<p>Avenida Tabachines</p>
+<p>Tabachines</p>
+<p>Zapopan,Jalisco</p>
+<p>RFC: GONM540312B43</p>
+<p>Lugar de Expedicion: Avenida Tabachines 3217  Tabachines CP 45188,Zapopan,Jalisco</p>
+<p>facturacionSanAngelTabachines@gmail.com</p>
+  </div>
+
+</div>
+<div class="col-xs-4">
+
+<table class="table-factura-detalles">
+  <tbody>
+    <tr>
+      <td>Factura</td>
+    </tr>
+    <tr>
+      <td>Serie: A Folio:837</td>
+    </tr>
+    <tr>
+     <td> No. de Certificado</td> 
+       </tr>
+<tr>
+  <td>00001000000407489457</td>
+</tr>
+<tr>
+<td>No. Certificado SAT</td>
+
+</tr>
+<tr>
+  <td>00001000000407489457Sat</td>
+</tr>
+<tr>
+  <td>Fecha y Hora de Timbrado    </td>
+</tr>
+<tr>
+  <td>2019-08-05T15:41:51</td>
+</tr>
+      </tbody>
+</table>
+
+
+</div>
+</div>
+
+<hr>
+    <table class="table table-bordered table-params">
+      <tbody>
+    <tr>
+       <td class="td-important">Folio SAT(UUID):</td>
+      <td>99a3366e-31bf-4fdd-a58e-9bc6cdf659fa</td>
+      <td class="td-important">Fecha de impresión</td>
+      <td>2019-08-05 15:41:51</td>
+    </tr>
+    <tr>
+        <td class="td-important">Método de Pago:</td>
+       <td>PUE(Pago en una sola exhibición)</td>
+       <td class="td-important">Tipo de Comprobante</td>
+       <td>Ingreso</td>
+     </tr>
+     <tr>
+        <td class="td-important">Moneda:</td>
+       <td>MXN</td>
+       <td class="td-important">Tipo de Cambio</td>
+       <td>1</td>
+       
+     </tr>
+     <tr>
+       <td class="td-important">Num. Cuenta Pago</td>
+       <td>N/A</td>
+       <td class="td-important">Forma de Pago</td>
+       <td>01(Efectivo)</td>
+     
+     </tr>
+     <tr>
+      <td class="td-important">Condiciones Pago</td>
+      <td>Sin condiciones</td>
+      <td class="td-important">Uso CFDI</td>
+      <td>G01(Adquisición de mercancias)</td>
+    
+    </tr>
+
+      </tbody>
+ 
+    
+    
+    </table>
+    <div class="datos-cliente" style="transform: translate(0,0);">
+<h4 class="header-important">
+  Datos del cliente
+</h4>
+<table class="table table-bordered">
+<tbody>
+<tr>
+<td>Nombre: MARTHA VERONICA DIAZ DE LEON ARRIAGA </td>
+<td>RFC: DIAM791206L1A</td>
+</tr>
+<tr>
+    <td>TARRAGONA 677-A  45130 ZAPOPAN,JALISCO</td>
+    <td>Telefono:0000</td>
+
+</tr>
+
+
+</tbody>
+
+</div>
+<div class="conceptos">
+<table class="table table-bordered table-striped">
+<thead>
+<tr class="tr-important">
+  <td class="col-xs-1">Cantidad</td>
+  <td class="col-xs-1">Clave Prod.Serv.</td>
+  <td class="col-xs-1">No. Serie</td>
+  <td class="col-xs-5">Descripción</td>
+  <td class="col-xs-1">Unidad</td>
+  <td class="col-xs-1">Precio</td>
+  <td class="col-xs-2">Importe</td>
+</tr>
+</thead>
+<tbody>
+<tr><td>1</td><td>42142901</td><td>N/A</td><td>UNIFORMES ESCOLARES</td><td>H87</td><td>$365.52</td><td>$365.52</td></tr>
+
+</tbody>
+
+</table>
+
+
+</div>
+
+<table class="table table-bordered" >
+<tr>
+  <td class="td-important col-xs-8">Importe con letra</td>
+  <td class="col-xs-2">Subtotal</td>
+  <td class="col-xs-2">$365.52</td>
+</tr>
+<tr>
+    <td class="col-xs-8 border-less">Cuatrocientos veinticuatro pesos 0/100 M.N.</td>
+    <td id="td-descuento1" class="col-xs-2">Descuento</td>
+    <td id="td-descuento2" class="col-xs-2">$0.00</td>
+  </tr>
+
+
+
+
+
+      <tr>
+          <td class="col-xs-8 border-less"></td>
+          <td class="col-xs-2">Iva</td>
+          <td class="col-xs-2">$58.48</td>
+        </tr>
+        <tr>
+            <td class="col-xs-8 border-less"></td>
+            <td class="col-xs-2">Total</td>
+            <td class="col-xs-2">$424.00</td>
+          </tr>
+
+
+</table>
+
+<div class="row">
+  <div class="col-xs-3">
+<img  src="https://www.luxline.com.mx/sanAngel/LuxFacturacion/Facturacion/facturas/timbradas/xml/153_2019_08_05_837.png"/>
+  </div>
+  <div class="col-xs-9">
+    
+    <ul class="list-group cadenas">
+      <li class="list-group-item td-important">Sello Digital del CFDI</li>
+      <li class="list-group-item">
+         FXTPcpONfxFkTb8CSVu+LcNAfwyc7F2JWbknmxdezSwhCozr8KfedXjjsmaAypaRnTwssn0Y<br>5YC4oVB2f8UDY/OB1RIR9o7f+lypWOan80YSxh2BTcXQ5YMb0hH170s4RPsN7vS2m+BIs0Jt<br>2l2MY+owGmbXEHNZaIdmkt1Gxk2wGZj+OsfFQBHRJSOEFuGxr5o3uvLxEt17qCFs87yJVxaw<br>4Qakh/itzX31v8NvNoRbC18JKYTKJRxhExrC7WMxMpKdvGPwK0seG+IfMBKMlI3HpHecaZKA<br>nl6vLFLKWpucpzZgtPNTtg9T+J462y0Tseab6piFLcoGQRR957+e3w==<br>
+
+      </li>
+      <li class="list-group-item td-important">Sello Digital SAT</li>
+      <li class="list-group-item">
+        K9sBVfgKLq75RklV+6hqkVoTI3wsqFUnTr/OMD8sC2GVDZlay3UrFJqAz8IfZQ9G+IdXMozy<br>GVLgSl1dMITHa5QP6bd7sJ9vQlPy+DKolbaNjSq/lCoUl4puW/BNjk3FeLTV61IRPH7pkznu<br>r5LeS84rQDDp5Ok5o31ZvStL0hTludpAha3n+QDTXH9prjNDUFWgq/FV8URS08H8ZsNj+g2a<br>lKNl3++qnQM1M9GjMbuaZkzgFRAO3drEReAe3lw8vJ5Rh7PFoRSoQEFzkp29L+ve2PzD+JTw<br>ZJ4XXQ4CFddYiFwiTqINtO8uLa6BAb79SpkFY0rR2LKjVJ0++LtI8A==<br>
+      </li>   
+      <li class="list-group-item td-important">Cadena Complementaria</li>
+      
+      <li class="list-group-item">
+         ||1.0|99a3366e-31bf-4fdd-a58e-9bc6cdf659fa|2019-08-05T15:41:51|FXTPcpONf<br>xFkTb8CSVu+LcNAfwyc7F2JWbknmxdezSwhCozr8KfedXjjsmaAypaRnTwssn0Y5YC4oVB2f<br>8UDY/OB1RIR9o7f+lypWOan80YSxh2BTcXQ5YMb0hH170s4RPsN7vS2m+BIs0Jt2l2MY+owG<br>mbXEHNZaIdmkt1Gxk2wGZj+OsfFQBHRJSOEFuGxr5o3uvLxEt17qCFs87yJVxaw4Qakh/itz<br>X31v8NvNoRbC18JKYTKJRxhExrC7WMxMpKdvGPwK0seG+IfMBKMlI3HpHecaZKAnl6vLFLKW<br>pucpzZgtPNTtg9T+J462y0Tseab6piFLcoGQRR957+e3w==|||<br>
+      </li>        
+    </ul>
+    <label class="text-center">Esta es una representaciín impresa de un CFDI</label>
+
+    </div>
+  </div>
+</div>
+
+
+    
+    
+
+
+
+
+</body>
+</html>

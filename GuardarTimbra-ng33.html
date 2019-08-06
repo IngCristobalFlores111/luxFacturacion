@@ -1,0 +1,467 @@
+
+<?php
+require_once("../Login/php/Functions.php");   
+$link = linkDBLuxLine();
+$luxlineObj = new luxlineWebLogin($link);
+
+$luxlineObj->initialCheckUpSystems();
+
+?>
+
+<!DOCTYPE html>
+<html lang="es">
+<?php
+
+include("includes/head.php");
+?>
+<head>
+<script>
+    var idCliente = <?= $_GET['id'] ?>;
+    var facturaParams = JSON.parse('<?= json_encode($_GET); ?>');
+    console.log(facturaParams);
+</script>
+    <script src="js/services/facturacion/facturarService.js"></script>
+    <script src="js/controllers/facturacion/ctrlFactura.js"></script>
+    <script src="js/controllers/facturacion/ctrlGuardarTimbrar33.js"></script>
+<script src="js/app.js"></script>
+</head>
+
+<body ng-app="app" ng-controller="ctrlGuardarTimbrar" >
+     <div id="i_modalBlur">
+
+    <div class="container-fluid">
+        <div class="c_roundedBackground c_background">
+            <h3 class="c_marginTitle">Cliente</h3>
+            <div class="table-responsive">
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>Nombre</th>
+                            <th>RFC</th>
+                            <th>Domicilio</th>
+                            <th>Correo Electrónico</th>
+                            <th>Telefono</th>
+
+                        </tr>
+
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>{{cliente.nombre}}</td>
+                            <td>
+                            {{cliente.RFC}}
+                            </td>
+                            <td>
+                               {{cliente.domicilio}}
+                            </td>
+                            <td>{{cliente.email}}</td>
+                            <td>{{cliente.telefono}}</td>
+                        </tr>
+
+                    </tbody>
+
+                </table>
+            </div>
+
+
+        </div>
+
+            <div class="c_roundedBackground c_background">
+
+                <h3 class="c_marginTitle">Factura</h3>
+                <div class="table-responsive">
+                    <table class="table table-bordered">
+
+                        <thead>
+                            <tr>
+                                <th>Forma de Pago</th>
+                                <th>Metodo de Pago</th>
+                                <th>Descuento</th>
+                                <th ng-if="facturaParams.numCuenta!=''">Numero de Cuenta Pago</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+
+                            <tr>
+                                <td>
+                                {{facturaParams.formasPago}}
+                                </td>
+                                <td>
+                                    {{facturaParams.metodosPago}}
+                                </td>
+                            
+
+                                <td>
+                                    {{facturaParams.descuento}}
+
+                                </td>
+
+                                <td ng-if="facturaParams.numCuenta!=''">
+                                   {{facturaParams.numCuenta}}
+                                </td>
+                    
+                            </tr>
+
+                        </tbody>
+                    </table>
+
+                </div>
+
+            </div>
+            <div class="c_roundedBackground c_background">
+                <h3 class="c_marginTitle">
+                    Conceptos de Factura
+                    <button class="btn btn-primary" ng-click="return()">
+                        <i class="fa fa-undo"></i>Regresar
+                    </button>
+                </h3>
+                <div class="table-responsive">
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>Numero de Serie</th>
+                                <th>Clave Prod.Serv.</th>
+                                <th>Descripción</th>
+                                <th>Unidad</th>
+                                <th>Precio</th>
+                                <th>Cantidad</th>
+                                <th>Importe</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php
+                        setlocale(LC_MONETARY,"es_MX");
+                        $concepts = $_SESSION['conceptos'];
+                       $tmp =  json_encode($concepts);
+                       $concepts= json_decode ($tmp,true);
+                        foreach($concepts as $concepto){
+                            $popOver ='';
+                            
+                            if(isset($concepto['pedimento'])){
+                                $pedimento = $concepto['pedimento'];
+                                 $content = "<div class='popover-info'>";
+                                 $content .= "<label>Numero de Pedimento: </label> " . $pedimento['numero_pedimento']."<br>";
+                                 $content .= "<label>Aduana:</label> " . $pedimento['aduana'] . "<br></div>";
+                   $popOver = '<a class="a-pop-over" data-placement="top" data-toggle="popover" title="Importado" data-html="true" data-content="' . $content . '">Importado</a>';
+
+                            }
+                           
+                            ?>
+                            <tr>
+                                <td>
+                                    <?=$concepto['noSerie']?>
+                                </td>
+                                <td><?= $concepto['claveProdServ']['codigo'] ?></td>
+                                <td>
+                                    <?=$concepto['descripcion'].'<br>'.$popOver?>
+                                </td>
+                                <td>
+                                    <?=$concepto['unidad']?>
+                                </td>
+                                <td>
+                                    <?=money_format("$%i",(float)$concepto['precio']);?>
+                                </td>
+                                <td>
+                                    <?=$concepto['cantidad']?>
+                                </td>
+                                <td>
+                                    <?=money_format("$%i",(float)$concepto['importe']);?>
+                                </td>
+
+
+
+                            </tr>
+                            <?php } ?>
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+
+            </div>
+
+
+            <div class="c_roundedBackground c_background">
+
+                <h3 class="c_marginTitle">Correos de Envio</h3>
+                <hr />
+
+                <div class="row">
+
+                    <div class="col-xs-9">
+
+                        <input ng-model="correoNuevo" id="i_inputCorreo" type="text" class="form-control c_marginInput c_input" placeholder="Correo Electronico" />
+
+                    </div><!-- /col-xs-10 -->
+
+                    <div class="col-xs-3">
+
+                        <button ng-click="agregarCorreo()" id="i_btnAgregarCorreo" class="btn btn-block c_Accept" type="button">
+                            <i class="fa fa-plus" style="font-size: 20px;" aria-hidden="true"></i>
+                        </button>
+
+                    </div><!-- /col-xs-10 -->
+
+
+
+                </div><!-- /row Correo Inputs -->
+
+
+                <div class="table-responsive table-responsiveCorreo" style="margin-top: 2%">
+
+                    <table class="table table-bordered">
+
+                        <thead></thead>
+
+                        <tbody id="i_tableCorreosDefault">
+                            <tr ng-repeat="c in correos">
+                                <td style="color:white; text-align:center;">
+                                    <span style="margin-right:5px; display:inline;">{{c.email}} <label ng-if="c.isCliente" class="label label-success">Cliente</label></span>
+                                </td>
+                                <td>
+                                    <div class="btn-group-horizontal">
+                                        <button ng-click="eliminarCorreo()" id="i_btnTrash_'+key+'" class="c_btnTrash btn btn-default fa fa-trash c_Cancel" style="font-size:20px;"></button>
+                                        <button ng-click="setCorreo(c)" style="margin-left:5px; font-size:20px;" type="button" id="i_btnSetMsg_'+key+'" class="c_btnSetMsg btn btn-default fa fa-envelope c_Accept"></button>
+                                    </div>
+                                </td>
+                            </tr>
+
+                        </tbody>
+
+
+
+                    </table>
+
+                </div><!-- table-responsive -->
+
+
+
+            </div><!--/c_roundedBackground-->
+
+
+
+            <div style="position:relative" class="c_roundedBackground c_background">
+                <button ng-click="cambiarAmbiente()" class="btn btn-primary"><i class="fa fa-cog"></i>
+                    </button>
+                    <h5>Modo {{ambientePruebas?'Pruebas':'Produccion'}}</h5>
+
+                <div class="row">
+
+                    <div class="col-xs-12">
+
+                        <h3>Lugar de expedición</h3>
+                        <hr />
+                        <select ng-model="lugar" class="form-control c_input" id="i_selectLugares">
+                            <option ng-value="l.idexpedicion" ng-repeat="l in lugares">{{l.calle}} {{l.noExt}} {{l.noInt}} C.P {{l.codigoPostal}} {{l.municipio}},{{l.estado}}</option>
+                         </select>
+                    </div>
+
+                </div><!--/row-->
+
+                <div class="row c_marginElement" style="margin:3%;">
+
+                    <div class="col-xs-6">
+                        <label class="radio-inline">
+                            <input value="guardar" ng-model="opcion" id="i_radioGuardar" type="radio" name="optradio" />Guardar
+                        </label>
+                    </div>
+
+                    <div class="col-xs-6">
+                        <label class="radio-inline">
+                            <input value="guardarytimbrar" ng-model="opcion" id="i_radioGyT" type="radio" name="optradio" />Guardar y Timbrar
+                        </label>
+                    </div>
+                    <button ng-if="show.btnSalir" ng-click="salir()" style="margin-top: inherit;" class="btn btn-lg c_Accept">Salir y terminar</button>
+
+                    <button ng-if="show.btnContinuar" ng-click="continuar()" id="i_btnContinuar" style="margin-top: inherit;" class="btn btn-lg c_Accept">Continuar</button>
+                    <button onclick="location.href='index.html'" id="i_goOn" style="display:none; margin-top: inherit;" class="btn btn-lg c_Accept">Regresar</button>
+
+                </div><!--/row-->
+
+            </div><!--/c_roundedBackground-->
+
+        </div> <!-- /container -->
+    
+</div><!-- /i_modalBlur -->
+
+   
+    <!-- ModalMessageCorreo -->
+    <div class="modal fade" id="i_modalAgregarMensajeExtra" role="dialog">
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-6 col-sm-offset-3 text-center modal-box">
+                    
+                        <h3 id="i_correoEnviarHeader">Mensaje para correo Electrónico</h3>
+                        <div class="form-group">
+                            <label for="i_inputAsunto">Asunto</label>
+                            <input ng-model="correoEdit.asunto" class="form-control c_input" id="i_inputAsunto" type="text">
+                        </div>
+                        <div class="form-group">
+                            <label id="i_tableCorreosDefault" for="i_inputCuerpo">Cuerpo</label>
+                            <textarea  ng-model="correoEdit.cuerpo" class="form-control c_input" id="i_inputCuerpo"></textarea>
+                        </div>
+                        <button data-dismiss="modal" id="i_btnAceptarMensaje" style = "margin:5%;" class="btn btn-default c_Accept">Aceptar</button>
+    
+                </div> <!--col -->
+            </div>
+        </div>
+    </div><!--/ModalMessageCorreo -->
+    
+
+    
+    <!--ModalLoader -->
+    <div class="modal fade" id="modalPreview" role="dialog">
+     <div class="sk-cube-grid">
+      <div class="sk-cube sk-cube1"></div>
+      <div class="sk-cube sk-cube2"></div>
+      <div class="sk-cube sk-cube3"></div>
+      <div class="sk-cube sk-cube4"></div>
+      <div class="sk-cube sk-cube5"></div>
+      <div class="sk-cube sk-cube6"></div>
+      <div class="sk-cube sk-cube7"></div>
+      <div class="sk-cube sk-cube8"></div>
+      <div class="sk-cube sk-cube9"></div>
+     </div>
+     
+     
+    
+     
+     
+ 
+    
+</div><!--/ModalLoader -->
+
+    <!--ModalMessageGuardaryTimbrar -->
+    <div class="modal fade" id="i_modalContinuar" role="dialog">
+           <div class="container">
+             <div class="row">
+              <div class="col-sm-6 col-sm-offset-3 text-center modal-box">
+              <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                  
+                  <h3 class = "h3Modal">Status de Factura</h3>
+                  
+                   <div ng-if="show.successTimbrado" hidden id="i_alertSuccessTimbrado" class="alert alert-success" style="display: block;">
+
+                                            <i class="fa fa-3x fa-check-circle" style="display:block;" aria-hidden="true"></i>
+
+                                            <strong style="display:block;">Se ha Guardado y Timbrado Correctamente</strong>
+                                            
+                                            <p id = "i_MensajeServidorSucces">{{timbrado.mensaje}}</p>
+                                               <div class="btn-group">
+                                              <a target="_blank" ng-href="{{timbrado.pdf}}" class="btn btn-success"><i class="fa fa-file-pdf-o" aria-hidden="true"></i> PDF</a>
+                                              <a target="_blank" ng-href="{{timbrado.xml}}" class="btn btn-primary"><i class="fa fa-file" aria-hidden="true"></i> XML</a>
+ 
+                                              </div>
+    
+
+                                        </div>
+                                        
+                   <div ng-if="show.failTimbrado"  id = "i_alertFailTimbrado" class="alert alert-danger" >
+
+
+                                            <i class="fa fa-3x fa-times-circle" style="display:block;" aria-hidden="true"></i>
+
+                                            <strong style="display:block;">Sucedio algún error</strong>
+                                            <p id = "i_MensajeServidorFail">{{timbrado.mensaje}}</p>
+                                            
+                                            
+
+            
+
+                  </div>
+                                        
+                    
+                 
+                  
+                  <button type="button"  class="btn btn-default c_modalDismiss c_Accept" data-dismiss="modal" autofocus>Aceptar</button>
+                  <button ng-if="correos.length>0&&show.successTimbrado" ng-click="irCorreos()" type="button" class="btn btn-default c_modalDismiss c_Accept" data-dismiss="modal"><i class="fa fa-paper-plane" aria-hidden="true"></i> Enviar Correos</button>
+                  
+             </div>
+            </div>
+           </div>
+        </div><!--/ModalMessageGuardaryTimbrar -->
+        
+    <!--ModalMessageGuardar -->
+    <div class="modal fade" id="i_modalContinuar" role="dialog">
+           <div class="container">
+             <div class="row">
+              <div class="col-sm-6 col-sm-offset-3 text-center modal-box">
+              <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                  
+                  <h3 class = "h3Modal">¿Seguro que solo desea guardar la factura</h3>
+                  
+                  
+                  
+                  <button type="button" class="btn btn-default c_modalDismiss c_Accept" data-dismiss="modal" autofocus>Aceptar</button>
+                  <button type="button" class="btn btn-default c_modalDismiss c_Cancel" data-dismiss="modal">Cancelar</button>
+                  
+                  
+             </div>
+            </div>
+           </div>
+        </div><!--/ModalMessageGuardar -->
+    
+    
+    <div class="modal fade" id="i_modalEnvioCorreo" role="dialog">
+        <div class="container">
+           
+            <div class="row" id="i_contentModalEnviarCorreo">
+                <div class="col-sm-6 col-sm-offset-3 text-center modal-box">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    <h3 class="h3Modal" id="i_h3ModalMessageEnvioCorreo">Envío de Correos</h3>
+                    
+                    <div class="alert alert-success" id="i_enviarCorreosConfirmacion">
+                        <div class="table-responsive">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <td>Correo</td>
+                                        <td>Status</td>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr ng-repeat="c in correos">
+                                        <td>{{c.email}}</td>
+                                        <td><i class="fa fa-question" ng-class="{'fa-question':c.status==-1,'fa-check':c.status==1,'fa-times':c.status==0}"></i></td>
+                                    </tr>
+                              
+                            </table>
+                        </div>
+
+
+                    </div>
+                    <button ng-show="show.btnEnviarCorreos" ng-click="enviarCorreos()" type="button" class="btn btn-default c_modalDismiss c_AcceptModal" autofocus  id="i_botonModalEnviar">Aceptar</button>
+                    <button type="button" class="btn btn-default c_modalDismiss c_Cancel" data-dismiss="modal" id="i_botonModalCancelar">Cancelar</button>
+                    <button onclick="location.href='index.html'" ng-show="!show.btnEnviarCorreos" type="button" class="btn btn-default c_modalDismiss c_AcceptModal" autofocus  id="i_botonModalEnviar">Terminar</button>
+
+                    </div>
+            </div>
+        </div>
+
+    </div><!--/ModalMessageEnvioCorreo -->
+    
+        
+
+    <script>
+    var modalCorreo = null;
+    var modalposTimbrar = null;
+    var modalWaiting = null;
+    var modalCorreosEnvio = null;
+    var btnEnviar = null;
+    $(document).ready(function(){
+modalposTimbrar = $("#i_modalContinuar");
+        modalCorreo = $("#i_modalAgregarMensajeExtra");
+        modalWaiting =  $("#modalPreview");
+        modalCorreosEnvio =  $("#i_modalEnvioCorreo");
+        btnEnviar = $("#i_btnEnviarTerminar");
+        $('[data-toggle="popover"]').popover(); 
+
+        
+    });
+
+    </script>    
+    
+</body>
+
+</html>

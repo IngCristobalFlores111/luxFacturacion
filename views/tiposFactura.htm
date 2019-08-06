@@ -1,0 +1,26 @@
+<h4>Tipos de factura</h4>
+<div class="row">
+    <div class="col-xs-12">
+        <div class="form-group text-center">
+            
+            <label class="checkbox-inline"><input ng-change="onChangeTipoFactura()" ng-model="params.tipoFactura" type="radio" ng-value="1">Arrendamiento</label>
+            <label class="checkbox-inline"><input ng-change="onChangeTipoFactura()" ng-model="params.tipoFactura" type="radio" ng-value="0">Productos</label>
+            
+        </div>
+    
+</div>
+<div class="row">
+ <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+<div class="form-group">
+    <div class="input-group">
+        <span class="input-group-addon"><i class="fa fa-percent"></i> DE ISR</span>
+        <input ng-change="onChangeISR()" ng-model="params.ISR" class="form-control input-lg"  />
+    </div>
+</div>
+ </div>
+ <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+ <div class="btn-group">
+   <button ng-show="cambio.ISR||cambio.tipoFactura" ng-click="actualizar()" class="btn btn-success"><i class="fa fa-check"></i> Aceptar</button>     
+</div>       
+ </div>
+</div>

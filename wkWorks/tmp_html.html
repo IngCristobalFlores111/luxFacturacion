@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Factura</title>
+  <meta name="dompdf.view" content="FitH">
+  
+  <meta charset="utf-8">
+  <link href="https://fonts.googleapis.com/css?family=Caveat+Brush|Dosis|Indie+Flower|Lobster|Fjalla+One|Open+Sans+Condensed:300|Roboto|Sansita" rel="stylesheet">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<link rel="stylesheet" href="https://luxline.com.mx/joseO/LuxFacturacion/wkWorks/style.css"/>
+
+</head>
+<body>
+<div class="container-fluid">
+<div class="row">
+<div class="col-xs-4">
+<img class="img-responsive"  src="https://www.luxline.com.mx/joseO/LuxFacturacion/Facturacion/logo/logo.png" />
+</div>
+<div class="col-xs-4">
+  <div class="info-emisor">
+<h4>MARIA ELENA IÑIGUEZ DIAZ DE LEON</h4>
+<p>Guacamaya</p>
+<p> Mirador de San Isidro</p>
+<p>Zapopan,Jalisco</p>
+<p>RFC: IIDE660331UU7</p>
+<p>Lugar de Expedicion: Guacamaya 1758   Mirador de San Isidro CP 45133,Zapopan,Jalisco</p>
+<p>g.badgerfacturacion@gmail.com</p>
+  </div>
+
+</div>
+<div class="col-xs-4">
+
+<table class="table-factura-detalles">
+  <tbody>
+    <tr>
+      <td>Factura</td>
+    </tr>
+    <tr>
+      <td>Serie: A Folio:491</td>
+    </tr>
+    <tr>
+     <td> No. de Certificado</td> 
+       </tr>
+<tr>
+  <td>00001000000401234457</td>
+</tr>
+<tr>
+<td>No. Certificado SAT</td>
+
+</tr>
+<tr>
+  <td>00001000000401234457Sat</td>
+</tr>
+<tr>
+  <td>Fecha y Hora de Timbrado    </td>
+</tr>
+<tr>
+  <td>2018-01-24T20:47:11</td>
+</tr>
+      </tbody>
+</table>
+
+
+</div>
+</div>
+
+<hr>
+    <table class="table table-bordered table-params">
+      <tbody>
+    <tr>
+       <td class="td-important">Folio SAT(UUID):</td>
+      <td>19fb4324-dc02-45b9-bb58-2e0b2ef9d1e0</td>
+      <td class="td-important">Fecha de impresión</td>
+      <td>2018-09-15 15:13:17</td>
+    </tr>
+    <tr>
+        <td class="td-important">Método de Pago:</td>
+       <td>PUE(Pago en una sola exhibición)</td>
+       <td class="td-important">Tipo de Comprobante</td>
+       <td>Ingreso</td>
+     </tr>
+     <tr>
+        <td class="td-important">Moneda:</td>
+       <td>MXN</td>
+       <td class="td-important">Tipo de Cambio</td>
+       <td>1</td>
+       
+     </tr>
+     <tr>
+       <td class="td-important">Num. Cuenta Pago</td>
+       <td>N/A</td>
+       <td class="td-important">Forma de Pago</td>
+       <td>03(Transferencia electrónica de fondos)</td>
+     
+     </tr>
+     <tr>
+      <td class="td-important">Condiciones Pago</td>
+      <td>SIN CONDICIONES</td>
+      <td class="td-important">Uso CFDI</td>
+      <td>G03(Gastos en general)</td>
+    
+    </tr>
+
+      </tbody>
+ 
+    
+    
+    </table>
+    <div class="datos-cliente" style="transform: translate(0,0);">
+<h4 class="header-important">
+  Datos del cliente
+</h4>
+<table class="table table-bordered">
+<tbody>
+<tr>
+<td>Nombre: INMOBILIARIA Y PROMOTORA STERLING SA DE CV </td>
+<td>RFC: IPS920211B9A</td>
+</tr>
+<tr>
+    <td>FRANCISCO DE QUEVEDO 117 TORRE B B PLANTA BAJA 44500 GUADALAJARA,JALISCO</td>
+    <td>Telefono:</td>
+
+</tr>
+
+
+</tbody>
+
+</div>
+<div class="conceptos">
+<table class="table table-bordered table-striped">
+<thead>
+<tr class="tr-important">
+  <td class="col-xs-1">Cantidad</td>
+  <td class="col-xs-1">Clave Prod.Serv.</td>
+  <td class="col-xs-1">No. Serie</td>
+  <td class="col-xs-5">Descripción</td>
+  <td class="col-xs-1">Unidad</td>
+  <td class="col-xs-1">Precio</td>
+  <td class="col-xs-2">Importe</td>
+</tr>
+</thead>
+<tbody>
+<tr><td>1</td><td>72101507</td><td>NA</td><td>REPARACION DE PLAFON DE TABLA ROCA Y RETICULAR</td><td>E48</td><td>$3,700.00</td><td>$3,700.00</td></tr>
+
+</tbody>
+
+</table>
+
+
+</div>
+
+<table class="table table-bordered" >
+<tr>
+  <td class="td-important col-xs-8">Importe con letra</td>
+  <td class="col-xs-2">Subtotal</td>
+  <td class="col-xs-2">$3,700.00</td>
+</tr>
+<tr>
+    <td class="col-xs-8 border-less">Cuatro mil doscientos noventa y dos pesos 0/100 M.N.</td>
+    <td id="td-descuento1" class="col-xs-2">Descuento</td>
+    <td id="td-descuento2" class="col-xs-2">$0.00</td>
+  </tr>
+
+
+
+
+
+      <tr>
+          <td class="col-xs-8 border-less"></td>
+          <td class="col-xs-2">IVA (16%)</td>
+          <td class="col-xs-2">$592.00</td>
+        </tr>
+        <tr>
+            <td class="col-xs-8 border-less"></td>
+            <td class="col-xs-2">Total</td>
+            <td class="col-xs-2">$4,292.00</td>
+          </tr>
+
+
+</table>
+
+<div class="row">
+  <div class="col-xs-3">
+<img  src="https://www.luxline.com.mx/joseO/LuxFacturacion/wkWorks/48_2017_09_04_413.png"/>
+  </div>
+  <div class="col-xs-9">
+    
+    <ul class="list-group cadenas">
+      <li class="list-group-item td-important">Sello Digital del CFDI</li>
+      <li class="list-group-item">
+         Ghxqe0C3Q7ZcOUQsp9z72z3BS50bvBBI9DidNMfSubVYwK8+mYx5Gt2yZ3zH4Ta5L5SqlHuk<br>Zj3zubWzUSIL/7Sxp5xTtLL4ybYSqkkNg1RutV+LMb1pvAryNosxoC6+mAISOc6RS2ZVWPqu<br>JJWFguhwHkYwXIT4099k/uiwaLKlZW4iof+HbMLAhbvuNAG0URm/CL1V+DI1FS962hOFDPqd<br>3QS2UhYe2D6TnLRUM/rbEauzatUpBitP4X969sSmkZEGpd3hEAPZJxG72GTLyBEnfsrONviJ<br>PWcawnhTYpyFJw0PkCNmwuQ2DJLtlKNIDbw9e1F/6u68y1gjaT10zA==<br>
+
+      </li>
+      <li class="list-group-item td-important">Sello Digital SAT</li>
+      <li class="list-group-item">
+        wGMSss5tIFln071X3Afc0CF7NVt7hTa1PoYidAgYWpebm7tMvpJBgCfauGINdoDrqEnWfivz<br>wCXtmP8wpwj33eNXUf5ePmy0rdaAh9XA3YRHfHOri1gF8Q9cEMH7Jo5cVuH8EDRhxni7/knw<br>1bhpbue0z0AEakT0eJybTj8xowKyfF7IMigQcFRVIYUYlXKCXf5SJ3aYXwP/1MVRTpTv7rxM<br>QVyEvufG+dHc36MNDwaRvJnDDvMfZM+HRfkJ9Pw284cbYTvozH5JG7vj8pheZwRKEKZlbf2B<br>vHuU2LDLwUWQqXNilpPxCtImkNS65TFpJLu8JbSAd3tWwWF3gMBpew==<br>
+      </li>   
+      <li class="list-group-item td-important">Cadena Complementaria</li>
+      
+      <li class="list-group-item">
+         ||1.0|19fb4324-dc02-45b9-bb58-2e0b2ef9d1e0|2018-01-24T20:47:11|Ghxqe0C3Q<br>7ZcOUQsp9z72z3BS50bvBBI9DidNMfSubVYwK8+mYx5Gt2yZ3zH4Ta5L5SqlHukZj3zubWzU<br>SIL/7Sxp5xTtLL4ybYSqkkNg1RutV+LMb1pvAryNosxoC6+mAISOc6RS2ZVWPquJJWFguhwH<br>kYwXIT4099k/uiwaLKlZW4iof+HbMLAhbvuNAG0URm/CL1V+DI1FS962hOFDPqd3QS2UhYe2<br>D6TnLRUM/rbEauzatUpBitP4X969sSmkZEGpd3hEAPZJxG72GTLyBEnfsrONviJPWcawnhTY<br>pyFJw0PkCNmwuQ2DJLtlKNIDbw9e1F/6u68y1gjaT10zA==|||<br>
+      </li>        
+    </ul>
+    <label class="text-center">Esta es una representación impresa de un CFDI</label>
+    <label class="text-center">Generado con <a href="https://www.luxline.com.mx/luxFacturacion.html">LuxFacturación</a></label>
+
+    </div>
+  </div>
+</div>
+
+
+    
+    
+
+
+
+
+</body>
+</html>

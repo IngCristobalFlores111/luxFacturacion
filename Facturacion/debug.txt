@@ -1,0 +1,381 @@
+Array
+(
+    [0] => Array
+        (
+            [archivo_cer] => CSD_San_Angel_Tabachines_GONM540312B43_20170911_085554s.cer
+            [archivo_key] => CSD_San_Angel_Tabachines_GONM540312B43_20170911_085554.key
+            [csdPass] => 5478RjPOOk_erju67P
+            [email] => facturacionSanAngelTabachines@gmail.com
+        )
+
+)
+Array
+(
+    [ambientePruebas] => 1
+    [idCliente] => 30
+    [lugarExpedicion] => 29
+    [facturaParams] => Array
+        (
+            [id] => 30
+            [importe] => 0
+            [descuento] => 0
+            [metodosPago] => PUE
+            [formasPago] => 1
+            [numCuenta] => 
+            [serie] => A
+            [folio] => 632
+            [usoCFDI] => G01
+            [idusuario] => 107522810518784289052
+            [retencion_IVA] => false
+            [retencion_ISR] => 10
+            [retener_ISR] => false
+            [conceptos_iva] => 0
+            [mensaje_timbrada] => Le enviamos su comprobante fiscal. Gracias por su compra.
+            [mensaje_cancelada] => se cancelo
+            [mensaje_generada] => 
+            [tipo_factura] => 0
+            [idRegimen] => 9
+            [idTipoFactura] => 0
+            [tipo] => I
+            [moneda] => 1
+        )
+
+)
+--------------------DATOS----------------Array
+(
+    [cfdi] => facturas/pruebas/xml/30_2017_12_31_632.xml
+    [xml_debug] => facturas/sin_timbrar/sin_timbrar_30_2017_12_31_632.xml
+    [php_openssl] => SI
+    [factura] => Array
+        (
+            [version] => 3.3
+            [serie] => A
+            [folio] => 632
+            [fecha_expedicion] => 2017-12-31T13:13:43
+            [metodo_pago] => PUE
+            [forma_pago] => 01
+            [tipocomprobante] => I
+            [condicionesDePago] => Sin condiciones
+            [moneda] => MXN
+            [tipocambio] => 1
+            [LugarExpedicion] => 45188
+            [subtotal] => 7209.76
+            [descuento] => 0
+            [total] => 8363.32
+            [certificado] => MIIFxTCCA62gAwIBAgIUMjAwMDEwMDAwMDAzMDAwMjI4MTUwDQYJKoZIhvcNAQELBQAwggFmMSAwHgYDVQQDDBdBLkMuIDIgZGUgcHJ1ZWJhcyg0MDk2KTEvMC0GA1UECgwmU2VydmljaW8gZGUgQWRtaW5pc3RyYWNpw7NuIFRyaWJ1dGFyaWExODA2BgNVBAsML0FkbWluaXN0cmFjacOzbiBkZSBTZWd1cmlkYWQgZGUgbGEgSW5mb3JtYWNpw7NuMSkwJwYJKoZIhvcNAQkBFhphc2lzbmV0QHBydWViYXMuc2F0LmdvYi5teDEmMCQGA1UECQwdQXYuIEhpZGFsZ28gNzcsIENvbC4gR3VlcnJlcm8xDjAMBgNVBBEMBTA2MzAwMQswCQYDVQQGEwJNWDEZMBcGA1UECAwQRGlzdHJpdG8gRmVkZXJhbDESMBAGA1UEBwwJQ295b2Fjw6FuMRUwEwYDVQQtEwxTQVQ5NzA3MDFOTjMxITAfBgkqhkiG9w0BCQIMElJlc3BvbnNhYmxlOiBBQ0RNQTAeFw0xNjEwMjUyMTUyMTFaFw0yMDEwMjUyMTUyMTFaMIGxMRowGAYDVQQDExFDSU5ERU1FWCBTQSBERSBDVjEaMBgGA1UEKRMRQ0lOREVNRVggU0EgREUgQ1YxGjAYBgNVBAoTEUNJTkRFTUVYIFNBIERFIENWMSUwIwYDVQQtExxMQU43MDA4MTczUjUgLyBGVUFCNzcwMTE3QlhBMR4wHAYDVQQFExUgLyBGVUFCNzcwMTE3TURGUk5OMDkxFDASBgNVBAsUC1BydWViYV9DRkRJMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAgvvCiCFDFVaYX7xdVRhp/38ULWto/LKDSZy1yrXKpaqFXqERJWF78YHKf3N5GBoXgzwFPuDX+5kvY5wtYNxx/Owu2shNZqFFh6EKsysQMeP5rz6kE1gFYenaPEUP9zj+h0bL3xR5aqoTsqGF24mKBLoiaK44pXBzGzgsxZishVJVM6XbzNJVonEUNbI25DhgWAd86f2aU3BmOH2K1RZx41dtTT56UsszJls4tPFODr/caWuZEuUvLp1M3nj7Dyu88mhD2f+1fA/g7kzcU/1tcpFXF/rIy93APvkU72jwvkrnprzs+SnG81+/F16ahuGsb2EZ88dKHwqxEkwzhMyTbQIDAQABox0wGzAMBgNVHRMBAf8EAjAAMAsGA1UdDwQEAwIGwDANBgkqhkiG9w0BAQsFAAOCAgEAJ/xkL8I+fpilZP+9aO8n93+20XxVomLJjeSL+Ng2ErL2GgatpLuN5JknFBkZAhxVIgMaTS23zzk1RLtRaYvH83lBH5E+M+kEjFGp14Fne1iV2Pm3vL4jeLmzHgY1Kf5HmeVrrp4PU7WQg16VpyHaJ/eonPNiEBUjcyQ1iFfkzJmnSJvDGtfQK2TiEolDJApYv0OWdm4is9Bsfi9j6lI9/T6MNZ+/LM2L/t72Vau4r7m94JDEzaO3A0wHAtQ97fjBfBiO5M8AEISAV7eZidIl3iaJJHkQbBYiiW2gikreUZKPUX0HmlnIqqQcBJhWKRu6Nqk6aZBTETLLpGrvF9OArV1JSsbdw/ZH+P88RAt5em5/gjwwtFlNHyiKG5w+UFpaZOK3gZP0su0sa6dlPeQ9EL4JlFkGqQCgSQ+NOsXqaOavgoP5VLykLwuGnwIUnuhBTVeDbzpgrg9LuF5dYp/zs+Y9ScJqe5VMAagLSYTShNtN8luV7LvxF9pgWwZdcM7lUwqJmUddCiZqdngg3vzTactMToG16gZA4CWnMgbU4E+r541+FNMpgAZNvs2CiW/eApfaaQojsZEAHDsDv4L5n3M1CC7fYjE/d61aSng1LaO6T1mh+dEfPvLzp7zyzz+UgWMhi5Cs4pcXx1eic5r7uxPoBwcCTt3YI1jKVVnV7/w=
+            [noCertificado] => 20001000000300022815
+        )
+
+    [PAC] => Array
+        (
+            [usuario] => DEMO700101XXX
+            [pass] => DEMO700101XXX
+            [produccion] => NO
+        )
+
+    [conf] => Array
+        (
+            [cer] => cfdi3.3/certificados/lan7008173r5.cer.pem
+            [key] => cfdi3.3/certificados/lan7008173r5.key.pem
+            [pass] => 12345678a
+        )
+
+    [emisor] => Array
+        (
+            [rfc] => LAN7008173R5
+            [nombre] => Miguel Ángel González Navarro
+            [RegimenFiscal] => 601
+        )
+
+    [receptor] => Array
+        (
+            [UsoCFDI] => G01
+            [rfc] => XAXX010101000
+            [nombre] => PUBLICO EN GENERAL
+        )
+
+    [conceptos] => Array
+        (
+            [0] => Array
+                (
+                    [cantidad] => 1
+                    [ClaveUnidad] => H87
+                    [ID] => N/A
+                    [descripcion] => LENTE OFTALMICO
+                    [valorunitario] => 1287.76
+                    [ClaveProdServ] => 42142901
+                    [importe] => 1287.76
+                    [Impuestos] => Array
+                        (
+                            [Traslados] => Array
+                                (
+                                    [0] => Array
+                                        (
+                                            [Base] => 1287.76
+                                            [Impuesto] => 002
+                                            [TipoFactor] => Tasa
+                                            [TasaOCuota] => 0.160000
+                                            [Importe] => 206.04
+                                        )
+
+                                )
+
+                        )
+
+                )
+
+            [1] => Array
+                (
+                    [cantidad] => 1
+                    [ClaveUnidad] => H87
+                    [ID] => N/A
+                    [descripcion] => Solución para limpiar anteojos
+                    [valorunitario] => 1287.21
+                    [ClaveProdServ] => 42142908
+                    [importe] => 1287.21
+                    [Impuestos] => Array
+                        (
+                            [Traslados] => Array
+                                (
+                                    [0] => Array
+                                        (
+                                            [Base] => 1287.21
+                                            [Impuesto] => 002
+                                            [TipoFactor] => Tasa
+                                            [TasaOCuota] => 0.160000
+                                            [Importe] => 205.95
+                                        )
+
+                                )
+
+                        )
+
+                )
+
+            [2] => Array
+                (
+                    [cantidad] => 1
+                    [ClaveUnidad] => H87
+                    [ID] => N/A
+                    [descripcion] => Paño para limpiar lentes
+                    [valorunitario] => 1276.13
+                    [ClaveProdServ] => 42142907
+                    [importe] => 1276.13
+                    [Impuestos] => Array
+                        (
+                            [Traslados] => Array
+                                (
+                                    [0] => Array
+                                        (
+                                            [Base] => 1276.13
+                                            [Impuesto] => 002
+                                            [TipoFactor] => Tasa
+                                            [TasaOCuota] => 0.160000
+                                            [Importe] => 204.18
+                                        )
+
+                                )
+
+                        )
+
+                )
+
+            [3] => Array
+                (
+                    [cantidad] => 1
+                    [ClaveUnidad] => H87
+                    [ID] => N/A
+                    [descripcion] => Paño para limpiar lentes
+                    [valorunitario] => 98.76
+                    [ClaveProdServ] => 42142907
+                    [importe] => 98.76
+                    [Impuestos] => Array
+                        (
+                            [Traslados] => Array
+                                (
+                                    [0] => Array
+                                        (
+                                            [Base] => 98.76
+                                            [Impuesto] => 002
+                                            [TipoFactor] => Tasa
+                                            [TasaOCuota] => 0.160000
+                                            [Importe] => 15.8
+                                        )
+
+                                )
+
+                        )
+
+                )
+
+            [4] => Array
+                (
+                    [cantidad] => 1
+                    [ClaveUnidad] => H87
+                    [ID] => N/A
+                    [descripcion] => Solución para limpiar anteojos
+                    [valorunitario] => 453.54
+                    [ClaveProdServ] => 42142908
+                    [importe] => 453.54
+                    [Impuestos] => Array
+                        (
+                            [Traslados] => Array
+                                (
+                                    [0] => Array
+                                        (
+                                            [Base] => 453.54
+                                            [Impuesto] => 002
+                                            [TipoFactor] => Tasa
+                                            [TasaOCuota] => 0.160000
+                                            [Importe] => 72.57
+                                        )
+
+                                )
+
+                        )
+
+                )
+
+            [5] => Array
+                (
+                    [cantidad] => 1
+                    [ClaveUnidad] => H87
+                    [ID] => N/A
+                    [descripcion] => Paño para limpiar lentes
+                    [valorunitario] => 1287.23
+                    [ClaveProdServ] => 42142907
+                    [importe] => 1287.23
+                    [Impuestos] => Array
+                        (
+                            [Traslados] => Array
+                                (
+                                    [0] => Array
+                                        (
+                                            [Base] => 1287.23
+                                            [Impuesto] => 002
+                                            [TipoFactor] => Tasa
+                                            [TasaOCuota] => 0.160000
+                                            [Importe] => 205.96
+                                        )
+
+                                )
+
+                        )
+
+                )
+
+            [6] => Array
+                (
+                    [cantidad] => 1
+                    [ClaveUnidad] => H87
+                    [ID] => N/A
+                    [descripcion] => LENTE OFTALMICO
+                    [valorunitario] => 1276.21
+                    [ClaveProdServ] => 42142901
+                    [importe] => 1276.21
+                    [Impuestos] => Array
+                        (
+                            [Traslados] => Array
+                                (
+                                    [0] => Array
+                                        (
+                                            [Base] => 1276.21
+                                            [Impuesto] => 002
+                                            [TipoFactor] => Tasa
+                                            [TasaOCuota] => 0.160000
+                                            [Importe] => 204.19
+                                        )
+
+                                )
+
+                        )
+
+                )
+
+            [7] => Array
+                (
+                    [cantidad] => 1
+                    [ClaveUnidad] => H87
+                    [ID] => N/A
+                    [descripcion] => Solución para limpiar anteojos
+                    [valorunitario] => 121.21
+                    [ClaveProdServ] => 42142908
+                    [importe] => 121.21
+                    [Impuestos] => Array
+                        (
+                            [Traslados] => Array
+                                (
+                                    [0] => Array
+                                        (
+                                            [Base] => 121.21
+                                            [Impuesto] => 002
+                                            [TipoFactor] => Tasa
+                                            [TasaOCuota] => 0.160000
+                                            [Importe] => 19.39
+                                        )
+
+                                )
+
+                        )
+
+                )
+
+            [8] => Array
+                (
+                    [cantidad] => 1
+                    [ClaveUnidad] => H87
+                    [ID] => N/A
+                    [descripcion] => LENTE OFTALMICO
+                    [valorunitario] => 121.71
+                    [ClaveProdServ] => 42142901
+                    [importe] => 121.71
+                    [Impuestos] => Array
+                        (
+                            [Traslados] => Array
+                                (
+                                    [0] => Array
+                                        (
+                                            [Base] => 121.71
+                                            [Impuesto] => 002
+                                            [TipoFactor] => Tasa
+                                            [TasaOCuota] => 0.160000
+                                            [Importe] => 19.47
+                                        )
+
+                                )
+
+                        )
+
+                )
+
+        )
+
+    [impuestos] => Array
+        (
+            [TotalImpuestosTrasladados] => 1153.56
+            [translados] => Array
+                (
+                    [0] => Array
+                        (
+                            [impuesto] => 002
+                            [tasa] => 0.160000
+                            [importe] => 1153.56
+                            [TipoFactor] => Tasa
+                        )
+
+                )
+
+        )
+
+    [SDK] => Array
+        (
+            [ruta] => /var/www/luxline.com.mx/sanAngel/LuxFacturacion/Facturacion/cfdi3.3/
+        )
+
+    [modulos_pre] => default
+    [retencion] => NO
+    [modo_externo] => SI
+    [html_a_txt] => 
+    [remueve_acentos] => 
+)
+------------------DATOS------------------

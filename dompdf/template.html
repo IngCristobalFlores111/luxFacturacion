@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Factura</title>
+  <meta name="dompdf.view" content="FitH">
+  
+  <meta charset="utf-8">
+  <link href="https://fonts.googleapis.com/css?family=Caveat+Brush|Dosis|Indie+Flower|Lobster|Fjalla+One|Open+Sans+Condensed:300|Roboto|Sansita" rel="stylesheet">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<link rel="stylesheet" href="https://luxline.com.mx/joseO/LuxFacturacion/dompdf/style.css"/>
+
+</head>
+<body>
+<div class="container-fluid">
+<div class="row" style="margin-right:222px;transform:translate(0,-20px);">
+<div class="col-xs-4">
+<img style="height:175px;width:400px;"  class="img-responsive"  src="https://www.luxline.com.mx/joseO/LuxFacturacion/Facturacion/logo/logo.png" />
+</div>
+<div class="col-xs-6">
+  <div class="info-emisor">
+<h4>#nombreEmisor</h4>
+<p>#calleEmisor</p>
+<p>#coloniaEmisor</p>
+<p>#estadoMunicipioEmisor</p>
+<p>RFC: #RFCEmisor</p>
+<p>Lugar de Expedicion: #lugarExpedicion</p>
+<p>#correoEmisor</p>
+  </div>
+
+</div>
+<div class="col-xs-2" style="transform:translate(0,-20px);">
+
+<table class="table-factura-detalles">
+  <tbody>
+    <tr>
+      <td>Factura</td>
+    </tr>
+    <tr>
+      <td>Serie: #serieFactura Folio:#folioFactura</td>
+    </tr>
+    <tr>
+     <td> No. de Certificado</td> 
+       </tr>
+<tr>
+  <td>#noCertificado</td>
+</tr>
+<tr>
+<td>No. Certificado SAT</td>
+
+</tr>
+<tr>
+  <td>#noCertificadoSat</td>
+</tr>
+<tr>
+  <td>Fecha y Hora de Timbrado    </td>
+</tr>
+<tr>
+  <td>#fechaTimbrado</td>
+</tr>
+      </tbody>
+</table>
+
+
+</div>
+</div>
+
+
+    <table class="table table-bordered table-params" style="transform: translate(0,-25px);">
+      <tbody>
+    <tr>
+       <td class="td-important">Folio SAT(UUID):</td>
+      <td>#UUID</td>
+      <td class="td-important">Fecha de impresión</td>
+      <td>#fechaImpresion</td>
+    </tr>
+    <tr>
+        <td class="td-important">Método de Pago:</td>
+       <td>#metodoPago</td>
+       <td class="td-important">Tipo de Comprobante</td>
+       <td>#tipoComprobante</td>
+     </tr>
+     <tr>
+        <td class="td-important">Moneda:</td>
+       <td>#moneda</td>
+       <td class="td-important">Tipo de Cambio</td>
+       <td>#tipoCambio</td>
+       
+     </tr>
+     <tr>
+       <td class="td-important">Num. Cuenta Pago</td>
+       <td>#numCuenta</td>
+     
+     </tr>
+
+      </tbody>
+ 
+    
+    
+    </table>
+    <div class="datos-cliente">
+<h4 class="header-important">
+  Datos del cliente
+</h4>
+<table class="table table-bordered" style="margin-top: -10px;">
+<tbody>
+<tr>
+<td>Nombre: #nombreCliente </td>
+<td>RFC: #RFCcliente</td>
+</tr>
+<tr>
+    <td>#domicilioCliente</td>
+    <td>Telefono:#telefonoCliente</td>
+
+</tr>
+
+
+</tbody>
+
+</div>
+<div class="conceptos">
+<table class="table table-bordered table-striped">
+<thead>
+<tr class="tr-important">
+  <td>Cantidad</td>
+  <td>No. Serie</td>
+  <td>Descripción</td>
+  <td>Unidad</td>
+  <td>Precio</td>
+  <td>Importe</td>
+</tr>
+</thead>
+<tbody>
+#conceptos
+
+</tbody>
+
+</table>
+
+
+</div>
+
+<table class="table table-bordered" style="margin-top: -35px;">
+<tr>
+  <td class="td-important col-xs-8">Importe con letra</td>
+  <td class="col-xs-2">Subtotal</td>
+  <td class="col-xs-2">#subtotal</td>
+</tr>
+<tr>
+    <td class="col-xs-8 border-less">#importeLetra</td>
+    <td class="col-xs-2">Descuento</td>
+    <td class="col-xs-2">#descuento</td>
+  </tr>
+  <tr>
+      <td class="col-xs-8 border-less"></td>
+      <td class="col-xs-2">Ret. Iva</td>
+      <td class="col-xs-2">#retIva</td>
+    </tr>
+    <tr>
+        <td class="col-xs-8 border-less"></td>
+        <td class="col-xs-2">Ret. ISR</td>
+        <td class="col-xs-2">#retIsr</td>
+      </tr>
+      <tr>
+          <td class="col-xs-8 border-less"></td>
+          <td class="col-xs-2">Iva</td>
+          <td class="col-xs-2">#iva</td>
+        </tr>
+        <tr>
+            <td class="col-xs-8 border-less"></td>
+            <td class="col-xs-2">Total</td>
+            <td class="col-xs-2">#total</td>
+          </tr>
+
+
+</table>
+
+<div class="row">
+  <div class="col-xs-3">
+<img  src="https://luxline.com.mx/joseO/LuxFacturacion/dompdf/#png" style="transform:translate(-25px,0);" />
+  </div>
+  <div class="col-xs-9">
+    
+    <ul class="list-group cadenas" style="transform:translate(-45px,0);">
+      <li class="list-group-item td-important">Sello Digital del CFDI</li>
+      <li class="list-group-item">
+         #selloDigitalCFDI
+
+      </li>
+      <li class="list-group-item td-important">Sello Digital SAT</li>
+      <li class="list-group-item">
+        #selloDigitalSat
+      </li>   
+      <li class="list-group-item td-important">Cadena Complementaria</li>
+      
+      <li class="list-group-item">
+         #cadenaComp
+      </li>        
+    </ul>
+    <label class="text-center">Esta es una representaciín impresa de un CFDI</label>
+
+    </div>
+  </div>
+</div>
+
+
+    
+    
+
+
+
+
+</body>
+</html>

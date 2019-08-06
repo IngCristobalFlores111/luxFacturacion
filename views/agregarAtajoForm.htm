@@ -1,0 +1,84 @@
+<div class="row">
+    <div class="col-xs-12">
+        <div class="form-group">
+        <div class="input-group">
+         <span   style="cursor:pointer" id="btnBuscarProdServ" class="input-group-addon"><i class="fa fa-search"></i> Clave Producto Servicio (Cataologo)</span>
+         <input ng-change="buscarClaveProd()" ng-model="search.claveProd" type="text" class="form-control" id="buscarProdServ"  />
+        </div>
+     
+
+        </div>
+        <ui-select ng-model="atajo.claveProd">
+            <ui-select-match>
+                <span ng-bind="$select.selected.descripcion"></span>
+            </ui-select-match>
+            <ui-select-choices repeat="item in (clavesProd | filter: $select.search) track by item.id">
+                <span ng-bind="item.descripcion"></span>
+                <small ng-bind="item.codigo"></small>
+            </ui-select-choices>
+          </ui-select>
+     </div> 
+ </div>
+<div class = "row">
+<div class="col-sm-12">
+   <div class="form-group">
+       <label for="usr">Atajo</label>
+       <input ng-model="atajo.atajo" maxlength="5" max="5" type="text" class="form-control c_input c_inputsAtajos" id="i_atajoNombre">
+   </div> <!--form atajo-->
+</div>
+</div>
+
+<div class="row">
+ <div class="col-sm-12">
+     <div class="form-group">
+         <label for="i_atajoDescripcion">Descripción</label>
+         <textarea ng-model="atajo.descripcion" rows="4" id="i_atajoDescripcion" class="form-control c_input c_inputsAtajos"></textarea>
+     </div> <!--form descripcion-->
+ </div>
+</div> 
+
+<div class = "row">
+
+<div class = "col-lg-4 col-md-4 col-sm-4 col-xs-12">
+
+<div class="form-group">
+   <label for="i_atajoMedida">Medida</label>
+   <ui-select ng-model="atajo.medida">
+    <ui-select-match>
+        <span ng-bind="$select.selected.nombre"></span>
+    </ui-select-match>
+    <ui-select-choices repeat="item in (unidades | filter: $select.search) track by item.id">
+        <span ng-bind="item.nombre"></span>
+        <small ng-bind="item.clave"></small>
+    </ui-select-choices>
+  </ui-select>
+        
+ </div> <!--form medida-->
+
+</div>
+
+<div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+
+   <div class="form-group">
+       <label for="i_atajoPrecio">Precio</label>
+       <input ng-model="atajo.precio" type="number" class="form-control c_input c_inputsAtajos" id="i_atajoPrecio">
+
+   </div> <!--form precio-->
+
+</div>
+<div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+   <div class="form-group">
+       <label for="i_atajoNoSerie">No.Serie</label>
+       <input  ng-model="atajo.noSerie" type="text" class="form-control c_input c_inputsAtajos" id="i_atajoNoSerie">
+
+   </div>
+
+</div>  
+
+
+</div>    
+
+         <div class="form-group">
+         <button ng-click="agregarAtajo()" class="btn btn-lg c_Accept" style="margin-top: 3%;"  >Agregar</button>
+         
+     </div> <!--btn agregar-->

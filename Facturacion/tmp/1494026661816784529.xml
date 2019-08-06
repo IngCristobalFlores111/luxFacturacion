@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+                <cfdi:Comprobante xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                                  xmlns:cfdi="http://www.sat.gob.mx/cfd/3"       xmlns:tfd="http://www.sat.gob.mx/TimbreFiscalDigital" xsi:schemaLocation="http://www.sat.gob.mx/cfd/3 http://www.sat.gob.mx/sitio_internet/cfd/3/cfdv32.xsd http://www.sat.gob.mx/TimbreFiscalDigital http://www.sat.gob.mx/sitio_internet/TimbreFiscalDigital/TimbreFiscalDigital.xsd   "
+                                  version="3.2"
+                                  serie="A"
+                                  folio="67"
+                                  fecha="2017-05-05T18:22:21"
+                                  formaDePago="Pago en una sola Exhibición"
+                                  noCertificado="20001000000200001428"
+                                  certificado="MIIEYTCCA0mgAwIBAgIUMjAwMDEwMDAwMDAyMDAwMDE0MjgwDQYJKoZIhvcNAQEFBQAwggFcMRowGAYDVQQDDBFBLkMuIDIgZGUgcHJ1ZWJhczEvMC0GA1UECgwmU2VydmljaW8gZGUgQWRtaW5pc3RyYWNpw7NuIFRyaWJ1dGFyaWExODA2BgNVBAsML0FkbWluaXN0cmFjacOzbiBkZSBTZWd1cmlkYWQgZGUgbGEgSW5mb3JtYWNpw7NuMSkwJwYJKoZIhvcNAQkBFhphc2lzbmV0QHBydWViYXMuc2F0LmdvYi5teDEmMCQGA1UECQwdQXYuIEhpZGFsZ28gNzcsIENvbC4gR3VlcnJlcm8xDjAMBgNVBBEMBTA2MzAwMQswCQYDVQQGEwJNWDEZMBcGA1UECAwQRGlzdHJpdG8gRmVkZXJhbDESMBAGA1UEBwwJQ295b2Fjw6FuMTQwMgYJKoZIhvcNAQkCDCVSZXNwb25zYWJsZTogQXJhY2VsaSBHYW5kYXJhIEJhdXRpc3RhMB4XDTEzMDUwNzE2MDEyOVoXDTE3MDUwNzE2MDEyOVowgdsxKTAnBgNVBAMTIEFDQ0VNIFNFUlZJQ0lPUyBFTVBSRVNBUklBTEVTIFNDMSkwJwYDVQQpEyBBQ0NFTSBTRVJWSUNJT1MgRU1QUkVTQVJJQUxFUyBTQzEpMCcGA1UEChMgQUNDRU0gU0VSVklDSU9TIEVNUFJFU0FSSUFMRVMgU0MxJTAjBgNVBC0THEFBQTAxMDEwMUFBQSAvIEhFR1Q3NjEwMDM0UzIxHjAcBgNVBAUTFSAvIEhFR1Q3NjEwMDNNREZOU1IwODERMA8GA1UECxMIcHJvZHVjdG8wgZ8wDQYJKoZIhvcNAQEBBQADgY0AMIGJAoGBAKS/beUVy6E3aODaNuLd2S3PXaQre0tGxmYTeUxa55x2t/7919ttgOpKF6hPF5KvlYh4ztqQqP4yEV+HjH7yy/2d/+e7t+J61jTrbdLqT3WD0+s5fCL6JOrF4hqy//EGdfvYftdGRNrZH+dAjWWml2S/hrN9aUxraS5qqO1b7btlAgMBAAGjHTAbMAwGA1UdEwEB/wQCMAAwCwYDVR0PBAQDAgbAMA0GCSqGSIb3DQEBBQUAA4IBAQACPXAWZX2DuKiZVv35RS1WFKgT2ubUO9C+byfZapV6ZzYNOiA4KmpkqHU/bkZHqKjR+R59hoYhVdn+ClUIliZf2ChHh8s0a0vBRNJ3IHfA1akWdzocYZLXjz3m0Er31BY+uS3qWUtPsONGVDyZL6IUBBUlFoecQhP9AO39er8zIbeU2b0MMBJxCt4vbDKFvT9i3V0Puoo+kmmkf15D2rBGR+drd8H8Yg8TDGFKf2zKmRsgT7nIeou6WpfYp570WIvLJQY+fsMp334D05Up5ykYSAxUGa30RdUzA4rxN5hT+W9whWVGD88TD33Nw55uNRUcRO3ZUVHmdWRG+GjhlfsD"
+                                  subTotal="862.0690"
+                                  descuento="0.0000"
+                                  total="1000.0000"
+                                  metodoDePago="Efectivo"
+                                  tipoDeComprobante="ingreso"
+                                  TipoCambio="1.0000"
+                                  Moneda="MXN"
+                                    LugarExpedicion="GUADALAJARA,JALISCO"
+                                  
+                                   
+                                   >
+        
+                  <cfdi:Emisor
+                         rfc="AAA010101AAA"
+                         nombre="Cristóbal de Jesus Flores Iñiguez">
+                    <cfdi:DomicilioFiscal
+                                calle="JESUS MARIA Y JOSE CON CEREZA Y LIMON"
+                                noExterior="151"
+                                noInterior="11"
+                                colonia="Santa Cabeza"
+                                localidad="Guadalajara Centro"
+                                municipio="Guadalajara"
+                                estado="Jalisco"
+                                pais="Mexico"
+                                codigoPostal="45135" />
+                    <cfdi:ExpedidoEn
+                                calle="MALAGA de los estercolers"
+                                noExterior="3214" 
+                                noInterior="5454"
+                                colonia="SANTA MONICA"
+                                localidad="GUADALAJARA"
+                                municipio="GUADALAJARA"
+                                estado="JALISCO"
+                                pais="MEXICO"
+                                codigoPostal="12345" />
+                    <cfdi:RegimenFiscal Regimen="MI REGIMEN" />
+                  </cfdi:Emisor>
+                
+                  <cfdi:Receptor
+                        rfc="AAA010101AAA"
+                        nombre="MIGUEL ANGEL SOSA HERNANDEZ LOZA">
+                    <cfdi:Domicilio
+                        calle="LA TRUNKS"
+                        noExterior="32"
+                        noInterior="23"
+                        colonia="la pija"
+                        localidad="ALVARO OBREGON"
+                        municipio="Distrito Federal"
+                        estado="DISTRITO FEDERAL"
+                        pais="MEXICO"
+                        codigoPostal="44620" />
+                  </cfdi:Receptor>
+                
+                  <cfdi:Conceptos>
+        <cfdi:Concepto cantidad="10" unidad="PIEZA" noIdentificacion="3355RFJ" descripcion="Un producto" valorUnitario="86.2069" importe="862.069"></cfdi:Concepto>
+                            
+                  </cfdi:Conceptos>
+                  
+                  <cfdi:Impuestos totalImpuestosTrasladados="137.9310"  totalImpuestosRetenidos="0.0000" >
+                    
+                    
+                        <cfdi:Traslados>
+                       <cfdi:Traslado impuesto="IVA" tasa="16" importe="137.9310" />    
+                        </cfdi:Traslados> 
+                  </cfdi:Impuestos>
+            
+                  
+                </cfdi:Comprobante>
+        

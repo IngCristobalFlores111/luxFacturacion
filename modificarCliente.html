@@ -1,0 +1,794 @@
+﻿<?php
+require_once("../Login/php/Functions.php");   
+$link = linkDBLuxLine();
+$luxlineObj = new luxlineWebLogin($link);
+
+$luxlineObj->initialCheckUpSystems();
+
+$res = $luxlineObj->getClientAndSystemFilesFolder();
+     $response = $res->getResponse();
+     if($response['status'] < 0)
+        $res->printResponseInErrorPage();
+
+    $clientAndSystemFilesFolder = $response['data'];
+?>
+
+<!--Desarrollado por Luxline Solutions-->
+<html lang="en">
+    
+<head>  <!--HEAD-->
+    <title>Modificar Cliente</title>
+    
+    <meta charset="utf-8"> <!--Caracteres Codificados-->
+
+    <meta name="viewport" content="width=device-width, initial-scale=1"> <!--Para Dispositivos Moviles habilita touch-zoom etc-->
+
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+
+    <!--/MetaArea-->
+
+    <!--CSS-->
+
+    <!-- Latest compiled and minified CSS -->
+
+    <link rel="stylesheet" href="css/style.css" type="text/css" />
+
+    <link rel="stylesheet" href="font-awesome/css/font-awesome.min.css">
+
+    <link rel="icon" href="img/luxline1.ico" type="image/x-icon">
+
+    <style>
+        input[type="date"] {
+            display: block;
+            -webkit-appearance: textfield;
+            -moz-appearance: textfield;
+            min-height: 1.2em;
+        }
+    </style>
+
+    <script>
+        g_clientAndSystemFilesFolder = <?php    echo "'".$clientAndSystemFilesFolder."'"; ?>;
+    </script>
+
+    <!-- jQuery library -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <!-- Latest compiled JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" rel="stylesheet" type="text/css" />
+
+    <script type="text/javascript" src="https://cdn.datatables.net/v/dt/jq-2.2.4/dt-1.10.15/r-2.1.1/datatables.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.6.4/angular.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/jq-2.2.4/dt-1.10.15/r-2.1.1/datatables.min.css"/>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-datatables/0.5.6/angular-datatables.min.js"></script>
+    
+    <!--Google+ api-->
+    <script src="https://apis.google.com/js/api.js?onload=handleClientLoad"></script>
+    <!--Google+ api-->
+    <!--ApiLogIn-->
+    <script src="js/controllers/folios/ctrlFoliosCliente.js"></script>
+    <script src="js/services/folios/foliosServiceCliente.js"></script>
+    <style>
+        .tr_timbrada{
+            background-color: rgba(104,255,104,0.25) !important;
+        }
+        .tr_cancelada{
+            background-color: rgba(255, 104, 104, 0.25) !important;
+        }
+        .tr_pendiente{
+            background-color: rgba(241, 196, 15, 0.25) !important;
+        
+        }
+        
+        </style>
+    <script>
+        (function(){
+            
+          
+    function Date_toYMD() {
+        var year, month, day;
+        year = String(this.getFullYear());
+        month = String(this.getMonth() + 1);
+        if (month.length == 1) {
+            month = "0" + month;
+        }
+        day = String(this.getDate());
+        if (day.length == 1) {
+            day = "0" + day;
+        }
+        return year + "-" + month + "-" + day;
+    }
+   idCliente = '<?=$_GET["id"]?>';
+    var app = angular.module("app",['datatables']);
+    app.service("foliosService",foliosService);
+    app.controller("ctrlFolios",ctrlFolios);
+})()
+    </script>
+    <script>
+        var ApiLogIn = function (btnSingIn, btnSignOut, msgContainer,phpLogin) {
+            //var test = 10; private variable
+            //var method = function(){} private method
+            //this.test = 10; public variable
+            //this.method = function(){} public method
+            var self = this;
+            var m_auth2 = null; // The Sign-In object.
+            var m_btnSignIn = btnSingIn;
+            var m_btnSignOut = btnSignOut;
+            var m_message = msgContainer;
+            var m_apiKey = 'accesssecurity-140019';
+            var m_clientId = "1043488027097-f77grlc3h5cli90m6c0b4urra6jmcakn.apps.googleusercontent.com";
+            var m_phpLogin = phpLogin;
+            // Enter one or more authorization scopes. Refer to the documentation for
+            // the API or https://developers.google.com/identity/protocols/googlescopes
+            // for details.
+            var m_scopes = 'profile https://www.googleapis.com/auth/userinfo.profile';
+            var m_cookie_policy = 'single_host_origin';
+
+            this.signIn = function () {
+                m_auth2.signIn();
+            }
+
+            this.logOut = function () {
+                var User = m_auth2.currentUser.get();
+                var l_RO = User.getAuthResponse();
+                var access_token = l_RO.access_token;
+
+                var location = (parseInt(screen.availWidth) / 2) - 290;
+                var revokeUrl = window.open('https://accounts.google.com/Logout', "Logout", "left=" + location + ",top=10 width=580,height=800");
+                revokeUrl.focus();
+                setTimeout(function () {
+                    revokeUrl.close();
+                }, 500);
+            }
+
+            var updateSigninStatus = function (isSignedIn) { //Callback function
+                if (isSignedIn) {
+                    //*****************googleUser**************
+                    //A GoogleUser object represents one user account.
+                    var User = m_auth2.currentUser.get()
+                    var profile = User.getBasicProfile();
+                    //*****************googleUser**************
+                    var user_id = profile.getId();
+
+                    //console.log('ID: ' + user_id); // Do not send to your backend! Use an ID token instead.
+                    //console.log('Name: ' + profile.getName());
+                    //console.log('Image URL: ' + profile.getImageUrl());
+                    //console.log('Email: ' + profile.getEmail());
+
+                    // The ID token you need to pass to your backend:
+                    var l_RO = User.getAuthResponse();
+
+                    var id_token = l_RO.id_token;
+                    //var access_token = l_RO.access_token;
+                    //var log_hint = l_RO.login_hint;
+                    //var scopes = l_RO.scope;
+                    //var expire_time = l_RO.expires_in;
+                    //var f_issued_at = l_RO.first_issued_at;
+                    //var expires_at = l_RO.expires_at;
+
+                    //console.log("ID Token: " + id_token);
+                    //console.log("Access Token: " + access_token);
+                    //console.log("Log Hint: " + log_hint);
+                    //console.log("Scopes: " + scopes);
+                    //console.log("Expire Time: " + expire_time);
+                    //console.log("f_issued_at: " + f_issued_at);
+                    //console.log("Expires at: " + expire_time);
+
+                    $.post(m_phpLogin, { ID_TOKEN: id_token }, function (data, status) {
+                        var indexer = parseInt(data);
+                        switch (indexer) {
+                            case 0:
+                                if (window.location.href === "http://www.luxline.com.mx") {
+                                    setTimeout(function () {
+                                        window.location.href = "http://www.luxline.com.mx/testLuxFact";
+                                    }, 1000);
+                                }
+
+                                if(m_btnSignIn !== null)
+                                    $(m_btnSignIn).hide();
+
+                                if(m_btnSignOut !== null)
+                                    $(m_btnSignOut).show();
+                                break;
+                            case -1:
+                                console.log("Token Invalido");
+                                break;
+                            case -2:
+                                console.log("Estampa de tiempo expirada");
+                                break;
+                            case -3:
+                                if(m_message !== null)
+                                    $(m_message).html("<h3>El usuario no existe en la base de datos. Ingrese a su cuenta de Google+ con un usuario válido.</h3>");
+                                else
+                                    console.log("El usuario no existe en la base de datos. Ingrese a su cuenta de Google+ con un usuario válido.");
+
+                                if (window.location.href !== "http://www.luxline.com.mx") {
+                                    setTimeout(function () {
+                                        window.location.href = "http://www.luxline.com.mx";
+                                    }, 1000);
+                                }
+
+
+                                if(m_btnSignOut !== null)
+                                    $(m_btnSignOut).hide();
+
+                                if(m_btnSignIn !== null)
+                                    $(m_btnSignIn).show();
+                                break;
+                            case -4:
+                                console.log("Hay inconsistencia en la base de datos");
+                                break;
+                            default:
+                                break;
+                        }
+                    });
+                }
+                else {
+                    if(m_message !== null)
+                        m_message.html("<h3>De click a Ingresar para comenzar</h3>")
+                    else
+                        console.log("De click a Ingresar para comenzar");
+
+                    if(m_btnSignIn !== null)
+                        $(m_btnSignIn).show();
+
+                    if(m_btnSignOut !== null)
+                        $(m_btnSignOut).hide();
+
+
+                    $.post("../Login/php/clearSession.php", {}, function () {
+                    if (window.location.href !== "http://www.luxline.com.mx") {
+                        setTimeout(function () {
+                            window.location.href = "http://www.luxline.com.mx";
+                        }, 1000);
+                    }
+                    });
+
+                }
+            }
+
+           this.initAuth = function () {
+                //make gapi calls
+                gapi.client.setApiKey(m_apiKey);
+                gapi.auth2.init({
+                    client_id: m_clientId,
+                    scope: m_scopes,
+                    cookie_policy: m_cookie_policy
+                }).then(function () {
+                    //Obtener instancia de autorización
+
+                    //****************auth2***************************************
+                    //auth 2 is a GoogleAuth object that is a singleton class that provides methods to allow
+                    //the user to sign in with a Google account, get the user's current
+                    //sign-in status, get specific data from the user's Google profile,
+                    //request additional scopes, and sign out from the current account.
+                    m_auth2 = gapi.auth2.getAuthInstance();
+                    //****************auth2***************************************
+
+                    //Víncular un cambio de estado a una función
+
+                    m_auth2.isSignedIn.listen(updateSigninStatus);
+
+                    //Checar el estado inicial, podría ya estar loggeado
+                    updateSigninStatus(m_auth2.isSignedIn.get());
+
+                    //Listen to signin states
+                    if(m_btnSignIn !== null)
+                        m_btnSignIn.addEventListener("click", self.signIn);
+
+                    if(m_btnSignOut !== null)
+                        m_btnSignOut.addEventListener("click", self.logOut);
+                });
+            }
+
+        };
+    </script>
+    <!--ApiLogIn-->
+
+    <script>
+        var go_ApiLogIn = null;
+        var authorizeButton = null;
+        var signoutButton = null;
+        var g_message = null;
+        var g_signOutBtn = null;
+        var g_signInBtn = null;
+
+        $(document).ready(function () {
+            g_message = null;
+            g_signInBtn = null;
+            g_signOutBtn = document.getElementById('signout-button');
+
+            go_ApiLogIn = new ApiLogIn(g_signInBtn, g_signOutBtn, g_message, "../../Login/php/logInFacturacion.php");
+            gapi.load('client:auth2', go_ApiLogIn.initAuth);
+        });
+    </script>
+</head> 
+
+<body ng-app="app" > 
+    <?php   if(!isset($_GET['id'])){echo "<script>location.href = 'index.html'</script>"; } ?>
+
+    <div id="i_modalBlur">
+        <nav class="navbar navbar-default">
+            <div class="container-fluid">
+                <div class="row visible-xs ">
+                    <img src="img/luxline.png" style="height:8%;" id="i_navBarLogo" alt="lux_logo">
+                </div>
+                <div class="navbar-header" style="margin:1%;">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <img src="img/luxline.png" class="visible-md visible-lg visible-sm" id="i_navBarLogo" alt="lux_logo">
+                </div>
+                <div class="collapse navbar-collapse" id="myNavbar">
+                    <ul class="nav navbar-nav" style="margin:1%;">
+                        <li><a href="index.html"> Facturar</a></li>
+                        <li><a href="folios.html">Folios</a></li>
+                        <li><a href="AgrModAtajo.html">Ajustes</a></li>
+                    </ul>
+                    <ul class="nav navbar-nav navbar-right">
+                        <li data-toggle="modal" data-target="#i_modalOpcionesUsuario"><a href="#"><span class="fa fa-user" style="font-size:20px;" aria-hidden="true"></span></a></li>
+                        <li data-toggle="modal" data-target="#i_modalCerrarSesion"><a href="#"><span class="fa fa-sign-out" style="font-size:20px;" aria-hidden="true"></span></a></li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+        <form id="i_formRedirect" method="post" hidden>
+            <input name="folio" value="" type="text" />
+            <input name="id" value="" type="text" />
+        </form>
+        <div class="container">
+            <ul class="nav nav-pills ">
+                <li class="active"><a data-toggle="tab" href="#i_menuModificar"> Modificar</a></li>
+                <li><a  data-toggle="tab" href="#i_menuHistorial"> Historial</a></li>
+                <li><a data-toggle="tab" href="#i_menuEliminar"> Eliminar Cliente</a></li>
+
+            </ul>
+            <div class="tab-content">
+                <div id="i_menuModificar" class="tab-pane fade in active">
+                    <h3>Datos de Contacto
+                    <button id="i_btnGoFacturar" class="btn btn-success">Facturar Cliente <i class="fa fa-share" aria-hidden="true"></i></button>
+                    </h3>
+
+                    <hr>
+                    <div class="row c_inputForm">
+                        <div class="col-sm-12">
+                            <label for="inputNombre">Nombre</label>
+                            <input id="inputNombre" type="text" class="form-control c_input" />
+                        </div>
+
+                    </div>
+                    <div class="row c_inputForm">
+                        <div class="col-sm-6">
+                            <label for="inputRFC">RFC</label>
+                            <input id="inputRFC" type="text" class="form-control c_input" />
+                        </div>
+                        <div class="col-sm-6">
+                            <label for="inputTelefono">Telefono</label>
+                            <input class="form-control c_input" id="inputTelefono" type="text" />
+                        </div>
+                    </div>
+                    <div class="row c_inputForm">
+                        <div class="col-sm-6">
+                            <label for="inputCelular">Celular</label>
+                            <input id="inputCelular" type="text" class="form-control c_input" />
+                        </div>
+                        <div class="col-sm-6">
+                            <label for="inputEmail">Email</label>
+                            <input class="form-control c_input" id="inputEmail" type="text" />
+                        </div>
+                    </div>
+                    <h3>Domicilio Fiscal</h3>
+
+                    <hr>
+
+                    <div class="row c_inputForm">
+                        <div class="col-xs-6">
+                            <label for="inputCalle">Calle</label>
+                            <input id="inputCalle" class="form-control c_input" type="text" />
+                        </div>
+                        <div class="col-xs-6">
+                            <label for="inputColonia">Colonia</label>
+                            <input id="inputColonia" class="form-control c_input" type="text" />
+                        </div>
+
+                    </div>
+
+                    <div class="row c_inputForm">
+
+                        <div class="col-sm-4">
+
+                            <label for="inputCodigoPostal">C.P</label>
+                            <input id="inputCodigoPostal" class="form-control c_input" type="text" />
+                        </div>
+                        <div class="col-sm-4">
+
+                            <label for="inputNoExteior">No. Exterior</label>
+                            <input id="inputNoExteior" class="form-control c_input" type="text" />
+                        </div>
+                        <div class="col-sm-4">
+
+                            <label for="inputNoInterior">No. Interior</label>
+                            <input id="inputNoInterior" class="form-control c_input" type="text" />
+                        </div>
+                    </div>
+
+                    <div class="row c_inputForm">
+
+                        <div class="col-sm-4">
+                            <label for="inputLocalidad">Localidad</label>
+                            <input type="text" class="form-control c_input" id="inputLocalidad" />
+
+                        </div>
+                        <div class="col-sm-4">
+                            <label for="inputMunicipio">Municipio</label>
+                            <input type="text" class="form-control c_input" id="inputMunicipio" />
+
+
+                        </div>
+
+                        <div class="col-sm-4">
+                            <label for="inputEstado">Estado</label>
+                            <input class="form-control c_input" id="inputEstado" type="text" />
+                        </div>
+
+                    </div>
+                    <div class="row c_inputForm" style="margin-bottom:5%;">
+
+                        <div class="col-sm-6" style="padding-top:10px;">
+                            <button  data-toggle="modal" data-target="#i_modalAceptar" onclick="actualizarCliente()" id="i_btnAceptar" class="btn btn-block c_Accept">Aceptar</button>
+
+                        </div>
+                        <div class="col-sm-6" style="padding-top:10px;">
+
+                            <button id="i_btnUnDo" class="btn c_button btn-block c_Ajustes">Deshacer</button>
+                        </div>
+                    </div>
+
+
+                </div>
+                <div ng-controller="ctrlFolios" ng-include="'views/foliosCliente.htm'" id="i_menuHistorial" class="tab-pane fade">
+               
+
+
+                </div>
+                <div id="i_menuEliminar" class="tab-pane fade">
+                    <div class="c_roundedBackground c_background">
+
+                        <h3 style="margin-bottom:3%;">Eliminar Cliente</h3>
+
+                        <h4 class="c_marginElement">¿Esta seguro de eliminar este cliente?</h4>
+                        <h4>Toda la información del cliente será eliminada</h4>
+
+                        <div class="row" style="margin-top: 6%;">
+
+                            <div class="col-xs-12">
+                                <button id="i_btn_eliminarCheck" class="btn btn-lg c_Cancel" data-toggle="modal" data-target="#i_modalEliminarCliente">Eliminar</button>
+                            </div>
+
+                        </div>
+                    </div>
+                    <!--background -
+
+                            </div>
+                            </div>
+
+
+
+                    </div> <!--/Container-->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!--ModalPill-->
+    <div class="modal fade" id="i_modalExcelInfo" role="dialog">
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-6 col-sm-offset-3 text-center modal-box">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    <h3 class="h3Modal">Descarga tus facturas en excel</h3>
+
+                    <h4>Esto es una excelente herramienta cuando tu contador/a requiere las facturas de un mes en específico. Usa los filtros para recuperar las facturas que quieres exportar y haz click!</h4>
+
+                    <button type="button" class="btn  c_modalDismiss c_Accept" data-dismiss="modal" autofocus>Aceptar</button>
+
+                </div>
+            </div>
+        </div>
+    </div><!--/ModalPill -->
+
+
+    <div class="modal fade in" id="i_modalEliminarCliente" role="dialog">
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-6 col-sm-offset-3 text-center modal-box">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    <h3 id="i_headerEliminarCliente" class="h3Modal">¿Seguro que desea eliminar este cliente?</h3>
+                    <h3 id="i_headerInfoEliminarCliente">Toda la información se eliminará</h3>
+                    <button id="i_btnGoEliminarCliente" type="button" class="btn  c_modalDismiss c_AcceptModal" data-dismiss="modal" autofocus>Aceptar</button>
+                    <button type="button" class="btn  c_modalDismiss c_Cancel" data-dismiss="modal">Cancelar</button>
+                </div>
+            </div>
+        </div>
+
+                </div>
+
+                <!--ModalCerrarSesion-->
+                <div class="modal fade" id="i_modalCerrarSesion" role="dialog">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-sm-6 col-sm-offset-3 text-center modal-box">
+                                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                                <h3 class="h3Modal">¿Esta seguro que desea cerrar sesión?</h3>
+                                <button type="button" class="btn  c_modalDismiss c_AcceptModal" data-dismiss="modal" id="signout-button" autofocus>Aceptar</button>
+                                <button type="button" class="btn  c_modalDismiss c_Cancel" data-dismiss="modal">Cancelar</button>
+                            </div>
+                        </div>
+                    </div>
+                </div><!--/ModalCerrarSesion -->
+                <!--ModalOpcionesUsuario-->
+                <div class="modal fade" id="i_modalOpcionesUsuario" role="dialog">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-sm-6 col-sm-offset-3 text-center modal-box">
+                                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                                <h3 class="h3Modal">¿Seguro que desea salir a ajustes?</h3>
+                                <p>Puede que la información no se haya guardado</p>
+               
+
+
+
+                                <button onclick="location.href = 'opcionesUsuario.html'" type="button" class="btn  c_modalDismiss c_AcceptModal" data-dismiss="modal" autofocus>Acceder</button>
+                                <button type="button" class="btn  c_modalDismiss c_Cancel" data-dismiss="modal">Regresar</button>
+
+                            </div>
+                        </div>
+                    </div>
+                </div><!--/ModalOpcionesUsuario-->
+                <!--ModalAceptar-->
+
+                <div class="modal fade" id="i_modalAceptar" role="dialog">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-sm-6 col-sm-offset-3 text-center modal-box">
+                                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                                <h3 id="h3Modal_aceptar">¿Esta seguro que desea guardar los siguientes cambios?</h3>
+                                <strong id="i_msjModal"></strong>
+                                <div id="i_alertGuardado" class="alert alert-success">
+
+                                    <i class="fa fa-3x fa-check-circle" style="display:block;" aria-hidden="true"></i>
+                                    <strong style="display:block;">Se ha guardado correctamente</strong>
+                                </div>
+
+                                <div class="alert alert-danger">
+
+                                    <i class="fa fa-3x fa-times-circle" style="display:block;" aria-hidden="true"></i>
+                                    <strong style="display:block;">No se ha podido guardar</strong>
+                                </div>
+
+                                <button onclick="goActualizar()"  data-toggle="modal" data-target="#i_modalAceptar" id="i_actualizarInfoBtn" type="button" class="btn btn-default c_modalDismiss c_AcceptModal" autofocus>Aceptar</button>
+                                <button type="button" class="btn btn-default c_modalDismiss c_Cancel" data-dismiss="modal">Cancelar</button>
+
+
+                            </div>
+                        </div>
+                    </div>
+                </div><!--/ModalAceptar-->
+                <!--ModalMessageDeshacer -->
+                <div class="modal fade" id="i_modalDeshacer" role="dialog">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-sm-6 col-sm-offset-3 text-center modal-box">
+                                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                                <h3 class="h3Modal">¿Esta seguro que desea deshacer los cambios realizados?</h3>
+                                <button type="button" class="btn btn-default c_modalDismiss c_AcceptModal" data-dismiss="modal" autofocus>Aceptar</button>
+                                <button type="button" class="btn btn-default c_modalDismiss c_Cancel" data-dismiss="modal">Cancelar</button>
+
+
+                            </div>
+                        </div>
+                    </div>
+                </div><!--/ModalMessageDeshacer -->
+                <!--ModalPill-->
+                <div class="modal fade" id="i_modalPill" role="dialog">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-sm-6 col-sm-offset-3 text-center modal-box">
+                                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                                <h3 class="h3Modal">Filtro por Estatus</h3>
+
+                                <h4>Al dar click a los siguientes iconos permite filtrar el estatus de todas las facturas (o las facturas catalogadas por fecha) para su comodidad.</h4>
+
+
+
+                                <button type="button" class="btn  c_modalDismiss c_Accept" data-dismiss="modal" autofocus>Aceptar</button>
+
+                            </div>
+                        </div>
+                    </div>
+                </div><!--/ModalPill -->
+             
+                <script src="js/validationOfStirngs.js"></script>
+                <script src="js/modCliente.js"></script>
+                <script>
+                    var gd_divLG = $("#i_divlgTable");
+                    var gd_divXS = $("#i_divxsTable");
+                    var gd_tableFacturas = $("#tableFacturas");
+                    var gd_dateFrom = $("#dateFrom");
+                    var gd_dateTo = $("#dateTo");
+                    var gd_amountFrom = $("#inputAmountFrom");
+                    var gd_amountTo = $("#inputAmountTo");
+                    var gd_inputSearch = $("#inputSearch");
+                    var filter_type = 0;  // 0 = no filter, 1= timbradas, 2= pendientes, 3= canceladas
+                    //.c_buttonTableConfig butt
+
+
+
+                    $(".alert").hide();
+
+                    $("#i_btnGoEliminarCliente").click(function () {
+                        $.post("php/eliminarClienteForGood.php", { idCliente: gn_idCliente }, function (data) {
+                            location.href = "index.html";
+                        });
+
+                    });
+
+                    $("#i_btn_eliminarCheck").click(function () {
+                        gn_idCliente = "<?php echo $_GET['id']; ?>"
+                        $.post("php/checkIfEliminar.php", { idCliente: gn_idCliente }, function (data) {
+                            // alert(data);
+                            var lj_conteo = JSON.parse(data);
+                            var generdas = parseInt(lj_conteo.generadas);
+                            var pendientes = parseInt(lj_conteo.pendinetes);
+
+                            if (generdas > 0 || pendientes > 0) {
+                                $("#i_headerEliminarCliente").html("No se puede eliminar este cliente");
+                                $("#i_headerInfoEliminarCliente").html("Se tiene registro previo del cliente<br>Pendientes:" + pendientes + "<br>Timbradas:" + generdas);
+                                $("#i_btnGoEliminarCliente").remove();
+
+                            }
+
+                        });
+                    });
+
+                    function actualizarCliente() {
+
+                        var fails = new Map();
+                        var la_failedIndexes = new Map();
+                        if (la_doms[0].value.trim()=='')
+                        { la_failedIndexes.set(0, "El nombre no puede estar vacio"); fails.set("Nombre", "Solo puede contener letras"); }
+                        var validar_rfc = validateRFC(la_doms[1].value);
+                        if (validar_rfc != true) { fails.set("RFC", validar_rfc); la_failedIndexes.set(1, validar_rfc); }
+                        if (!validateTel(la_doms[2].value)) { la_failedIndexes.set(2, "El telefono solo puede contener numeros y letras"); fails.set("Telefono", "El telefono solo puede contener numeros y letras"); }
+                        if (!validateTel(la_doms[3].value)) { la_failedIndexes.set(3, "El celular solo puede contener numeros y letras"); fails.set("Celular", "El celular solo puede contener numeros y letras"); }
+                        if (!validateEmail(la_doms[4].value)) { la_failedIndexes.set(4, "Correo invalido o mal formaldo"); fails.set("Email", "Correo invalido o mal formaldo"); }
+                       // if (!validateCalle(la_doms[5].value)) { la_failedIndexes.set(5, "La calle es invalida"); fails.set("Calle", "La calle es invalida"); }
+                        //if (!validateCalle(la_doms[6].value)) { la_failedIndexes.set(6, "Colonia invalida, solo alfanuméricos"); fails.set("Colonia", "Colonia invalida, solo alfanuméricos"); }
+                        if (isNaN(la_doms[7].value) || la_doms[7].value.length != 5)
+                        { la_failedIndexes.set(7, "Invalido, solo numeros de 5 digitos"); fails.set("CodigoPostal", "Invalido, solo numeros de 5 digitos"); }
+                        //if (!validateCalle(la_doms[10].value)) { la_failedIndexes.set(10, "Localidad invalido, solo letras alfabéticas con permitidas"); fails.set("Localidad", "Localidad invalida, solo letras alfabéticas con permitidas"); }
+                      //  if (!validateCalle(la_doms[11].value)) { la_failedIndexes.set(11, "Municipio invalido, solo letras alfabéticas con permitidas"); fails.set("Municipio", "Municipio invalida, solo letras alfabéticas con permitidas"); }
+                        //if (!validateCalle(la_doms[12].value)) { la_failedIndexes.set(12, "Estado invalido, solo letras alfabéticas con permitidas"); fails.set("Estado", "Estado invalido, solo letras alfabéticas con permitidas"); }
+                        if (fails.size == 0) {
+                            $("#h3Modal_aceptar").html("Actualizar Información");
+                            $("#i_msjModal").html("¿Esta seguro que deseas actualizar la información de este cliente?");
+                            $("#i_actualizarInfoBtn").show();
+                            //$("#i_modalAceptar").modal("show");
+                            la_doms.css("background-color", "");
+                            la_doms.attr("placeholder", "");
+                        } else {
+                            var la_tmp = [];
+                            fails.forEach(function (value, key, fails) {
+                                la_tmp.push("<h4>" + key + "</h4>");
+                                la_tmp.push("<strong>" + value + "</strong>");
+                            });
+                            var len = la_doms.length; var i = 0;
+                            for (; i < len; i++) {
+                                var msj = la_failedIndexes.get(i);
+                                if (msj != undefined) {
+                                    ld_input = $(la_doms[i]);
+                                    ld_input.css("background-color", "rgba(254, 110, 0, 0.498039)");
+                                    ld_input.attr("placeholder", msj);
+                                    ld_input.val("");
+                                } else {
+                                    ld_input = $(la_doms[i]);
+                                    ld_input.css("background-color", "");
+                                    ld_input.attr("placeholder", "");
+                                }
+
+
+
+                            }
+
+                            $("#h3Modal_aceptar").html("Se han encontrado errores");
+
+                            $("#i_msjModal").html(la_tmp.join("<br>")); $("#i_actualizarInfoBtn").hide();
+                           // $("#i_modalAceptar").modal("show");
+
+                        }
+                    } function loadCliente() {
+                        var idCliente = "<?php echo $_GET['id'];  ?>";
+                        $.post("php/getClient.php", { id: idCliente }, function (data) {
+                            try{
+                                var lj_datos = JSON.parse(data);
+                                lj_datos = lj_datos.result[0];
+                                var la_doms = $("#i_menuModificar input[type=text]"); var i = 0;
+                                $.each(lj_datos, function (key, value) {
+
+                                    la_doms[i].value = value;
+                                    i++;
+                                });
+                            } catch (err) {
+                                alert("Cliente no encontrado");
+                                location.href = "index.html";
+                            }
+                        });
+                    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+               
+
+
+
+            
+                
+
+
+
+                    var gn_idCliente = 0;
+                    var la_doms = null;
+                    var filter_btns = 0;
+
+                    $(document).ready(function () {
+           
+                   
+                             
+
+                        $("#i_btnGoFacturar").click(function () {
+                        var idCliente = "<?php  echo $_GET['id'];  ?>";
+                        location.href = "facturar-ng33.html?id=" + idCliente;
+
+
+                    });
+
+
+
+                   
+
+                        la_doms = $("#i_menuModificar input[type=text]");
+                        gn_idCliente = "<?php echo $_GET['id']; ?>";
+              
+                      //  alert("updated");
+                        loadCliente();
+                        gn_idCliente = "<?php echo$_GET['id']; ?>"
+                    
+                    });
+
+
+
+
+
+
+                </script>
+
+
+</body>
+
+
+</html> 
+

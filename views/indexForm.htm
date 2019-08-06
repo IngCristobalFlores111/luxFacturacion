@@ -1,0 +1,139 @@
+<div class="row c_inputForm">
+    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-8">
+        <input ng-model="search.qCliente" id="i_inputSearch" class="form-control c_input" placeholder="Buscar Nombre,RFC,Email..." type="text" >
+    </div>
+    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+        <button ng-click="buscarCliente()" id="i_btnSearch" type="button" class="btn btn-block c_faSize c_Accept"><i class="fa fa-search" aria-hidden="true"></i></button>
+        <!-- style="background-color: rgba(255,255,255,0.25);" -->
+    </div>
+    <div class="visible-lg visible-md visible-sm col-lg-4 col-md-4 col-sm-4 col-xs-12">
+        <a href="agregarCliente.html" role="button" class="btn btn-block btn-lg c_Accept c_faSize"><i class="fa fa-plus" aria-hidden="true"></i></a>
+    </div>
+    <div style="padding-top:12px;" class="visible-xs col-lg-4 col-md-4 col-sm-4 col-xs-12">
+        <a href="agregarCliente.html" role="button" class="btn btn-block btn-lg c_Accept c_faSize"><i class="fa fa-plus" aria-hidden="true"></i></a>
+    </div>
+</div> <!-- Buscar Clientes-->
+<div class="row c_inputForm">
+<h4>Importación desde Excel</h4>
+<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+    <div class="btn-group">
+        <button ng-click="importarClientes()" id="btnImportarClientes" class="btn c_Accept c_faSize"><i class="fa fa-file-excel-o" aria-hidden="true"></i> Importar Clientes</button>
+        <input  onchange="angular.element(this).scope().inputExcelFile(this)" type="file" id="importInput" style="display:none" />
+        <button ng-click="importarProductos()" id="btnImportarProductos" class="btn c_Accept c_faSize"  type="button"><i class="fa fa-file-excel-o" aria-hidden="true"></i> Importar Productos</button>
+    </div>
+</div>
+<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+    <div class="btn-group">
+        <button type="button" data-toggle="modal" data-target="#i_modalInfoExcel" style="background:transparent;border:none;font-size:30px;"><i class="fa fa-question-circle" aria-hidden="true"></i></button>
+    </div>
+</div>
+</div>
+<div class="row">
+    <div class="col-xs-12">
+        <h3>Clientes</h3>
+        <hr>
+    </div>
+
+</div> <!-- Clientes-->
+
+<div id="lg-facturas" class="row visible-lg visible-md visible-sm">
+    <div class="col-xs-12">
+        <div class="table-responsive" style="max-height:90%;">
+            <table datatable="ng" class="table table-bordered">
+
+                <thead>
+
+                    <tr>
+
+                        <th><i class="fa fa-file-text-o" aria-hidden="true"></i></th>
+
+                        <th>Nombre</th>
+
+                        <th>RFC</th>
+
+                        <th>Tel</th>
+
+                        <th>Cel</th>
+
+                        <th>Correo</th>
+
+                        <th>No.facturas</th>
+
+                        <th><i class="fa fa-wrench" aria-hidden="true"></i></th>
+
+                    </tr>
+
+                </thead>
+
+                <tbody>
+                <tr ng-repeat="c in clientes">
+                    <td>
+                    <a href="facturar-ng33.html?id={{c.id}}" class="c_facturarBtn btn btn-default btn-block c_Accept">Facturar</a>
+                    </td>
+                    <td>{{c.nombre}}</td>
+                    <td>{{c.RFC}}</td>
+                    <td>{{c.telefono}}</td>
+                    <td>{{c.celular}}</td>
+                    <td>{{c.email}}</td>
+                    <td>{{c.numeroFacturas}}</td>
+                    <td>
+                        <a class="c_modificarBtn btn btn-lg c_Ajustes" href="modificarCliente.html?id={{c.id}}"><i class="fa fa-cog"></i></a>
+                    </td>
+                    
+
+                </tr>
+
+                </tbody>
+
+            </table>
+        </div>
+</div>
+</div>   
+
+<div id="xs-facturas" class="visible-xs">
+        <div class="row" ng-repeat="c in clientes">
+                <div class="col-xs-12">
+                    <table class="table table-bordered">
+                        <tbody>
+                            <tr>
+                                <td class="col-xs-6"><i aria-hidden="true" class="fa fa-file-text-o" style="padding-top:10px;"></i></td>
+                                <td class="col-xs-6">
+                                    <a href="facturar-ng33.html?id={{c.id}}" class="c_facturarBtn btn btn-default btn-block c_Accept">Facturar</a>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="col-xs-6"><strong>Nombre</strong></td>
+                                <td class="col-xs-6">{{c.nombre}}</td>
+                            </tr>
+                            <tr>
+                                <td class="col-xs-6"><strong>RFC</strong></td>
+                                <td class="col-xs-6">{{c.RFC}}</td>
+                            </tr>
+                            <tr>
+                                <td class="col-xs-6"><strong>Tel. y Cel.</strong></td>
+                                <td class="col-xs-6">{{c.telefono}},{{c.celular}}</td>
+                            </tr>
+                            <tr>
+                                <td class="col-xs-6"><strong>Email</strong></td>
+                                <td class="col-xs-6">{{c.email}}</td>
+                            </tr>
+                            <tr>
+                                <td class="col-xs-6"><strong>No. Facturas</strong></td>
+                                <td class="col-xs-6">{{c.numeroFacturas}}</td>
+                            </tr>
+                            <tr>
+                                <td class="col-xs-6"><i aria-hidden="true" class="fa fa-wrench" style="padding-top:10px;"></i></td>
+                                <td class="col-xs-6"><a class="c_modificarBtn btn btn-lg c_Ajustes" href="modificarCliente.html?id={{c.id}}"><i aria-hidden="true" class="fa fa-cog"></i></a></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+</div>
+<script>
+    var importInput = null;
+    $(document).ready(function(){
+        importInput = $("#importInput");
+    })
+</script>

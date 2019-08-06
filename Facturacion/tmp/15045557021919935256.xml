@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+                <cfdi:Comprobante  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                                
+                                  xmlns:cfdi="http://www.sat.gob.mx/cfd/3"         xmlns:tfd="http://www.sat.gob.mx/TimbreFiscalDigital" xsi:schemaLocation="http://www.sat.gob.mx/cfd/3 http://www.sat.gob.mx/sitio_internet/cfd/3/cfdv32.xsd http://www.sat.gob.mx/TimbreFiscalDigital http://www.sat.gob.mx/sitio_internet/TimbreFiscalDigital/TimbreFiscalDigital.xsd        "
+                                  version="3.2"
+                                    serie="A"            
+                                    folio="410"
+                                  fecha="2017-09-04T15:06:22"
+                                  formaDePago="Pago en una sola Exhibición"
+                                  noCertificado="00001000000401234457"
+                                  certificado="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"
+                                  subTotal="0.8620"
+                                  descuento="0.0000"
+                                  total="0.9999"
+                                  metodoDePago="Efectivo"
+                                  tipoDeComprobante="ingreso"
+                                  TipoCambio="1.0000"
+                                  Moneda="MXN"
+                                    LugarExpedicion="Zapopan,Jalisco"
+                                  
+                                   
+                                   >
+        
+                  <cfdi:Emisor
+                         rfc="IIDE660331UU7"
+                         nombre="MARIA ELENA IÑIGUEZ DIAZ DE LEON">
+                                        <cfdi:DomicilioFiscal
+                                calle="Guacamaya"
+                                noExterior="1758"
+                                
+                                colonia="Mirador de San Isidro"
+                                localidad="Zapopan"
+                                municipio="Zapopan"
+                                estado="Jalisco"
+                                pais="MEXICO"
+                                codigoPostal="45133" />
+                    <cfdi:ExpedidoEn
+                                calle="Guacamaya"
+                                noExterior="1758" 
+                                noInterior="0"
+                                colonia="Mirador de san isidro"
+                                localidad="Zapopan"
+                                municipio="Zapopan"
+                                estado="Jalisco"
+                                pais="MEXICO"
+                                codigoPostal="45133" />
+                    <cfdi:RegimenFiscal Regimen="Regimen de incorporacion fiscal" />
+                  </cfdi:Emisor>
+                
+                  <cfdi:Receptor
+                        rfc="XAXX010101000"
+                        nombre="publice general">
+                  </cfdi:Receptor>
+                  
+                  <cfdi:Conceptos>
+        <cfdi:Concepto cantidad="1" unidad="PIEZA" noIdentificacion="1" descripcion="prueb" valorUnitario="0.862" importe="0.862"></cfdi:Concepto>
+                            
+                  </cfdi:Conceptos>
+                  
+                  <cfdi:Impuestos  totalImpuestosTrasladados="0.1379"   >
+                        <cfdi:Traslados>
+                       <cfdi:Traslado impuesto="IVA" tasa="16" importe="0.1379" />    
+                        </cfdi:Traslados> 
+                  </cfdi:Impuestos>
+            
+                  
+                </cfdi:Comprobante>
+        

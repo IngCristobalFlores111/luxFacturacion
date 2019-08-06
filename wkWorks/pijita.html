@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Factura</title>
+  <meta name="dompdf.view" content="FitH">
+  
+  <meta charset="utf-8">
+  <link href="https://fonts.googleapis.com/css?family=Caveat+Brush|Dosis|Indie+Flower|Lobster|Fjalla+One|Open+Sans+Condensed:300|Roboto|Sansita" rel="stylesheet">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<link rel="stylesheet" href="https://luxline.com.mx/joseO/LuxFacturacion/dompdf/style.css"/>
+
+</head>
+<body>
+<div class="container-fluid">
+<div class="row">
+<div class="col-xs-4">
+<img style="height:175px;width:400px;"  class="img-responsive"  src="https://www.luxline.com.mx/joseO/LuxFacturacion/Facturacion/logo/logo.png" />
+</div>
+<div class="col-xs-6">
+  <div class="info-emisor">
+<h4>MARIA ELENA IÑIGUEZ DIAZ DE LEON</h4>
+<p>Guacamaya</p>
+<p>Mirador de San Isidro</p>
+<p>Zapopan,Jalisco</p>
+<p>RFC: IIDE660331UU7</p>
+<p>Lugar de Expedicion: Guacamaya 1758 Mirador de san isidro CP 45133,Zapopan,Jalisco</p>
+<p>golman.badger@gmail.com</p>
+  </div>
+
+</div>
+<div class="col-xs-2">
+
+<table class="table-factura-detalles">
+  <tbody>
+    <tr>
+      <td>Factura</td>
+    </tr>
+    <tr>
+      <td>Serie: A Folio:409</td>
+    </tr>
+    <tr>
+     <td> No. de Certificado</td> 
+       </tr>
+<tr>
+  <td>00001000000401234457</td>
+</tr>
+<tr>
+<td>No. Certificado SAT</td>
+
+</tr>
+<tr>
+  <td>00001000000401234457Sat</td>
+</tr>
+<tr>
+  <td>Fecha y Hora de Timbrado    </td>
+</tr>
+<tr>
+  <td>2017-09-04T09:54:30</td>
+</tr>
+      </tbody>
+</table>
+
+
+</div>
+</div>
+
+
+    <table class="table table-bordered table-params">
+      <tbody>
+    <tr>
+       <td class="td-important">Folio SAT(UUID):</td>
+      <td>7db4b3ee-b8b3-4882-8607-ed3f453178fb</td>
+      <td class="td-important">Fecha de impresión</td>
+      <td>2017-09-04 21:11:30</td>
+    </tr>
+    <tr>
+        <td class="td-important">Método de Pago:</td>
+       <td>No. Identificado</td>
+       <td class="td-important">Tipo de Comprobante</td>
+       <td>ingreso</td>
+     </tr>
+     <tr>
+        <td class="td-important">Moneda:</td>
+       <td>MXN</td>
+       <td class="td-important">Tipo de Cambio</td>
+       <td>1</td>
+       
+     </tr>
+     <tr>
+       <td class="td-important">Num. Cuenta Pago</td>
+       <td>N/A</td>
+     
+     </tr>
+
+      </tbody>
+ 
+    
+    
+    </table>
+    <div class="datos-cliente">
+<h4 class="header-important">
+  Datos del cliente
+</h4>
+<table class="table table-bordered">
+<tbody>
+<tr>
+<td>Nombre: ASOCIACION DE CONDOMINOS STERLING PLAZA AC </td>
+<td>RFC: ACS100707DM3</td>
+</tr>
+<tr>
+    <td>ND 0  00000 ND,ND</td>
+    <td>Telefono:33384545</td>
+
+</tr>
+
+
+</tbody>
+
+</div>
+<div class="conceptos">
+<table class="table table-bordered table-striped">
+<thead>
+<tr class="tr-important">
+  <td>Cantidad</td>
+  <td>No. Serie</td>
+  <td>Descripción</td>
+  <td>Unidad</td>
+  <td>Precio</td>
+  <td>Importe</td>
+</tr>
+</thead>
+<tbody>
+<tr><td>1</td><td>NA</td><td>60% DE ANTICIPO PARA REPARACIONES DE DOMO</td><td>N/A</td><td>$5,624.48</td><td>$5,624.48</td></tr>
+
+</tbody>
+
+</table>
+
+
+</div>
+
+<table class="table table-bordered" >
+<tr>
+  <td class="td-important col-xs-8">Importe con letra</td>
+  <td class="col-xs-2">Subtotal</td>
+  <td class="col-xs-2">$5,624.48</td>
+</tr>
+<tr>
+    <td class="col-xs-8 border-less">Seis mil quinientos veinticuatro pesos 397/100 M.N.</td>
+    <td class="col-xs-2">Descuento</td>
+    <td class="col-xs-2">$0.00</td>
+  </tr>
+  <tr>
+      <td class="col-xs-8 border-less"></td>
+      <td class="col-xs-2">Ret. Iva</td>
+      <td class="col-xs-2">$0.0</td>
+    </tr>
+    <tr>
+        <td class="col-xs-8 border-less"></td>
+        <td class="col-xs-2">Ret. ISR</td>
+        <td class="col-xs-2">$0.0</td>
+      </tr>
+      <tr>
+          <td class="col-xs-8 border-less"></td>
+          <td class="col-xs-2">Iva</td>
+          <td class="col-xs-2">$899.9168</td>
+        </tr>
+        <tr>
+            <td class="col-xs-8 border-less"></td>
+            <td class="col-xs-2">Total</td>
+            <td class="col-xs-2">$6524.397</td>
+          </tr>
+
+
+</table>
+
+<div class="row">
+  <div class="col-xs-3">
+<img  src="https://luxline.com.mx/joseO/LuxFacturacion/dompdf/34_2017_09_04_409.png"/>
+  </div>
+  <div class="col-xs-9">
+    
+    <ul class="list-group cadenas">
+      <li class="list-group-item td-important">Sello Digital del CFDI</li>
+      <li class="list-group-item">
+         bfSnK3ASrto9ZXLqN1/Ox3KXS2j2nxtlq2DgRCb+WMHr3qlT1g+uC7FER8hDfSXImde7CL2O<br>L3YNNJ/5reP8vKUeY2fLZyFLkqr0yDNlLM7TEx8Wl5Ig1Oi4vq9JEEQO5V6rMuEJoUVpvpSB<br>AchXymMKWAzEKp8VoG5gFB2XTo+s8yfN6Jx8mQPRlTMdLiIBS2Ec/HY/e2U3NJxFWBb6kMtf<br>/x4UwO0refHKMNvLYLk90hel9Z1VY1i5I9PIhQOJIYP+Ayqj5VUQOG0Jb6fqsTJ7HFoyouan<br>0bBLJ8kGWTJoc7aBrhJgdEjHD8iPeoGscVke0DPSFnkGxCnM0A8egQ==<br>
+
+      </li>
+      <li class="list-group-item td-important">Sello Digital SAT</li>
+      <li class="list-group-item">
+        GnPkcrxAykIGNt/hagrYbPExGmKgvbw8X3tBZGFm0SMFgxhJKycms/kr7JmPBLfJu+DALYAJ<br>xYAnkf/7mbAZpOJg3gKGIKGDQ2iMW2yIUHRyQDfV6SYnF2U5g2Nh/p6MblSbIZyYGqLucXn3<br>D6r2sktZOQ1Mllhtli1p4HUX3nE=<br>
+      </li>   
+      <li class="list-group-item td-important">Cadena Complementaria</li>
+      
+      <li class="list-group-item">
+         ||1.0|7db4b3ee-b8b3-4882-8607-ed3f453178fb|2017-09-04T09:54:30|bfSnK3ASr<br>to9ZXLqN1/Ox3KXS2j2nxtlq2DgRCb+WMHr3qlT1g+uC7FER8hDfSXImde7CL2OL3YNNJ/5r<br>eP8vKUeY2fLZyFLkqr0yDNlLM7TEx8Wl5Ig1Oi4vq9JEEQO5V6rMuEJoUVpvpSBAchXymMKW<br>AzEKp8VoG5gFB2XTo+s8yfN6Jx8mQPRlTMdLiIBS2Ec/HY/e2U3NJxFWBb6kMtf/x4UwO0re<br>fHKMNvLYLk90hel9Z1VY1i5I9PIhQOJIYP+Ayqj5VUQOG0Jb6fqsTJ7HFoyouan0bBLJ8kGW<br>TJoc7aBrhJgdEjHD8iPeoGscVke0DPSFnkGxCnM0A8egQ==|00001000000401234457||<br>
+      </li>        
+    </ul>
+    <label class="text-center">Esta es una representaciín impresa de un CFDI</label>
+
+    </div>
+  </div>
+</div>
+
+
+    
+    
+
+
+
+
+</body>
+</html>

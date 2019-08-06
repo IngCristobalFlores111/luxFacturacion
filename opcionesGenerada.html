@@ -1,0 +1,3454 @@
+﻿<?php
+require_once("../Login/php/Functions.php");   
+$link = linkDBLuxLine();
+$luxlineObj = new luxlineWebLogin($link);
+
+$luxlineObj->initialCheckUpSystems();
+?>
+<!--Desarrollado por Luxline Solutions  -->
+<html lang="en">
+<head>  <!--HEAD-->
+    <title>opcionesGenerada.html</title>
+    <!--MetaArea-->
+    <meta charset="utf-8"> <!--Caracteres Codificados-->
+    <meta name="viewport" content="width=device-width, initial-scale=1"> <!--Para Dispositivos Moviles habilita touch-zoom etc-->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <!--/MetaArea-->
+
+    <!--CSS-->
+    <link href="css/bootstrap.min.css" rel="stylesheet"><!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="css/style.css" type="text/css" />
+    <link rel="stylesheet" href="font-awesome/css/font-awesome.min.css">
+    <link rel="icon" href="img/luxline1.ico" type="image/x-icon">
+
+    <style>
+
+
+        .no-results{
+
+            color:black;
+        }
+        select option {
+            /*background-color: rgba(255,255,255,0.25);*/
+            border-color: rgba(0,0,0,0.25);
+            color: black;
+        }
+    </style>
+
+    <script src="js/jquery.js"></script>
+
+    <script src="js/bootstrap.min.js"></script>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.10.0/css/bootstrap-select.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.10.0/js/bootstrap-select.min.js"></script>
+    <!--/CSS-->   
+
+    <!--Google+ api-->
+    <script src="https://apis.google.com/js/api.js?onload=handleClientLoad"></script>
+    <!--Google+ api-->
+    <!--ApiLogIn-->
+    <script>
+        var ApiLogIn = function (btnSingIn, btnSignOut, msgContainer,phpLogin) {
+            //var test = 10; private variable
+            //var method = function(){} private method
+            //this.test = 10; public variable
+            //this.method = function(){} public method
+            var self = this;
+            var m_auth2 = null; // The Sign-In object.
+            var m_btnSignIn = btnSingIn;
+            var m_btnSignOut = btnSignOut;
+            var m_message = msgContainer;
+            var m_apiKey = 'accesssecurity-140019';
+            var m_clientId = "1043488027097-f77grlc3h5cli90m6c0b4urra6jmcakn.apps.googleusercontent.com";
+            var m_phpLogin = phpLogin;
+            // Enter one or more authorization scopes. Refer to the documentation for
+            // the API or https://developers.google.com/identity/protocols/googlescopes
+            // for details.
+            var m_scopes = 'profile https://www.googleapis.com/auth/userinfo.profile';
+            var m_cookie_policy = 'single_host_origin';
+
+
+            this.signIn = function () {
+                m_auth2.signIn();
+            }
+
+            this.logOut = function () {
+                var User = m_auth2.currentUser.get();
+                var l_RO = User.getAuthResponse();
+                var access_token = l_RO.access_token;
+
+                var location = (parseInt(screen.availWidth) / 2) - 290;
+                var revokeUrl = window.open('https://accounts.google.com/Logout', "Logout", "left=" + location + ",top=10 width=580,height=800");
+                revokeUrl.focus();
+                setTimeout(function () {
+                    revokeUrl.close();
+                }, 500);
+            }
+
+            var updateSigninStatus = function (isSignedIn) { //Callback function
+                if (isSignedIn) {
+                    //*****************googleUser**************
+                    //A GoogleUser object represents one user account.
+                    var User = m_auth2.currentUser.get()
+                    var profile = User.getBasicProfile();
+                    //*****************googleUser**************
+                    var user_id = profile.getId();
+
+                    //console.log('ID: ' + user_id); // Do not send to your backend! Use an ID token instead.
+                    //console.log('Name: ' + profile.getName());
+                    //console.log('Image URL: ' + profile.getImageUrl());
+                    //console.log('Email: ' + profile.getEmail());
+
+                    // The ID token you need to pass to your backend:
+                    var l_RO = User.getAuthResponse();
+
+                    var id_token = l_RO.id_token;
+                    //var access_token = l_RO.access_token;
+                    //var log_hint = l_RO.login_hint;
+                    //var scopes = l_RO.scope;
+                    //var expire_time = l_RO.expires_in;
+                    //var f_issued_at = l_RO.first_issued_at;
+                    //var expires_at = l_RO.expires_at;
+
+                    //console.log("ID Token: " + id_token);
+                    //console.log("Access Token: " + access_token);
+                    //console.log("Log Hint: " + log_hint);
+                    //console.log("Scopes: " + scopes);
+                    //console.log("Expire Time: " + expire_time);
+                    //console.log("f_issued_at: " + f_issued_at);
+                    //console.log("Expires at: " + expire_time);
+
+                    $.post(m_phpLogin, { ID_TOKEN: id_token }, function (data, status) {
+                        var indexer = parseInt(data);
+                        switch (indexer) {
+                            case 0:
+                                if (window.location.href === "http://www.luxline.com.mx") {
+                                    setTimeout(function () {
+                                        window.location.href = "http://www.luxline.com.mx/testLuxFact";
+                                    }, 1000);
+                                }
+
+                                if(m_btnSignIn !== null)
+                                    $(m_btnSignIn).hide();
+
+                                if(m_btnSignOut !== null)
+                                    $(m_btnSignOut).show();
+                                break;
+                            case -1:
+                                console.log("Token Invalido");
+                                break;
+                            case -2:
+                                console.log("Estampa de tiempo expirada");
+                                break;
+                            case -3:
+                                if(m_message !== null)
+                                    $(m_message).html("<h3>El usuario no existe en la base de datos. Ingrese a su cuenta de Google+ con un usuario válido.</h3>");
+                                else
+                                    console.log("El usuario no existe en la base de datos. Ingrese a su cuenta de Google+ con un usuario válido.");
+
+                                if (window.location.href !== "http://www.luxline.com.mx") {
+                                    setTimeout(function () {
+                                        window.location.href = "http://www.luxline.com.mx";
+                                    }, 1000);
+                                }
+
+
+                                if(m_btnSignOut !== null)
+                                    $(m_btnSignOut).hide();
+
+                                if(m_btnSignIn !== null)
+                                    $(m_btnSignIn).show();
+                                break;
+                            case -4:
+                                console.log("Hay inconsistencia en la base de datos");
+                                break;
+                            default:
+                                break;
+                        }
+                    });
+                }
+                else {
+                    if(m_message !== null)
+                        m_message.html("<h3>De click a Ingresar para comenzar</h3>")
+                    else
+                        console.log("De click a Ingresar para comenzar");
+
+                    if(m_btnSignIn !== null)
+                        $(m_btnSignIn).show();
+
+                    if(m_btnSignOut !== null)
+                        $(m_btnSignOut).hide();
+
+
+                    $.post("../../Login/php/clearSession.php", {}, function () {
+                    if (window.location.href !== "http://www.luxline.com.mx") {
+                        setTimeout(function () {
+                            window.location.href = "http://www.luxline.com.mx";
+                        }, 1000);
+                    }
+                    });
+
+                }
+            }
+
+           this.initAuth = function () {
+                //make gapi calls
+                gapi.client.setApiKey(m_apiKey);
+                gapi.auth2.init({
+                    client_id: m_clientId,
+                    scope: m_scopes,
+                    cookie_policy: m_cookie_policy
+                }).then(function () {
+                    //Obtener instancia de autorización
+
+                    //****************auth2***************************************
+                    //auth 2 is a GoogleAuth object that is a singleton class that provides methods to allow
+                    //the user to sign in with a Google account, get the user's current
+                    //sign-in status, get specific data from the user's Google profile,
+                    //request additional scopes, and sign out from the current account.
+                    m_auth2 = gapi.auth2.getAuthInstance();
+                    //****************auth2***************************************
+
+                    //Víncular un cambio de estado a una función
+
+                    m_auth2.isSignedIn.listen(updateSigninStatus);
+
+                    //Checar el estado inicial, podría ya estar loggeado
+                    updateSigninStatus(m_auth2.isSignedIn.get());
+
+                    //Listen to signin states
+                    if(m_btnSignIn !== null)
+                        m_btnSignIn.addEventListener("click", self.signIn);
+
+                    if(m_btnSignOut !== null)
+                        m_btnSignOut.addEventListener("click", self.logOut);
+                });
+            }
+
+        };
+
+    </script>
+    <!--ApiLogIn-->
+
+    <script>
+        var go_ApiLogIn = null;
+        var authorizeButton = null;
+        var signoutButton = null;
+        var g_message = null;
+        var g_signOutBtn = null;
+        var g_signInBtn = null;
+
+        $(document).ready(function () {
+
+
+
+            g_message = null;
+            g_signInBtn = null;
+            g_signOutBtn = document.getElementById('signout-button');
+
+            go_ApiLogIn = new ApiLogIn(g_signInBtn, g_signOutBtn, g_message, "../../Login/php/logInFacturacion.php");
+            gapi.load('client:auth2', go_ApiLogIn.initAuth);
+        });
+    </script>
+
+</head> 
+
+<body onload="cargarCorreosDefault(<?php echo $_POST['id']; ?>)">
+    <input hidden id="i_idCliente" value="<?php  echo $_POST['id']; ?>" />
+    <div id="i_modalBlur">
+        <div hidden id="i_divFolio"><?php echo $_POST["folio"]; ?></div>
+        <div hidden id="i_divId"><?php echo $_POST["id"]; ?></div>
+        <nav class="navbar navbar-default">
+            <div class="container-fluid">
+                <div class="row visible-xs ">
+                    <img src="img/luxline.png" style="height:8%;" id="i_navBarLogo" alt="lux_logo">
+                </div>
+                <div class="navbar-header" style="margin:1%;">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <img src="img/luxline.png" class="visible-md visible-lg visible-sm" id="i_navBarLogo" alt="lux_logo">
+                </div>
+                <div class="collapse navbar-collapse" id="myNavbar">
+                    <ul class="nav navbar-nav" style="margin:1%;">
+                        <li><a href="index.html"> Facturar</a></li>
+                        <li><a href="folios.html">Folios</a></li>
+                        <li><a href="AgrModAtajo.html">Ajustes</a></li>
+                    </ul>
+                    <ul class="nav navbar-nav navbar-right">
+                        <li data-toggle="modal" data-target="#i_modalOpcionesUsuario"><a href="#"><span class="fa fa-user" style="font-size:20px;" aria-hidden="true"></span></a></li>
+                        <li data-toggle="modal" data-target="#i_modalCerrarSesion"><a href="#"><span class="fa fa-sign-out" style="font-size:20px;" aria-hidden="true"></span></a></li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+        <div class="container-fluid" id="i_content">
+
+            <ul class="nav nav-pills">
+                <li class="active"><a data-toggle="pill" href="#i_menuModificar">Modificar</a></li>
+                <li><a data-toggle="pill" href="#i_menuTimbrar">Timbrar</a></li>
+                <li><a data-toggle="pill" href="#i_menuEnviar">Enviar</a></li>
+                <li><a data-toggle="pill" href="#i_menuEliminar">Eliminar</a></li>
+            </ul>
+            <div class="tab-content">
+                <!--/MenuModificar-->
+                <div id="i_menuModificar" class="tab-pane fade in active">
+                    <div class="row c_marginElement">
+
+                        <div class="col-xs-12">
+
+                            <h3 id="i_nombreCliente">Jesus Alejando Almada Carrillo</h3>
+
+                        </div>
+
+                    </div> <!-- nombre cliente -->
+
+                    <div class="row c_marginElement">
+
+                        <div class="col-xs-12">
+
+                            <div class="table-responsive">
+
+                                <table class="table table-bordered">
+
+                                    <thead>
+
+                                        <tr>
+
+                                            <th>RFC</th>
+
+                                            <th>Email</th>
+
+                                            <th>Domicilio</th>
+
+                                            <th>Telefono</th>
+
+                                        </tr>
+
+                                    </thead>
+
+                                    <tbody id="i_tableCliente"></tbody>
+
+                                </table>
+
+                            </div> <!-- table-responsive -->
+
+                        </div>
+
+                    </div> <!-- table head -->
+                    <div class="row c_inputForm">
+                        <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12"></div>
+
+                        <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+                            <label for="i_selectLugares">Lugar de expedición</label>
+                            <select class="c_input form-control c_facturaParams" id="i_selectLugares"></select>
+                        </div>
+                        <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12"></div>
+
+                    </div>
+
+                    <div class="row c_inputForm">
+
+                        <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+
+                            <label for="selectMetodoPago">Metodo de Pago</label>
+
+                            <select class="c_input form-control c_facturaParams" id="i_selectMetodoPago">
+
+                                <option>Efectivo</option>
+
+                                <option>Cheque</option>
+
+                                <option>Tarjeta de Credito</option>
+
+                                <option>Transferencia Bancaria</option>
+
+                                <option>No. Identificado</option>
+
+
+
+                            </select>
+
+                        </div>
+
+                        <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+
+                            <label>Forma de Pago</label>
+
+                            <div id="divFormaPago">
+
+                                <select id="i_selectFormaPago" class="c_input form-control c_facturaParams">
+
+                                    <option>Pago en una sola Exhibición</option>
+
+                                    <option>Credito</option>
+
+                                    <option>Otro</option>
+
+
+
+                                </select>
+
+                            </div>
+
+                        </div>
+                        <div id="i_divNoCuenta" class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+                            <label for="i_checkeCuenta">Número de cuenta</label>
+                            <input placeholder="Al menos los ultimos 4 dígitos" type="text" class="form-control c_input c_facturaParams" id="i_checkeCuenta" />
+
+                        </div>
+
+                        <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+
+                            <label for="inputDescuento">Descuento</label>
+
+                            <input placeholder="% de Descuento" type="number" id="i_inputDescuento" class="c_input form-control c_facturaParams" />
+
+
+
+                        </div>
+
+
+                        <div style="padding-top:25px;" class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+
+                            <button class="btn btn-block c_Accept" data-toggle="modal" data-target="#i_modalSeguroAplicar"> Aplicar</button>
+
+                        </div>
+
+
+
+                    </div> <!-- tipos de conceptos y descuentos -->
+
+
+                    <div class="row c_marginElement">
+                        <div id="i_divPredial" class="col-xs-4">
+                            <label>Predial</label>
+                            <input type="text" id="i_inputPredial" class="c_facturaParams form-control c_input" />
+                        </div>
+                        <div class="col-xs-4">
+
+                            <label style="display:inline;" for="i_retenerIVA">Retener IVA</label>
+
+                            <input type="checkbox" id="i_retenerIVA" data-toggle="modal" data-target="#i_modalSeguro" />
+
+                            <i style="display:inline; margin-left:inherit;" class="fa fa-question-circle contacticon" data-toggle="modal" data-target="#i_modalRetenerIVA"></i>
+
+
+                        </div>
+
+                        <div class="col-xs-4">
+
+                            <label style="display:inline;" for="i_retenerISR">Retener ISR</label>
+
+                            <input type="checkbox" id="i_retenerISR" data-toggle="modal" data-target="#i_modalSeguro" />
+
+                            <i style="display:inline; margin-left:inherit;" class="fa fa-question-circle contacticon" data-toggle="modal" data-target="#i_modalRetenerISR"></i>
+
+
+                        </div>
+
+                    </div><!--/check-boxes -->
+
+                    <div class="row c_marginElement">
+                        <h3>Agregar concepto</h3>
+                        <hr />
+                        <div class="col-xs-12 visible-lg visible-md">
+
+                            <div class="table-responsive">
+
+                                <table class="table table-bordered">
+
+                                    <thead>
+                                        <tr>
+
+                                            <th class="col-xs-2">Atajo &nbsp&nbsp&nbsp<button onclick="window.open('AgrModAtajo.html')" class="btn btn-success"><i style="font-size:20px;" class="fa fa-share" aria-hidden="true"></i></button> </th>
+
+                                            <th class="col-xs-3">Descripción</th>
+                                            <th class="col-xs-2">No.Serie</th>
+
+                                            <th class="col-xs-1">Unidad de medida</th>
+
+                                            <th class="col-xs-1">Cantidad</th>
+
+                                            <th class="col-xs-1">Precio Unitario</th>
+
+                                            <th class="col-xs-1">Importe</th>
+
+                                            <th class="col-xs-1"><i style="font-size:22px;" class="fa fa-wrench" aria-hidden="true"></i></th>
+
+                                        </tr>
+
+
+                                    </thead>
+                                    <tbody id="i_tableConceptos">
+
+                                        <tr>
+
+                                            <td><select data-live-search="true" class="form-control c_input selectpicker" id="i_trinputAtajos"></select> </td>
+                                            <td><textarea class="form-control c_input" id="i_inputDesc"></textarea>   </td>
+                                            <td><input id="i_inputNoSerie" type="text" class="form-control c_input" /></td>
+
+                                            <td id="i_tdUniad">
+                                                <select id="i_inputUnidad" class="form-control c_input">
+                                                    <option>PIEZA</option>
+                                                    <option>KILOS</option>
+                                                    <option>LITROS</option>
+                                                    <option>GRAMOS</option>
+                                                    <option>N/A</option>
+                                                    <option>Otro..</option>
+                                                </select>
+                                            </td>
+
+                                            <td><input class="form-control c_input" type="number" id="i_inputCantidad" /> </td>
+
+                                            <td><input class="form-control c_input" type="number" id="i_inputPrecio" /> </td>
+
+                                            <td><input class="form-control c_input" type="number" id="i_inputImporte" /> </td>
+
+                                            <td>
+                                                <button id="i_btnAgregar" class="btn btn-block c_Accept "> <i style="font-size:22px;" class="fa fa-plus" aria-hidden="true"></i></button>
+
+                                                <button id="i_btnUnDo" class="btn btn-block c_Accept" data-toggle="modal" data-target="#i_modalDeshacer"> <i style="font-size:22px;" class="fa fa-refresh" aria-hidden="true"></i></button>
+
+                                            </td>
+
+
+
+
+
+                                        </tr>
+
+
+
+
+
+                                    </tbody>
+
+                                </table>
+
+                            </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+                        </div>
+
+
+
+
+                    </div>
+                    <div id="i_mobileAdd" class="visible-xs visible-sm">
+
+                        <div style="padding-top:11px;" class="row">
+                            <div class="col-xs-12"><strong>Atajo &nbsp&nbsp&nbsp<button onclick="window.open('AgrModAtajo.html')" class="btn btn-success"><i style="font-size:20px;" class="fa fa-share" aria-hidden="true"></i></button></strong></div>
+                        </div>
+
+                        <div style="padding-top:11px;" class="row">
+                            <div class="col-xs-12"><select data-live-search="true" class="form-control c_input selectpicker" id="i_trinputAtajosMobile"></select></div>
+                        </div>
+                        <div style="padding-top:11px;" class="row">
+                            <strong>Descripción</strong>
+                            <div class="col-xs-12"><textarea class="c_mobileInps form-control c_input"></textarea></div>
+                        </div>
+                        <div style="padding-top:11px;" class="row">
+                            <div class="col-xs-6"><strong>No.Serie</strong></div>
+                            <div class="col-xs-6"><input class="c_mobileInps form-control c_input" /></div>
+                        </div>
+                        <div style="padding-top:11px;" class="row">
+                            <div class="col-xs-6"><strong>Unidad de medida</strong></div>
+                            <div class="col-xs-6">
+                                <select id="i_inputMedidaMobile" class="c_input form-control c_mobileInps">
+                                    <option>PIEZA</option>
+                                    <option>KILOS</option>
+                                    <option>LITROS</option>
+                                    <option>GRAMOS</option>
+                                    <option>N/A</option>
+                                    <option>Otro..</option>
+
+                                </select>
+                            </div>
+                        </div>
+                        <div style="padding-top:11px;" class="row">
+                            <div class="col-xs-6"><strong>Cantidad</strong></div>
+                            <div class="col-xs-6"><input id="i_inputCantidadMob" type="number" class="form-control c_input c_mobileInps c_updateInputs" /></div>
+                        </div>
+                        <div style="padding-top:11px;" class="row">
+                            <div class="col-xs-6"><strong>Precio</strong></div>
+                            <div class="col-xs-6"><input id="i_inputPrecioMob" type="number" class="form-control c_input c_mobileInps c_updateInputs" /></div>
+                        </div>
+                        <div style="padding-top:11px;" class="row">
+                            <div class="col-xs-6"><strong>Importe</strong></div>
+                            <div class="col-xs-6"><input id="i_inputImporteMob" type="number" class="form-control c_input c_mobileInps c_updateInputs" /></div>
+                        </div>
+                        <div style="padding-top:11px;" class="row">
+                            <div class="col-xs-6"><strong>Opciones</strong></div>
+                            <div class="col-xs-6">
+                                <div class="btn-group-horizontal">
+                                    <button id="i_btnMobileAgregar" class="btn btn-default"><i style="font-size:20px;" class="fa fa-plus" aria-hidden="true"></i></button>
+                                    <button onclick="$('#i_modalDeshacer').modal()" class="btn btn-default"><i style="font-size:20px;" class="fa fa-undo" aria-hidden="true"></i></button>
+                                </div>
+                            </div>
+                        </div>
+
+
+
+
+                    </div>
+
+                    <h3>Conceptos agregados</h3>
+                    <div class="row visible-lg visible-md visible-sm">
+                        <div class="col-xs-12">
+                            <div class="table-responsive">
+                                <table id="i_tableConceptosAgregadosHideShow" class="table table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th class="col-xs-3">Descripción</th>
+                                            <th class="col-xs-1">No.Serie</th>
+
+                                            <th class="col-xs-2">Unidad de medida</th>
+                                            <th class="col-xs-1">Cantidad</th>
+                                            <th class="col-xs-2">Precio Unitario</th>
+                                            <th class="col-xs-2">Importe</th>
+                                            <th class="col-xs-1"><i style="font-size:20px;" class="fa fa-wrench" aria-hidden="true"></i></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="i_tableConceptosAgregados"></tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="i_xsRowing" class="visible-xs">
+
+                    </div>
+
+
+
+                    <h3>Totales</h3>
+                    <hr />
+                    <div class="row c_marginElement visible-lg visible-md" style="margin: auto;border:5px;">
+
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>Subtotal</th>
+                                    <th id="i_thSubDescuento">Subtotal con descuento</th>
+                                    <th>IVA(16%)</th>
+                                    <th>Total</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr id="i_trTotales">
+                                    <td>$0</td>
+                                    <td id="i_tdSubDescuento">$0</td>
+                                    <td>$0</td>
+                                    <td>$0</td>
+
+                                </tr>
+                            </tbody>
+
+                        </table>
+
+                    </div>
+                    <div id="i_divTotales" class="row c_marginElement visible-xs visible-sm" style="margin: auto;border:5px;">
+                        <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+
+                            <table class="table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>Subtotal</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td id="i_tdSubtotal">$0</td>
+                                    </tr>
+
+                                </tbody>
+
+                            </table>
+
+                        </div>
+                        <div id="i_divSubDescuento" class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                            <table class="table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>Subtotal con descuento</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td id="i_tdSubtotalDesc">$0</td>
+                                    </tr>
+
+                                </tbody>
+
+                            </table>
+
+                        </div>
+                        <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                            <table class="table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>IVA(16%)</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td id="i_tdIva">$0</td>
+                                    </tr>
+
+                                </tbody>
+
+                            </table>
+                        </div>
+                        <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                            <table class="table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>Total</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td id="i_tdTotal">$0</td>
+                                    </tr>
+
+                                </tbody>
+
+                            </table>
+
+                        </div>
+
+
+                    </div>
+
+                    <div id="i_rowRetenciones" class="row c_marginElement">
+                        <div class="col-xs-12">
+                            <h3>Retenciones</h3>
+                            <hr />
+                            <div class="table-responsive">
+                                <table class="table table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th>Retencion IVA(2/3 partes)</th>
+                                            <th id="i_tasaRet">Retencion de ISR</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="i_trRetenciones"></tbody>
+                                </table>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <div class="row c_marginElement">
+                        <form hidden method="post" action="GuardarTimbrar.html">
+                            <input type="text" hidden id="idCliente" name="id" value="" />
+                            <input hidden type="text" name="factura_params" value="" id="facturaParams" />
+                            <input id="folioFactura" type="text" name="folioFactura" value="" />
+                            <input id="retenerIVA" name="retenerIVA" value="" />
+                            <input id="retenerISR" name="retenerISR" value="" />
+                        </form>
+                        <div class="col-xs-4">
+                            <button type="submit" id="i_GuardarFactura" class="btn btn-block c_Accept">Guardar</button>
+
+
+
+
+                        </div>
+
+                        <div class="col-xs-4">
+
+                            <button id="i_btnVistaPrevia" class="btn btn-block c_Accept" data-toggle="modal" data-target="#i_modalVistaPrevia">Vista Previa</button>
+
+
+
+                        </div>
+                        <div class="col-xs-4">
+                            <button id="btnUndoFactura" class="btn btn-block c_Accept">Deshacer</button>
+
+                        </div>
+
+
+
+
+
+                    </div>
+
+                </div>
+                <!--/MenuModificar-->
+                <div id="i_menuTimbrar" class="tab-pane fade">
+
+                    <div class="c_roundedBackground c_background">
+
+                        <h3 style="margin-bottom:3%;">Opciones de Factura</h3>
+
+                        <h4 id="headerTimbrar" class="c_marginElement">¿Esta seguro que desea timbrar esta factura?</h4>
+
+                        <div class="row" style="margin-top: 6%;">
+
+                            <div class="col-xs-12">
+                                <button id="btn_timbrar" class="btn btn-lg c_AcceptModal" onclick="modalDeConfirmacion()">Timbrar</button>
+                            </div>
+
+                        </div>
+                        <button id="i_btnRedirect" class="btn btn-default c_Accept" onclick="redirect_user()">Terminar</button>
+                    </div> <!--background -->
+
+                </div><!--/MenuTimbrar-->
+                <div id="i_menuEnviar" class="tab-pane fade">
+                    <div class="c_roundedBackground c_background">
+
+                        <h3 style="margin:4%;">Correos para Enviar</h3>
+                        <div class="row c_marginElement">
+                            <div class="col-xs-12">
+                                <div class="table-responsive table-responsiveCorreo">
+                                    <table class="table table-bordered">
+                                        <thead>
+                                            <tr>
+                                                <th>
+                                                    <input placeholder="Correo Electrónico" type="text" id="i_inputCorreoNuevo" class="form-control c_input" />
+                                                </th>
+                                                <th>
+                                                    <button class="btn btn-block c_Accept" id="i_btnSumarCorreo" onclick="agregar_correo()"><i class="fa fa-plus" style="font-size:20px;" aria-hidden="true"></i></button>
+                                                </th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="i_tableCorreosDefault">
+                                            <tr>
+                                                <td><input disabled placeholder="Correo Electrónico" type="text" id="i_inputCorreo_2" class="form-control c_input" /></td>
+                                                <td><button style="background-color:red;" class="btn btn-lg" id="i_btnEliminarCorreo_2" onclick="eliminar_correo(this)"><i class="fa fa-remove" aria-hidden="true"></i></button> </td>
+                                            </tr>
+                                            <tr>
+                                                <td><input disabled placeholder="Correo Electrónico" type="text" id="i_inputCorreo_1" class="form-control c_input" /></td>
+                                                <td><button style="background-color:red;" class="btn btn-lg" id="i_btnEliminarCorreo_1" onclick="eliminar_correo(this)"><i class="fa fa-remove" aria-hidden="true"></i></button> </td>
+                                            </tr>
+
+                                        </tbody>
+                                    </table>
+                                </div><!-- table-responsive -->
+                            </div>
+
+                        </div>
+
+                        <div class="row c_marginElement">
+                            <div class="col-xs-12"><button class="btn btn-lg c_Accept" onclick="enviar_correos()">Enviar</button></div>
+                        </div>
+
+
+                    </div> <!--c_background -->
+
+                </div><!--/MenuEnviar-->
+                <div id="i_menuEliminar" class="tab-pane fade">
+                    <!--MenuEliminar-->
+                    <div class="c_roundedBackground c_background">
+
+                        <h3 style="margin-bottom:3%;">Opciones de Factura</h3>
+
+                        <h4 class="c_marginElement">¿Esta seguro que desea eliminar esta factura?</h4>
+
+                        <div class="row" style="margin-top: 6%;">
+
+                            <div class="col-xs-12">
+                                <button class="btn btn-lg c_Cancel" data-toggle="modal" data-target="#i_modalEliminar">Eliminar</button>
+                            </div>
+
+                        </div>
+                    </div> <!--background -->
+                </div><!--/MenuEliminar-->
+
+            </div> <!--i/tab-content-->
+
+        </div> <!--/Container-->
+    </div> <!--i/_modalBlur-->
+    <!--ModalLoader -->
+    <div class="modal fade" id="modalPreview" role="dialog">
+        <div class="sk-cube-grid">
+            <div class="sk-cube sk-cube1"></div>
+            <div class="sk-cube sk-cube2"></div>
+            <div class="sk-cube sk-cube3"></div>
+            <div class="sk-cube sk-cube4"></div>
+            <div class="sk-cube sk-cube5"></div>
+            <div class="sk-cube sk-cube6"></div>
+            <div class="sk-cube sk-cube7"></div>
+            <div class="sk-cube sk-cube8"></div>
+            <div class="sk-cube sk-cube9"></div>
+        </div>
+
+    </div>
+    <!--/ModalLoader -->
+    <!--MODALES MODIFICAR-->
+    <!--MODALES MODIFICAR-->
+    <!-- MODALES TIMBRAR -->
+    <!--ModalMessageTimbrar -->
+    <div class="modal fade" id="i_modalTimbrar" role="dialog">
+        <div class="container">
+            <div class="row" id="i_cubitoWaitingTimbrar">
+                <div class="col-xs-12">
+                    <div class="sk-cube-grid">
+                        <div class="sk-cube sk-cube1"></div>
+                        <div class="sk-cube sk-cube2"></div>
+                        <div class="sk-cube sk-cube3"></div>
+                        <div class="sk-cube sk-cube4"></div>
+                        <div class="sk-cube sk-cube5"></div>
+                        <div class="sk-cube sk-cube6"></div>
+                        <div class="sk-cube sk-cube7"></div>
+                        <div class="sk-cube sk-cube8"></div>
+                        <div class="sk-cube sk-cube9"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="row" id="i_timbrarContent">
+                <div class="col-sm-6 col-sm-offset-3 text-center modal-box">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    <h3 class="h3Modal">¿Esta seguro que desea timbrar la factura guardada?</h3>
+                    <div class="alert alert-success" id="i_msjSuccessContainer">
+                        <i class="fa fa-3x fa-check-circle" style="display:block;" aria-hidden="true"></i>
+                        <strong id="i_msjSuccess" style="display:block;">Se ha timbrado correctamente</strong>
+                    </div>
+                    <div class="alert alert-danger" id="i_msjWarningContainer">
+                        <i class="fa fa-3x fa-times-circle" style="display:block;" aria-hidden="true"></i>
+                        <strong id="i_msjWarning" style="display:block;">No se ha podido Timbrar</strong>
+                    </div>
+                    <button type="button" class="btn btn-default c_modalDismiss c_AcceptModal" id="i_botonAceptar" autofocus onclick="timbrar(<?php echo $_POST[" id"].",".$_post["folio"]; ?>)">Aceptar</button>
+                    <button type="button" class="btn btn-default c_modalDismiss c_Cancel" id="i_botonCancelar" data-dismiss="modal">Cancelar</button>
+                </div>
+            </div>
+        </div>
+    </div><!--/ModalMessageTimbrar -->
+    <!-- MODALES TIMBRAR -->
+    <!--MODALES ENVIAR-->
+    <!--ModalMessageEliminar -->
+    <div class="modal fade" id="i_modalEliminar" role="dialog">
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-6 col-sm-offset-3 text-center modal-box">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    <h3 class="h3Modal">¿Esta seguro que desea Eliminar los cambios realizados?</h3>
+                    <div class="alert alert-danger">
+
+                        <i class="fa fa-3x fa-times-circle" style="display:block;" aria-hidden="true"></i>
+                        <strong style="display:block;">No se ha podido eliminar</strong>
+                    </div>
+                    <div class="alert alert-success">
+                        <i class="fa fa-3x fa-check-circle" style="display:block;" aria-hidden="true"></i>
+                        <strong style="display:block;">Se ha eliminado correctamente</strong>
+                    </div>
+                    <button type="button" class="btn btn-default c_modalDismiss c_AcceptModal" data-dismiss="modal" autofocus>Aceptar</button>
+                    <button type="button" class="btn btn-default c_modalDismiss c_Cancel" data-dismiss="modal">Cancelar</button>
+
+
+                </div>
+            </div>
+        </div>
+    </div><!--/ModalMessageEliminar -->
+    <!--ModalCambiarMensaje -->
+    <!--ModalMessageDeshacer -->
+    <div class="modal fade" id="i_modalDeshacer" role="dialog">
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-6 col-sm-offset-3 text-center modal-box">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    <h3 style="margin:4%;">¿Esta seguro que desea deshacer los cambios realizados?</h3>
+                    <button id="i_btnUnDoFields" type="button" class="btn btn-default c_modalDismiss" data-dismiss="modal" autofocus>Aceptar</button>
+                    <button type="button" class="btn btn-default c_modalDismiss c_Cancel" data-dismiss="modal">Cancelar</button>
+
+
+                </div>
+            </div>
+        </div>
+    </div><!--/ModalMessageDeshacer -->
+
+    <div class="modal fade" id="i_modalCambiarMensaje" role="dialog">
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-6 col-sm-offset-3 text-center modal-box">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    <h3 class="h3Modal">Correo Electrónico</h3>
+                    <hr />
+                    <label for="i_inputAsunto">Asunto</label>
+                    <input type="text" id="i_inputAsunto" class="form-control c_input" />
+                    <label for="i_inputCorreoMsg">Cuerpo</label>
+                    <textarea class="form-control c_input" id="i_inputCorreoMsg"></textarea>
+                    <hr />
+                    <button value="" id="i_btnAceptarPlantillaMail" onclick="mensaje()" class="btn btn-primary c_Accept" style="margin-bottom: 3%;">Aceptar</button>
+                </div>
+            </div>
+        </div>
+    </div><!--/ModalCambiarMensaje -->
+    <!--ModalMessageSeguroAplicar -->
+    <div class="modal fade" id="i_modalSeguroAplicar" role="dialog">
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-6 col-sm-offset-3 text-center modal-box">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+
+                    <h3 style="margin:4%;">¿Deseas aplicar esta opción?</h3>
+
+                    <h3>Cambiara la información en la factura</h3>
+
+                    <button type="button" class="btn btn-default c_modalDismiss c_Accept" data-dismiss="modal" id="i_btnDescuento" autofocus>Aceptar</button>
+                    <button type="button" class="btn btn-default c_modalDismiss c_Cancel" data-dismiss="modal">Cancelar</button>
+
+                </div>
+            </div>
+        </div>
+    </div><!--/ModalMessageSeguroAplicar -->
+    <!--MODALES ENVIAR-->
+    <!--MODALES ELIMINAR-->
+    <!--ModalMessageEnvioCorreo -->
+    <!--ModalMessageVistaPrevia -->
+    <div class="modal fade" id="i_modalVistaPrevia" role="dialog">
+        <div class="container">
+            <div class="row">
+                <div class="col-xs-12 text-center modal-box">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+
+
+                    <h3 id="i_headerPrevFact" style="margin:4%;">Aqui se muestra una vista previa de la factura</h3>
+                    <div id="embededpdf" class="embed-responsive embed-responsive-16by9">
+                        <iframe id="i_previewSec" class="embed-responsive-item" src=""></iframe>
+                    </div>
+
+                    <button type="button" class="btn btn-default c_modalDismiss c_Accept" data-dismiss="modal" autofocus>Aceptar</button>
+                    <button type="button" class="btn btn-default c_modalDismiss c_Cancel" data-dismiss="modal">Cancelar</button>
+
+                </div><!--/col-xs-12 --->
+            </div><!--/row -->
+        </div> <!--/container -->
+    </div><!--/ModalMessageVistaPrevia -->
+    <div class="modal fade" id="i_modalEnvioCorreo" role="dialog">
+        <div class="container">
+            <div class="row" id="i_cubitoWaiting">
+                <div class="col-xs-12">
+                    <div class="sk-cube-grid">
+                        <div class="sk-cube sk-cube1"></div>
+                        <div class="sk-cube sk-cube2"></div>
+                        <div class="sk-cube sk-cube3"></div>
+                        <div class="sk-cube sk-cube4"></div>
+                        <div class="sk-cube sk-cube5"></div>
+                        <div class="sk-cube sk-cube6"></div>
+                        <div class="sk-cube sk-cube7"></div>
+                        <div class="sk-cube sk-cube8"></div>
+                        <div class="sk-cube sk-cube9"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="row" id="i_contentModalEnviarCorreo">
+                <div class="col-sm-6 col-sm-offset-3 text-center modal-box">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    <h3 class="h3Modal" id="i_h3ModalMessageEnvioCorreo">¿Esta seguro que desea enviar la factura a los siguientes clientes?</h3>
+                    <div class="alert alert-danger" id="i_enviarCorreosFallido">
+                        <i class="fa fa-3x fa-times-circle" style="display:block;" aria-hidden="true"></i>
+                        <strong style="display:block;">No se ha podido enviar</strong>
+                    </div>
+                    <div class="alert alert-success" id="i_enviarCorreosExito">
+                        <i class="fa fa-3x fa-check-circle" style="display:block;" aria-hidden="true"></i>
+                        <strong style="display:block;">Se ha enviado correctamente</strong>
+                    </div>
+                    <div class="alert alert-success" id="i_enviarCorreosConfirmacion">
+
+                    </div>
+                    <button type="button" class="btn btn-default c_modalDismiss c_AcceptModal" autofocus onclick="enviar()" id="i_botonModalEnviar">Aceptar</button>
+                    <button type="button" class="btn btn-default c_modalDismiss c_Cancel" data-dismiss="modal" id="i_botonModalCancelar">Cancelar</button>
+                    <button type="button" class="btn btn-default c_modalDismiss c_AcceptModal" data-dismiss="modal" autofocus id="i_botonModalTerminar">Terminar</button>
+                </div>
+            </div>
+        </div>
+
+    </div><!--/ModalMessageEnvioCorreo -->
+    <!--MODALES ELIMINAR-->
+    <!--MODALES LOGIN-->
+    <!--ModalCerrarSesion-->
+    <div class="modal fade" id="i_modalCerrarSesion" role="dialog">
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-6 col-sm-offset-3 text-center modal-box">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    <h3 class="h3Modal">¿Esta seguro que desea cerrar sesión?</h3>
+
+                    <button type="button" class="btn  c_modalDismiss c_AcceptModal" data-dismiss="modal" id="signout-button" autofocus>Aceptar</button>
+                    <button type="button" class="btn  c_modalDismiss c_Cancel" data-dismiss="modal">Cancelar</button>
+
+                </div>
+            </div>
+        </div>
+    </div><!--/ModalCerrarSesion -->
+    <!--ModalOpcionesUsuario-->
+    <div class="modal fade" id="i_modalOpcionesUsuario" role="dialog">
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-6 col-sm-offset-3 text-center modal-box">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    <h3 class="h3Modal">¿Seguro que desea ir a ajustes?</h3>
+                    <p>Puede que la información no se haya guardado</p>
+                    <button onclick="location.href='opcionesUsuario.html'" type="button" class="btn  c_modalDismiss c_AcceptModal" data-dismiss="modal" autofocus>Acceder</button>
+                    <button type="button" class="btn  c_modalDismiss c_Cancel" data-dismiss="modal">Regresar</button>
+
+                </div>
+            </div>
+        </div>
+    </div><!--/ModalOpcionesUsuario-->
+    <!--MODALES LOGIN-->
+    <!--ModalMessageRetenerIVA -->
+    <div class="modal fade" id="i_modalRetenerIVA" role="dialog">
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-6 col-sm-offset-3 text-center modal-box">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+
+                    <h3 style="margin:4%;">Retener IVA</h3>
+
+                    <h3>Aqui pondremos la información acerca de los casos donde se puede rentener el IVA </h3>
+
+                    <button type="button" class="btn btn-default c_modalDismiss c_Accept" data-dismiss="modal" autofocus>Aceptar</button>
+
+
+                </div>
+            </div>
+        </div>
+    </div><!--/ModalMessageRetenerIVA -->
+    <!--ModalMessageRetenerISR -->
+    <div class="modal fade" id="i_modalRetenerISR" role="dialog">
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-6 col-sm-offset-3 text-center modal-box">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+
+                    <h3 style="margin:4%;">Retener ISR</h3>
+
+                    <h3>Aqui pondremos la información acerca de los casos donde se puede rentener el ISR </h3>
+
+                    <button type="button" class="btn btn-default c_modalDismiss c_Accept" data-dismiss="modal" autofocus>Aceptar</button>
+
+
+                </div>
+            </div>
+        </div>
+    </div><!--/ModalMessageRetenerISR -->
+    <div class="modal fade" id="i_modalGuardarFact" role="dialog">
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-6 col-sm-offset-3 text-center modal-box">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+
+                    <h3 class="h3Modal">Se ha guardado la factura exitosamente</h3>
+
+
+                    <button type="button" class="btn btn-default c_modalDismiss c_Accept" data-dismiss="modal" autofocus>Aceptar</button>
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--ModalMessageNoCorreos -->
+    <div class="modal fade" id="i_modalNoCorreos" role="dialog">
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-6 col-sm-offset-3 text-center modal-box">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+
+                    <h3 class="h3Modal">No hay correos para enviar</h3>
+
+                    <p>Verifique que existan correos para enviar.</p>
+
+                    <button type="button" class="btn btn-default c_modalDismiss c_Accept" data-dismiss="modal" autofocus>Aceptar</button>
+                    <button type="button" class="btn btn-default c_modalDismiss c_Cancel" data-dismiss="modal">Cancelar</button>
+
+
+                </div>
+            </div>
+        </div>
+    </div><!--/ModalMessageNoCorreos -->
+    <!--ModalMessageCorreoMalIngresado -->
+    <div class="modal fade" id="i_modalCorreoMalIngresado" role="dialog">
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-6 col-sm-offset-3 text-center modal-box">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+
+                    <h3 class="h3Modal">Correo mal Ingresado</h3>
+
+                    <p>Verifique que el correo este correctamente escrito para enviar.</p>
+
+                    <button type="button" class="btn btn-default c_modalDismiss c_Accept" data-dismiss="modal" autofocus>Aceptar</button>
+                    <button type="button" class="btn btn-default c_modalDismiss c_Cancel" data-dismiss="modal">Cancelar</button>
+
+
+                </div>
+            </div>
+        </div>
+    </div><!--/ModalMessageCorreoMalIngresado -->
+    <!--ModalMessageAlertError -->
+    <div class="modal fade" id="i_modalAlertError" role="dialog">
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-6 col-sm-offset-3 text-center modal-box">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+
+                    <h3 style="margin:4%;">Error</h3>
+
+                    <h3>Valores invalidos</h3>
+
+                    <button type="button" class="btn btn-default c_modalDismiss c_Accept" data-dismiss="modal" autofocus>Aceptar</button>
+
+
+
+                </div>
+            </div>
+        </div>
+    </div><!--/ModalMessageAlertError -->
+    <div class="modal fade" id="i_modalConceptoRepeater" role="dialog">
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-6 col-sm-offset-3 text-center modal-box">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+
+
+                    <h3>Ya ha agregado este concepto</h3>
+                    <p>¿Desea agrupar este concepto con el anterior?</p>
+                    <p>¿O desea eliminar el anterior?</p>
+
+                    <button id="i_btnAgrupar" type="button" class="btn btn-default c_modalDismiss c_Accept" data-dismiss="modal" autofocus>Agrupar</button>
+                    <button id="i_btnEliminarAnterior" type="button" class="btn btn-default c_modalDismiss c_Accept" data-dismiss="modal" autofocus>Eliminar Anterior</button>
+
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="i_deshacerModal" role="dialog">
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-6 col-sm-offset-3 text-center modal-box">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+
+                    <h3 class="h3Modal">Deshacer Factura</h3>
+                    <p>¿Esta seguro de deshacer la factura?</p>
+                    <p>Todos los datos se eliminarán</p>
+
+                    <button id="i_btnDeshacerFact" type="button" class="btn btn-default c_modalDismiss c_Accept" data-dismiss="modal" autofocus>Aceptar</button>
+                    <button type="button" class="btn btn-default c_modalDismiss c_Cancel" data-dismiss="modal">Cancelar</button>
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="i_modalAgregarUnidad" role="dialog">
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-6 col-sm-offset-3 text-center modal-box">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    <h3 style="margin:4%;">Agregue una nueva unidad</h3>
+                    <label for="i_inputNewUnidad">Nueva unidad</label>
+                    <input type="text" class="form-control c_input" id="i_inputNewUnidad" />
+                    <button id="i_btnAgrgearUnidad" type="button" class="c_buttnsModal btn btn-default c_modalDismiss" data-dismiss="modal" autofocus>Aceptar</button>
+                    <button type="button" class="btn btn-default c_modalDismiss c_Cancel c_buttnsModal" data-dismiss="modal">Cancelar</button>
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="i_modalAgregarUnidadNueva" role="dialog">
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-6 col-sm-offset-3 text-center modal-box">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    <h3 class="h3Modal">Agregar nueva unidad de media</h3>
+                    <input id="i_inputNewMedida" type="text" class="form-control c_input" />
+                    <button type="button" class="btn  c_modalDismiss c_AcceptModal" data-dismiss="modal" autofocus id="i_btnAgregarNuevaMedida">Aceptar</button>
+                    <button type="button" class="btn  c_modalDismiss c_Cancel" data-dismiss="modal">Cancelar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="i_modalErrorFactura" role="dialog">
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-6 col-sm-offset-3 text-center modal-box">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+
+                    <h3 class="h3Modal">Error</h3>
+                    <p>Debes de llenar todos los campos de la factura</p>
+                    <p>antes de continuar</p>
+                    <button type="button" class="btn btn-default c_modalDismiss c_Accept" data-dismiss="modal" autofocus>Aceptar</button>
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="modal fade" id="i_modalConceptoRepeaterMobile" role="dialog">
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-6 col-sm-offset-3 text-center modal-box">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+
+
+                    <h3>Ya ha agregado este concepto</h3>
+                    <p>¿Desea agrupar este concepto con el anterior?</p>
+                    <p>¿O desea eliminar el anterior?</p>
+
+                    <button id="i_btnAgruparMobile" type="button" class="btn btn-default c_modalDismiss c_Accept" data-dismiss="modal" autofocus>Agrupar</button>
+                    <button id="i_btnEliminarMobile" type="button" class="btn btn-default c_modalDismiss c_Accept" data-dismiss="modal" autofocus>Eliminar Anterior</button>
+
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="i_modalFacturarPost" role="dialog">
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-6 col-sm-offset-3 text-center modal-box">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+
+                    <div id="i_respuesta">
+
+                    </div>
+                    <div class="alert alert-success" id="i_successTimbrado">
+                        <i class="fa fa-3x fa-check-circle" style="display:block;" aria-hidden="true"></i>
+                        <strong id="i_msjSuccess" style="display:block;">Se ha timbrado correctamente</strong>
+                    </div>
+                    <div class="alert alert-danger" id="i_failTimbrado">
+                        <i class="fa fa-3x fa-times-circle" style="display:block;" aria-hidden="true"></i>
+                        <strong id="i_msjWarning" style="display:block;">No se ha podido Timbrar</strong>
+                    </div>
+
+                    <button  type="button" class="btn btn-default c_modalDismiss c_Accept btn_modalClose" data-dismiss="modal" autofocus>Aceptar</button>
+                    <button type="button" class="btn btn-default c_modalDismiss c_Cancel btn_modalClose" data-dismiss="modal">Cancelar</button>
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- jQuery -->
+    <!-- Bootstrap Core JavaScript -->
+
+
+    <script>
+
+
+
+        //Variables Globales Enviar y Timbrar
+
+        //variables globales modificar
+
+        var gn_idCliente = 0;
+
+        var gd_trAtajos = $("#i_trinputAtajos");
+
+        var gd_tableConceptos = $("#i_tableConceptos");
+
+        var gd_totales = $("#trTotales");
+
+        var gd_chechCiVA = $("#i_checkConceptosIVA");
+
+        var gd_tableConceptosAgregados = $("#i_tableConceptosAgregados");
+
+        var gf_iva = 0;
+
+        var gf_subtotal = 0;
+
+        var gf_total = 0;
+
+        var ga_conceptos = [];
+
+        var gn_folioFactura = 0;
+
+        ///
+
+        var gd_enviarCorreosConfirmacion = null;
+
+        var gd_modalEnvioCorreo = null;
+
+        var gd_botonAceptar = null;
+
+        var gd_botonCancelar = null;
+
+        var gd_botonTerminar = null;
+
+        var gd_enviarCorreosExito = null;
+
+        var gd_enviarCorreosFallido = null;
+
+        var gd_tableCorreosDefault = null;
+
+        var ga_mensajeExtra = null;
+
+        var gd_modalCambiarMensaje = null;
+
+        var gd_botonPlantillaMail = null;
+
+        var gd_inputCorreoMsg = null;
+
+        var gd_inputCorreoAsunto = null;
+
+        var gd_contentModalEnviarCorreo = null
+
+        var gd_cubitoWaiting = null;
+
+        var gd_botonModalEnviar = null;
+
+        var gd_botonModalCancelar = null;
+
+        var gd_botonModalTerminar = null;
+
+        var gd_timbrarContent = null;
+
+        var gd_cubitoWaitingTimbrar = null;
+
+        //Variables Globales Enviar y Timbrar
+        //Funciones de facturar
+        var gn_idCliente = 0;
+        var gd_trAtajos = $("#i_trinputAtajos");
+        var gd_tableConceptos = $("#i_tableConceptos");
+        var gd_chechCiVA = $("#i_checkConceptosIVA");
+        var gd_tableConceptosAgregados = $("#i_tableConceptosAgregados");
+        var gf_iva = 0;
+        var gf_subtotal = 0;
+        var gf_total = 0;
+        var ga_conceptos = [];
+        var gn_folioFactura = 0;
+        var gb_showConfirm = true;
+        var ret_iva = 0;
+        var ret_isr = 0;
+        var g_ntasaISR = 0;
+        $("#i_btnEliminarMobile").click(function(){
+            var index_found = this.value;
+            var len = ga_conceptos.length; var i = 0;
+            var descripcion = gd_inputsMobile[0].value;
+            descripcion = descripcion.trim();
+            var noSerie = gd_inputsMobile[1].value;
+            var unidad = gd_inputsMobile[2].value;
+            var cantidad = parseFloat(gd_inputsMobile[3].value);
+            var precio = parseFloat(gd_inputsMobile[4].value);
+            var importe = parseFloat(gd_inputsMobile[5].value);
+            var lj_concepto = null;
+            for (; i < len; i++) {
+                if (ga_conceptos[i].descripcion.trim() == descripcion) {
+                    ga_conceptos[i].noSerie = noSerie;
+                    ga_conceptos[i].unidad = unidad;
+                    ga_conceptos[i].cantidad = cantidad;
+                    ga_conceptos[i].precio_unitario = precio.toFixed(3);
+                    gf_subtotal = gf_subtotal - parseFloat(ga_conceptos[i].importe);
+                    ga_conceptos[i].importe = importe.toFixed(3);
+                    gf_subtotal = gf_subtotal + parseFloat(ga_conceptos[i].importe);
+                    lj_concepto = {"noSerie":noSerie, "descripcion": descripcion, "unidad": unidad, "cantidad": ga_conceptos[i].cantidad, "precio_unitario": ga_conceptos[i].precio_unitario, "importe": ga_conceptos[i].importe };
+
+                    break;
+                }
+            }
+            gd_inputsMobile.val("");
+
+            porcentaje = parseFloat(porcentaje);
+
+            var descuento = gf_subtotal * (porcentaje / 100);
+            gf_iva = (gf_subtotal - descuento) * 0.16;
+            gf_total = gf_iva + (gf_subtotal - descuento);
+
+
+
+            update_table_conceptos()
+            updateTotals();
+        });
+        $("#i_btnAgruparMobile").click(function () {
+            // var ld_unidad = $("#i_inputUnidad");
+            var row_inserted = gd_inputsMobile;
+            var index_found = this.value;
+
+            var len = ga_conceptos.length; var i = 0;
+            var descripcion = row_inserted[0].value;
+            descripcion = descripcion.trim();
+            var noSerie = row_inserted[1].value;
+            var unidad = row_inserted[2].value;
+            var cantidad = parseFloat(row_inserted[3].value);
+            var precio = parseFloat(row_inserted[4].value);
+            var importe = parseFloat(row_inserted[5].value);
+            var lj_concepto = null;
+            for (; i < len; i++) {
+                if (ga_conceptos[i].descripcion.trim() == descripcion) {
+                    ga_conceptos[i].noSerie = noSerie;
+                    ga_conceptos[i].unidad = unidad;
+
+                    var prev_cantidad = parseFloat(ga_conceptos[i].cantidad);
+                    ga_conceptos[i].cantidad = prev_cantidad + cantidad;
+                    ga_conceptos[i].precio_unitario = precio.toFixed(3);
+                    importe = precio * (prev_cantidad + cantidad);
+                    gf_subtotal = gf_subtotal - ga_conceptos[i].importe;
+
+                    ga_conceptos[i].importe = importe.toFixed(3);
+                    gf_subtotal = gf_subtotal + parseFloat(ga_conceptos[i].importe);
+                    lj_concepto = { "noSerie": noSerie, "descripcion": descripcion, "unidad": unidad, "cantidad": ga_conceptos[i].cantidad, "precio_unitario": ga_conceptos[i].precio_unitario, "importe": ga_conceptos[i].importe };
+
+                    break;
+                }
+            }
+            row_inserted.val("");
+            porcentaje = parseFloat(porcentaje);
+
+            var descuento = (porcentaje / 100) * gf_subtotal;
+            gf_iva = (gf_subtotal - descuento) * 0.16;
+            gf_total = gf_iva + (gf_subtotal - descuento);
+
+
+            update_table_conceptos()
+            updateTotals();
+        });
+
+        $("#i_btnMobileAgregar").click(function () {
+            var inputs = gd_inputsMobile;
+            var descripcion = inputs[0].value;
+            descripcion = descripcion.trim();
+            var index_found = is_concepto_repeated(descripcion);
+
+            if (index_found!=-1) {
+                $("#i_btnAgruparMobile").val(index_found);
+                $("#i_btnEliminarMobile").val(index_found);
+                $("#i_modalConceptoRepeaterMobile").modal("show");
+
+
+
+
+
+            } else {
+                if (checkInputsMobile(inputs, $(".c_updateInputs"))) {
+                    var noSerie = inputs[1].value;
+                    var unidad = inputs[2].value;
+                    var cantidad = inputs[3].value;
+                    var precio = inputs[4].value;
+                    var importe = inputs[5].value;
+                    if (conceptos_iva) {
+                        precio = parseFloat(precio) / 1.16;
+                        importe = parseFloat(importe) / 1.16;
+
+                    }
+
+
+                    var lj_Concepto = { "noSerie": noSerie, "descripcion": descripcion, "unidad": unidad, "cantidad": cantidad, "precio_unitario": precio, "importe": importe };
+                    agregar_concepto(lj_Concepto);
+                    ga_conceptos.push(lj_Concepto);
+
+
+
+                    importe = parseFloat(importe);
+                    gf_subtotal += importe;
+                    porcentaje = parseFloat(porcentaje);
+
+                    var descuento = gf_subtotal * (porcentaje / 100);
+                    var sub_descuento = gf_subtotal - descuento;
+                    gf_iva = sub_descuento * 0.16;
+                    gf_total = (sub_descuento) + gf_iva;
+                    updateTotals();
+                    update_table_conceptos();
+                    inputs.val("");
+
+
+                } else {
+                    $("#i_modalAlertError").modal();
+                }
+            }
+
+        });
+        //
+        var gj_rowSelected = null;
+        $("#i_btnAgrgearUnidad").click(function () {
+
+            var new_unidad = $("#i_inputNewUnidad").val();
+            var s = $(".c_selectChange");
+            s.append("<option>" + new_unidad + "</option>");
+            s.val(new_unidad);
+        });
+        $("#i_btnAgregarNuevaMedida").click(function () {
+
+            var medida = $("#i_inputNewMedida").val();
+            var selec = $("#i_inputUnidad");
+            selec.append("<option>" + medida + "</option>");
+            selec.val(medida);
+            selec = $("#i_inputMedidaMobile");
+            selec.append("<option>" + medida + "</option>");
+            selec.val(medida);
+
+
+        });
+
+
+        $(document).on("input", "#i_selectedPrecio", function () {
+            var precio = $(this).val();
+            var cantidad = $("#i_selectedCantidad").val();
+            if (cantidad.trim() != '' && precio.trim() != '') {
+                if (!isNaN(cantidad) && !isNaN(precio)) {
+                    var importe = parseFloat(cantidad) * parseFloat(precio);
+                    $("#i_selectedImporte").val(importe.toFixed(3));
+                }
+            }
+        });
+
+        $(document).on("input", "#i_selectedCantidad", function () {
+            var cantidad = $(this).val();
+            var precio = $("#i_selectedPrecio").val();
+            if (cantidad.trim() != '' && precio.trim() != '') {
+                if (!isNaN(cantidad) && !isNaN(precio)) {
+                    var importe = parseFloat(cantidad) * parseFloat(precio);
+                    $("#i_selectedImporte").val(importe.toFixed());
+                }
+            }
+
+        });
+        function checkInputs_Row(row) {
+            var len = row.length; var i = 0;
+            for (; i < len; i++) {
+
+                if (row[i].value.trim() == "") {
+                    return false;
+                }
+                if (!isNaN(row[i].value.trim())) {
+                    var n = parseFloat(row[i].value.trim());
+                    if (n <= 0) {
+                        return false;
+                    }
+                }
+
+
+            }
+
+            return true;
+        }
+
+        $(document).on("click", "#i_btnRowAccept", function () {
+            //   var ld_row_inputs = gd_rowSelected.find("input,textarea,select");
+            var dom_row = gj_rowSelected.dom;
+            var index = parseInt(gj_rowSelected.index);
+            var ld_inputs = dom_row.find("input,select,textarea");
+            //var lj_Concepto = { "descripcion": obj[i].descripcion, "unidad": obj[i].unidad, "cantidad": obj[i].cantidad, "precio_unitario": obj[i].precio_unitario, "importe": obj[i].importe };
+            if (checkInputs_Row(ld_inputs)) {
+                var new_descripcion = ld_inputs[0].value;
+                var new_noSerie = ld_inputs[1].value;
+                var new_unidad = ld_inputs[2].value;
+                var new_canitdad = ld_inputs[3].value;
+                var new_precio = ld_inputs[4].value;
+                var new_importe = ld_inputs[5].value;
+                if (conceptos_iva) {
+                    new_precio = parseFloat(new_precio) / 1.16;
+                    new_importe = parseFloat(new_importe) / 1.16;
+                } else {
+                    new_precio = parseFloat(new_precio);
+                    new_importe = parseFloat(new_importe);
+                }
+                var old_importe = ga_conceptos[index].importe;
+                gf_subtotal = gf_subtotal - parseFloat(old_importe);
+                ga_conceptos[index].noSerie = new_noSerie;
+                ga_conceptos[index].descripcion = new_descripcion;
+                ga_conceptos[index].unidad = new_unidad;
+                ga_conceptos[index].cantidad = new_canitdad;
+                ga_conceptos[index].precio_unitario = new_precio.toFixed(3);
+                ga_conceptos[index].importe = new_importe.toFixed(3);
+                porcentaje = parseFloat(porcentaje);
+
+                gf_subtotal += new_importe;
+
+
+                if(isNaN(porcentaje)){porcentaje=0;}
+
+                var descuento = gf_subtotal * (porcentaje / 100);
+
+                gf_iva = (gf_subtotal - descuento) * 0.16;
+                gf_total = (gf_subtotal - descuento) + gf_iva;
+
+                update_table_conceptos();
+                updateTotals();
+                $("button").prop("disabled", false);
+
+
+            } else {
+                $("#i_modalAlertError").modal("show");
+
+
+            }
+
+        });
+
+        $(document).on("change", ".c_selectChange", function () {
+            if (this.value == 1) {
+                $("#i_modalAgregarUnidad").modal();
+                $(".c_buttnsModal").prop("disabled", false);
+            }
+
+
+        });
+
+        $(document).on("click", ".c_Ajustes", function () {
+
+            var ld_row = $(this).parent().parent().parent();
+            //  alert(ld_row.html());
+            var ld_row_elements = ld_row;
+            ld_row = ld_row.find("td");
+            var btnAceptar = ld_row_elements.find("button#i_btnRowAccept");
+
+            gj_rowSelected = { dom: ld_row,index:btnAceptar.val() };
+            var precio = ld_row[4].innerHTML;
+            precio = precio.slice(1, precio.length);
+            var importe = ld_row[5].innerHTML;
+            importe = importe.slice(1, importe.length);
+            var lj_prevData = { descripcion: ld_row[0].innerHTML, noSerie: ld_row[1].innerHTML, unidad: ld_row[2].innerHTML, cantidad: ld_row[3].innerHTML, precio: precio, importe: importe };
+
+            ld_row[0].innerHTML = "<textarea rows='4' class='form-control c_input c_config'>"+lj_prevData.descripcion+"</textarea>";
+
+
+            var arr_options = [lj_prevData.unidad.trim(), "PIEZA", "KILOS", "LITROS", "GRAMOS", "N/A", "Otro.."];
+            arr_options = $.unique(arr_options); var len = arr_options.length; var i = 0;
+            //console.log(arr_options);
+            var options_formats = [];
+            for (; i < len; i++) {
+                if (arr_options[i] == "Otro..") {
+                    options_formats.push("<option value='1'>" + arr_options[i] + "</option>");
+
+                } else {
+                    options_formats.push("<option>" + arr_options[i] + "</option>");
+                }
+            }
+
+            ld_row[1].innerHTML = "<input class='form-control c_input c_config' value='" + lj_prevData.noSerie + "' />"
+            ld_row[2].innerHTML = "<select value='" + lj_prevData.unidad + "' class='c_selectChange form-control c_input c_config'>" + options_formats.join("") + "</select>";
+
+            ld_row[3].innerHTML = "<input value='"+lj_prevData.cantidad+"' id='i_selectedCantidad' type='number' class='form-control c_input c_config' />";
+            ld_row[4].innerHTML = "<input value='"+lj_prevData.precio+"' id='i_selectedPrecio' type='number' class='form-control c_input c_config' />";
+            ld_row[5].innerHTML = "<input value='"+lj_prevData.importe+"' id='i_selectedImporte' type='number' class='form-control c_input c_config' />";
+            ld_row_elements.find(".c_divOpts").hide();
+            btnAceptar.show();
+            $("button").not("#i_btnRowAccept").prop("disabled", true);
+        });
+
+        //
+
+        $("#i_btnDeshacerFact").click(function(){
+
+            ga_conceptos =[];
+            update_table_conceptos();
+            gf_iva = 0;gf_subtotal = 0; gf_total = 0;
+            ret_isr = 0;
+            ret_iva =0;
+            updateTotals();
+
+        });
+
+        $("#i_GuardarFactura").click(function(){
+            var ld_params =$(".c_facturaParams");
+            var metodo_pago =ld_params[1].value;
+            var forma_pago = ld_params[2].value;
+            var descuento = ld_params[3].value;
+            var lj_facturaParams = {metodo_pago:metodo_pago,forma_pago:forma_pago,descuento:descuento};
+
+
+            $.post("php/guardarPendiente.php",{total:gf_total,j_conceptos:JSON.stringify(ga_conceptos),facturaParams:JSON.stringify(lj_facturaParams),folio:gn_folioFactura },function(data){
+                $("#i_modalGuardarFact").modal();
+                console.log(data);
+            });
+
+        });
+
+        $("#i_selectMetodoPago").on("change", function () {
+            var metodo_pago = $(this).val();
+            if (metodo_pago == "Cheque" || metodo_pago=="Transferencia Bancaria") {
+                $("#i_divNoCuenta").show();
+
+            } else {
+                $("#i_divNoCuenta").hide();
+
+            }
+        });
+
+
+
+        $("#i_btnUnDoFields").click(function () {
+            $("#i_tableConceptos tr input[type=number],input[type=text],textarea").val("");
+            gd_inputsMobile.val("");
+
+        });
+
+        function unDoFactura()
+        {
+            var idCliente = "<?php echo $_POST['id']; ?>";
+            $.post("php/unDoFactura.php", { idCliente: idCliente, folio: gn_folioFactura });
+
+        }
+
+        $("#btnUndoFactura").click(function () {
+
+            $("#i_deshacerModal").modal();
+        });
+
+
+        $("#trigger_next").click(function () {
+            if (ga_conceptos.length > 0 && !gb_showConfirm) {
+                $("form").submit();
+            } else {
+                $("#i_modalContinuar").modal("hide");
+            }
+        });
+
+
+
+
+        $(document).on("input", "#i_tableConceptos .bs-searchbox input[type=text]", function () {
+            if( $(this).attr("id")!='i_inputUnidad')  // input en bootstrap-select
+            {
+                $(".table-responsive").animate({ scrollTop: $(document).height() }, 1000);
+
+                $.post("php/atajosPicker.php", { query: $(this).val() }, function (data) {
+
+                    try{
+                        var lj_results = JSON.parse(data);
+
+                        var len = lj_results.result.length; var i = 0; var buf = [];
+
+                        //     buf.push("<select id='i_select' class='form-control c_input'>");
+
+                        for (; i < len; i++) {
+
+                            buf.push("<option value='" + lj_results.result[i].idatajo + "'>" + lj_results.result[i].descripcion.slice(0, 25) + "...</option>");
+
+
+
+                        }
+
+
+
+                        //   buf.push("</select>");
+
+
+
+
+                        if (len == 1)
+
+                            update_concepto_data(lj_results.result[0].idatajo);
+
+
+
+                        gd_trAtajos.html(buf.join("")).selectpicker('refresh');
+
+                        gd_trAtajos.show();
+                    }catch(err){
+
+                    }
+
+                });
+            }
+        });
+
+
+        $("#i_btnVistaPrevia").click(function () {
+
+
+            if (ga_conceptos.length == 0) {
+                $("#i_headerPrevFact").html("Debe primero introducir conceptos para<br>la vista previa");
+                $("#i_previewSec").attr("src", "");
+            } else {
+
+                var f = { forma_pago: $("#i_selectFormaPago").val(), metodo_pago: $("#i_selectMetodoPago").val(), descuento: $("#i_inputDescuento").val() };
+
+                $.post("Facturacion/vistaPreviaGenerada.php", { folio:gn_folioFactura,idCliente: gn_idCliente }, function (data) {
+                    //  window.open("printPDF.php?pdfFile=preview" + gn_folioFactura + ".pdf");
+                    //alert(data);
+                    $("#i_headerPrevFact").html("Aqui se muestra una vista previa de la factura");
+                    $("#i_previewSec").attr("src", "printPDF.php?pdfFile=preview" + gn_folioFactura + ".pdf&type=0");
+
+                });
+            }
+        });
+
+
+        $("#i_inputDescuento").on("input", function () {
+
+
+
+
+
+            var num = parseFloat($(this).val());
+            if (num <= 0) { $(this).val(0); }
+            if (num >= 100) { $(this).val(100);}
+
+        });
+
+        var porcentaje = 0;
+        $("#i_btnDescuento").click(function () {
+            recalculate_totals();
+
+            var descuento = parseFloat($("#i_inputDescuento").val());
+            porcentaje = descuento;
+            descuento = parseFloat(descuento / 100);
+
+            gf_subtotal = parseFloat(gf_subtotal);
+
+
+            var lf_descuento = descuento;
+
+            descuento = gf_subtotal * descuento;
+
+
+            gf_iva = parseFloat(gf_iva);
+            gf_total = parseFloat(gf_total);
+            gf_iva = (gf_subtotal - descuento) * 0.16;
+
+            gf_total = (gf_subtotal - descuento) + gf_iva;
+
+            updateTotals();
+            $.post("php/ActualizarDescuento.php",{DESCUENTO : porcentaje, ID : gn_folioFactura},function(data,status){
+                //  alert(data);
+            });
+
+        });
+
+        function agregar_concepto(concepto,folio)
+        {
+
+
+
+
+
+
+
+        }
+
+        $(".selectpicker").on("changed.bs.select", function () {
+            var id_atajo = this.value;
+            update_concepto_data_xs(id_atajo);
+            update_concepto_data(id_atajo);
+            // alert(id_atajo);
+
+        });
+        function is_concepto_repeated(descripcion)
+        {
+
+            var len = ga_conceptos.length; var i = 0;
+            var found_index = -1;
+            for (; i < len; i++) {
+
+                if (ga_conceptos[i].descripcion.trim() == descripcion.trim()) {
+                    found_index = i;
+                    return found_index;
+
+
+
+                }
+
+            }
+
+            return found_index;
+
+        }
+        var gd_inputFields = $("#i_tableConceptos tr .c_input");
+        $("#i_btnAgrupar").click(function () {
+            var index_found = this.value;
+            // var ld_unidad = $("#i_inputUnidad");
+
+            var len = ga_conceptos.length; var i = 0;
+            var descripcion = gd_inputFields[1].value;
+            descripcion = descripcion.trim();
+            var noSerie = gd_inputFields[2].value;
+            var unidad = gd_inputFields[3].value;
+            var cantidad = parseFloat(gd_inputFields[4].value);
+            var precio = parseFloat(gd_inputFields[5].value);
+            var importe = parseFloat(gd_inputFields[6].value);
+            var lj_concepto = null;
+            for (; i < len; i++) {
+                if (ga_conceptos[i].descripcion.trim() == descripcion) {
+                    ga_conceptos[i].unidad = unidad;
+                    ga_conceptos[i].noSerie = noSerie;
+                    var prev_cantidad = parseFloat(ga_conceptos[i].cantidad);
+                    ga_conceptos[i].cantidad = prev_cantidad + cantidad;
+                    ga_conceptos[i].precio_unitario = precio.toFixed(3);
+                    importe = precio * (prev_cantidad + cantidad);
+                    gf_subtotal = gf_subtotal - ga_conceptos[i].importe;
+
+                    ga_conceptos[i].importe = importe.toFixed(3);
+                    gf_subtotal = gf_subtotal + parseFloat(ga_conceptos[i].importe);
+
+                    lj_concepto = { "noSerie": noSerie, "descripcion": descripcion, "unidad": unidad, "cantidad": ga_conceptos[i].cantidad, "precio_unitario": ga_conceptos[i].precio_unitario, "importe": ga_conceptos[i].importe };
+
+                    break;
+                }
+            }
+            gd_inputFields.val("");
+            porcentaje = parseFloat(porcentaje);
+            if (porcentaje>0) {
+                var descuento = (porcentaje / 100) * gf_subtotal;
+                gf_iva = (gf_subtotal - descuento) * 0.16;
+                gf_total = gf_iva + (gf_subtotal - descuento);
+            } else {
+                gf_iva = (gf_subtotal) * 0.16;
+                gf_total = gf_iva + gf_subtotal;
+            }
+
+
+            update_table_conceptos()
+            updateTotals();
+
+
+        });
+        $("#i_btnEliminarAnterior").click(function () {
+            //    var ld_unidad = $("#i_inputUnidad");
+            var index_found = this.value;
+            var len = ga_conceptos.length; var i = 0;
+            var descripcion = gd_inputFields[1].value;
+            descripcion = descripcion.trim();
+            var noSerie = gd_inputFields[2].value;
+            var unidad = gd_inputFields[3].value;
+            var cantidad = parseFloat(gd_inputFields[4].value);
+            var precio = parseFloat(gd_inputFields[5].value);
+            var importe = parseFloat(gd_inputFields[6].value);
+            var lj_concepto = null;
+            for (; i < len; i++) {
+                if (ga_conceptos[i].descripcion.trim() == descripcion) {
+                    ga_conceptos[i].noSerie = noSerie;
+                    ga_conceptos[i].unidad = unidad;
+                    ga_conceptos[i].cantidad = cantidad;
+                    ga_conceptos[i].precio_unitario = precio.toFixed(3);
+                    gf_subtotal = gf_subtotal - parseFloat(ga_conceptos[i].importe);
+                    ga_conceptos[i].importe = importe.toFixed(3);
+                    gf_subtotal = gf_subtotal + parseFloat(ga_conceptos[i].importe);
+                    lj_concepto = { "noSerie": noSerie, "descripcion": descripcion, "unidad": unidad, "cantidad": ga_conceptos[i].cantidad, "precio_unitario": ga_conceptos[i].precio_unitario, "importe": ga_conceptos[i].importe };
+
+                    break;
+                }
+            }
+            gd_inputFields.val("");
+
+            porcentaje = parseFloat(porcentaje);
+
+            var descuento = gf_subtotal * (porcentaje / 100);
+            gf_iva = (gf_subtotal - descuento) * 0.16;
+            gf_total = gf_iva + (gf_subtotal - descuento);
+
+            update_table_conceptos()
+            updateTotals();
+
+
+        });
+        $("#i_btnAgregar").click(function () {
+            var descripcion = gd_inputFields[1].value;
+            var noSerie = gd_inputFields[2].value
+            var ld_unidad = gd_inputFields[3].value;
+            var unidad = ld_unidad;
+            var cantidad = gd_inputFields[4].value;
+            var precio = gd_inputFields[5].value;
+            var importe = gd_inputFields[6].value;
+            var went_fine = true;
+            if ( importe<=0||precio<=0||cantidad<=0|| !isNaN(unidad) || descripcion.trim() == '' || unidad.trim() == '' || cantidad.trim() == '' || precio.trim() == '' || importe.trim() == '') {
+                //   $("#i_headerError").html("valores invalidos");
+                $("#i_modalAlertError").modal("show");
+                went_fine = false;
+
+            }
+            var found_index = is_concepto_repeated(descripcion);
+            if (found_index != -1 && went_fine) {
+                went_fine = false;
+                $("#i_btnAgrupar").val(found_index);
+                $("#i_btnEliminarAnterior").val(found_index);
+                $("#i_modalConceptoRepeater").modal("show");
+
+
+
+
+
+            }
+            if (went_fine) {
+
+                // checar si es importe con iva o sin iva
+
+                if (conceptos_iva) {
+
+                    importe = parseFloat(importe) / 1.16;
+
+                    cantidad = parseFloat(cantidad);
+
+                    precio = parseFloat(precio) / 1.16;
+                } else {
+                    importe = parseFloat(importe);
+
+                    cantidad = parseFloat(cantidad);
+
+                    precio = parseFloat(precio);
+                }
+
+                porcentaje = parseFloat(porcentaje);
+                gf_subtotal += importe;
+                if (porcentaje > 0) {
+                    var descuento = gf_subtotal * (porcentaje / 100);
+
+                    gf_iva = (gf_subtotal - descuento) * 0.16;
+                    gf_total = (gf_subtotal - descuento) + gf_iva;
+
+                } else {
+
+                    gf_iva = (gf_subtotal) * 0.16;
+                    gf_total = (gf_subtotal) + gf_iva;
+                }
+
+
+
+
+                var lj_Concepto = { "noSerie": noSerie, "descripcion": descripcion, "unidad": unidad, "cantidad": cantidad, "precio_unitario": precio.toFixed(3), "importe": importe.toFixed(3) };
+                agregar_concepto(lj_Concepto);
+                ga_conceptos.push(lj_Concepto);
+                //gd_tableConceptos.append("<tr><td></td> <td>" +descripcion + "</td><td>" +unidad + "</td><td>" +cantidad.toFixed(3) + "</td><td>" +precio.toFixed(3) + "</td><td>" +importe.toFixed(3) + "</td><td><button id='btn_eliminar_concepto' class='btn btn-block btn-primary c_btnEliminarConcepto'>Eliminar</button></td></tr>");
+                update_table_conceptos();
+                gd_inputFields.val("");
+                // $("#i_tdUniad").html("<select id='i_inputUnidad' class='form-control c_input'><option>PIEZA</option><option>KILOS</option><option>LITROS</option><option>GRAMOS</option><option>N/A</option><option value='1'>Otro...</option> </select>");
+
+                updateTotals();
+
+
+
+
+            }
+
+        });
+        function eliminar_conepto(index)
+        {
+
+
+
+            // actualizar totales
+
+            gf_subtotal = gf_subtotal - ga_conceptos[index].importe;
+
+            gf_iva = gf_subtotal * 0.16;
+
+            gf_total = gf_iva + gf_subtotal;
+
+
+
+
+            ga_conceptos.splice(index, 1);
+
+            update_table_conceptos();
+            updateTotals();
+
+
+
+
+
+
+
+
+
+
+
+
+        }
+        function recalculate_totals()
+        {
+
+            gf_subtotal = 0; gf_total = 0; gf_iva = 0;
+
+            var len = ga_conceptos.length; var i = 0;
+
+            for (; i < len; i++)
+
+            {
+
+                gf_subtotal += parseFloat(ga_conceptos[i].importe);
+
+
+
+            }
+
+            gf_iva = gf_subtotal * 0.16;
+
+            gf_total = gf_iva + gf_subtotal;
+
+        }
+        function printTableRowing(row,i)
+        {
+            var out = '';
+            out += "<table class='table table-bordered'>";
+            out += "<tbody><tr>";
+            out += "<td style='font-weight: 900;'>Descripción</td>";
+            out += "<td>" + row[i].descripcion + "</td>";
+            out + "</tr>"
+
+            out += "<tr>";
+            out += "<td style='font-weight: 900;'>No.Serie</td>";
+            out += "<td>" + row[i].noSerie + "</td>";
+            out + "</tr>"
+
+            out += "<tr>";
+            out += "<td style='font-weight: 900;'>Unidad</td>";
+            out += "<td>" + row[i].unidad + "</td>";
+            out + "</tr>"
+            out += "<tr>";
+            out += "<td style='font-weight: 900;'>Cantidad</td>";
+            out += "<td>" + row[i].cantidad + "</td>";
+            out + "</tr>"
+            out += "<tr>";
+            out += "<td style='font-weight: 900;'>Precio</td>";
+            out += "<td>$" + parseFloat(row[i].precio_unitario).toFixed(3) + "</td>";
+            out + "</tr>"
+            out += "<tr>";
+            out += "<td style='font-weight: 900;'>Importe</td>";
+            out += "<td>$" + parseFloat(row[i].importe).toFixed(3) + "</td>";
+            out += "</tr>";
+            out += "<td style='font-weight: 900;'><i style='padding-top:9px;' class='fa fa-wrench' aria-hidden='true'></i></td>";
+            out += "<td><div class='btn-group-horizontal c_divOpts'> <button onclick='eliminar_conepto(" + i + ")' class='btn btn-default c_Cancel' ><i class='fa fa-trash' style='font-size:20px;' aria-hidden='true'></i></button><button class='btn btn-default  c_ajustesRowing'><i class='fa fa-cog' style='font-size:20px;' aria-hidden='true'></i></button></div><button value='" + i + "' id='i_btnRowAcceptxs' style='display: none;' class='btn btn-success'>Aceptar</button></td></tr>";
+            out += "</tbody></table>";
+            return out;
+
+
+        }
+
+        $(document).on("click", "#i_btnRowAcceptxs", function () {
+            var row = gj_rowSelected.dom;
+            var index = gj_rowSelected.index;
+            index = parseInt(index);
+
+
+
+            var inputs = row.find("input,select,textarea");
+
+            if (checkInputs_Row(inputs)) {
+                var new_descripcion = inputs[0].value;
+                var new_noSerie = inputs[1].value;
+                var new_unidad = inputs[2].value;
+                var new_cantidad = inputs[3].value;
+                var new_precio = inputs[4].value;
+                var new_importe = inputs[5].value;
+                if (conceptos_iva) {
+
+                    new_importe = parseFloat(new_importe);
+                    new_importe = new_importe / 1.16;
+                    new_precio = parseFloat(new_precio);
+                    new_precio = new_precio / 1.16;
+                }
+
+
+                //buff.push("<tr><td>" + ga_conceptos[i].descripcion + "</td><td>" + ga_conceptos[i].unidad + "</td><td>" + ga_conceptos[i].cantidad + "</td><td>$" + parseFloat(ga_conceptos[i].precio_unitario).toFixed(3) + "</td><td>$" + parseFloat(ga_conceptos[i].importe).toFixed(3) + "</td><td><div class='btn-group-horizontal c_divOpts'> <button onclick='eliminar_conepto(" + i + ")' class='btn btn-default c_Cancel' ><i class='fa fa-trash' style='font-size:20px;' aria-hidden='true'></i></button><button class='btn btn-default c_Ajustes'><i class='fa fa-cog' style='font-size:20px;' aria-hidden='true'></i></button></div><button value='" + i + "' id='i_btnRowAccept' style='display: none;' class='btn btn-success'>Aceptar</button></td></tr>");
+
+                var prev_importe = parseFloat(ga_conceptos[index].importe);
+                ga_conceptos[index].descripcion = new_descripcion;
+                ga_conceptos[index].noSerie = new_noSerie;
+                ga_conceptos[index].unidad = new_unidad;
+                ga_conceptos[index].cantidad = new_cantidad;
+                ga_conceptos[index].precio_unitario = new_precio;
+                ga_conceptos[index].importe = new_importe;
+                gf_subtotal = gf_subtotal - prev_importe;
+
+
+
+                gf_subtotal += parseFloat(new_importe)
+                if (parseFloat(porcentaje) > 0) {
+                    var descuento = parseFloat(porcentaje);
+                    var descuento = gf_subtotal * (descuento / 100);
+                    gf_iva = (gf_subtotal - descuento) * 0.16;
+                    gf_total = (gf_subtotal - descuento) + gf_iva;
+                } else {
+                    gf_iva = gf_subtotal * 0.16;
+                    gf_total = gf_subtotal + gf_iva;
+                }
+
+
+
+                updateTotals();
+                update_table_conceptos();
+                $("button").prop("disabled", false);
+            } else {
+                $("#i_modalAlertError").modal("show");
+
+
+            }
+        });
+
+
+
+        $(document).on("click", ".c_ajustesRowing", function () {
+            var ld_row = $(this).parent().parent().parent().parent();
+            //alert(ld_row.html());
+            var ld_row_elements = ld_row;
+            ld_row = ld_row.find("td");
+
+            //console.log(ld_row);
+            var btnAceptar = ld_row_elements.find("button#i_btnRowAcceptxs");
+
+            gj_rowSelected = { dom: ld_row, index: btnAceptar.val() };
+            var precio = ld_row[9].innerHTML;
+            precio = precio.slice(1, precio.length);
+            var importe = ld_row[11].innerHTML;
+            importe = importe.slice(1, importe.length);
+            var lj_prevData = {noSerie:ld_row[3].innerHTML, descripcion: ld_row[1].innerHTML, unidad: ld_row[5].innerHTML, cantidad: ld_row[7].innerHTML, precio: precio, importe: importe };
+
+            ld_row[1].innerHTML = "<textarea class='form-control c_input c_config'>" + lj_prevData.descripcion + "</textarea>";
+
+            var arr_options = [lj_prevData.unidad.trim(), "PIEZA", "KILOS", "LITROS", "GRAMOS", "N/A", "Otro.."];
+            arr_options = $.unique(arr_options); var len = arr_options.length; var i = 0;
+            //console.log(arr_options);
+            var options_formats = [];
+            for (; i < len; i++) {
+                if (arr_options[i] == "Otro..") {
+                    options_formats.push("<option value='1'>" + arr_options[i] + "</option>");
+
+                } else {
+                    options_formats.push("<option>" + arr_options[i] + "</option>");
+                }
+            }
+            ld_row[3].innerHTML = "<input id='i_selectedNoSerie' value='"+lj_prevData.noSerie+"' type='text' class='form-control c_input c_config' />";
+            ld_row[5].innerHTML = "<select value='" + lj_prevData.unidad + "' class='c_selectChange form-control c_input c_config'>"+options_formats.join("")+"</select>";
+            ld_row[7].innerHTML = "<input value='" + lj_prevData.cantidad + "' id='i_selectedCantidad' type='number' class='form-control c_input c_config' />";
+            ld_row[9].innerHTML = "<input value='" + lj_prevData.precio + "' id='i_selectedPrecio' type='number' class='form-control c_input c_config' />";
+            ld_row[11].innerHTML = "<input value='" + lj_prevData.importe + "' id='i_selectedImporte' type='number' class='form-control c_input c_config' />";
+            ld_row_elements.find(".c_divOpts").hide();
+            btnAceptar.show();
+            $("button").not("#i_btnRowAcceptxs").prop("disabled", true);
+            var ta = $("textarea.c_config");
+            var count = countLines(ta[0]);
+            ta.attr("rows", count.toString());
+
+
+
+        });
+
+        function update_table_conceptos()
+        {
+
+            var len = ga_conceptos.length; var i = 0; var buff = []; var buff2 = [];
+
+            gf_iva = parseFloat(gf_iva);
+            gf_subtotal = parseFloat(gf_subtotal);
+            gf_total = parseFloat(gf_total);
+            if (len == 0) {
+                gd_conceptosAgregadosHideShow.hide();
+            } else {
+                gd_conceptosAgregadosHideShow.show();
+
+            }
+            for (; i < len; i++) {
+
+                buff.push("<tr><td>" + ga_conceptos[i].descripcion + "</td><td>" + ga_conceptos[i].noSerie + "</td><td>" + ga_conceptos[i].unidad + "</td><td>" + ga_conceptos[i].cantidad + "</td><td>$" + parseFloat(ga_conceptos[i].precio_unitario).toFixed(3) + "</td><td>$" + parseFloat(ga_conceptos[i].importe).toFixed(3) + "</td><td><div class='btn-group-horizontal c_divOpts'> <button onclick='eliminar_conepto(" + i + ")' class='btn btn-default c_Cancel' ><i class='fa fa-trash' style='font-size:20px;' aria-hidden='true'></i></button><button class='btn btn-default c_Ajustes'><i class='fa fa-cog' style='font-size:20px;' aria-hidden='true'></i></button></div><button value='" + i + "' id='i_btnRowAccept' style='display: none;' class='btn btn-success'>Aceptar</button></td></tr>");
+                buff2.push("<div class='row'><div class='col-xs-12'> " + printTableRowing(ga_conceptos,i) + "</div></div>");
+            }
+            gd_xsRowing.html(buff2.join("<hr>"));
+            gd_tableConceptosAgregados.html( buff.join(""));
+
+
+
+        }
+
+        $("#i_inputPrecio").on("input", function () {
+
+
+            var s_precio = $(this).val();
+            var s_cantiad = $("#i_inputCantidad").val();
+            s_precio = s_precio.trim();
+            s_cantiad = s_cantiad.trim();
+            if (s_precio != "" && s_cantiad != "") {
+                var precio = parseFloat(s_precio);
+                var cantidad = parseFloat(s_cantiad);
+                var importe = precio * cantidad;
+                if (isNaN(importe)) { $("#i_inputImporte").val("*"); }
+                else { $("#i_inputImporte").val(importe.toFixed(3)); }
+
+            }
+        });
+
+
+        $("#i_inputCantidad").on("input", function () {
+
+            var s_precio = $("#i_inputPrecio").val();
+            var s_cantidad = $(this).val();
+            if (s_precio.trim() != "" && s_cantidad!="") {
+
+                var precio = parseFloat(s_precio);
+                var importe = parseFloat(s_cantidad) * precio;
+                if (isNaN(importe)) { $("#i_inputImporte").val("*"); }
+                else
+                    $("#i_inputImporte").val(importe.toFixed(3));
+            }
+        });
+
+        function update_concepto_data_xs(id) {
+            $.post("php/searchAtajoId.php", { idAtajo: id }, function (data) {
+                var concepto = JSON.parse(data);
+                concepto = concepto.result[0];
+                var inputs = gd_inputsMobile;
+
+                inputs[0].value = concepto.descripcion;
+                inputs[1].value = concepto.noSerie;
+                // inputs[1].value = concepto.medida;
+                var rows = countLines(inputs[0]);
+                $(inputs[0]).attr("rows",rows.toString());
+                inputs[4].value = concepto.precio;
+                var arr_options = [];
+                var o = $(inputs[2]).find("option");
+                o.each(function (i, e) { arr_options.push(e.innerHTML);});
+                arr_options.push(concepto.medida);
+
+                arr_options = $.unique(arr_options); var len = arr_options.length; var i = 0;
+                //console.log(arr_options);
+                var options_formats = [];
+                for (; i < len; i++) {
+
+                    options_formats.push("<option>" + arr_options[i] + "</option>");
+
+                }
+                inputs[2].innerHTML = options_formats.join("");
+                inputs[2].value = concepto.medida;
+
+
+            });
+        }
+
+        $(document).on("change", "#i_inputMedidaMobile", function () {
+            var item = this.value;
+            //  alert(item);
+            if (item == "Otro..") {
+                // $("#i_tdUniad").html("<input type='text' class='form-control c_input' id='i_inputUnidad' />");
+                $("#i_modalAgregarUnidadNueva").modal();
+
+            }
+
+        });
+
+        $(document).on("change", "#i_inputUnidad", function () {
+            var item = this.value;
+            //  alert(item);
+            if (item == "Otro..") {
+                // $("#i_tdUniad").html("<input type='text' class='form-control c_input' id='i_inputUnidad' />");
+                $("#i_modalAgregarUnidadNueva").modal();
+
+            }
+
+        });
+
+        function update_concepto_data(id)
+        {
+
+            $.post("php/searchAtajoId.php", { idAtajo: id }, function (data) {
+                var concepto = JSON.parse(data);
+                concepto = concepto.result[0];
+
+
+                gd_inputFields[1].value =concepto.descripcion;
+                gd_inputFields[5].value =concepto.precio;
+                gd_inputFields[2].value = concepto.noSerie;
+                var unidades = [];
+                var o = $(gd_inputFields[3]).find("option");
+                o.each(function (i, e) { unidades.push(e.innerHTML); });
+
+                unidades.push(concepto.medida)
+                unidades = $.unique(unidades); var buf = '';
+                var len = unidades.length; var i = 0;
+                for (; i < len; i++) {
+
+                    buf += "<option>"+unidades[i]+"</option>";
+                }
+                gd_inputFields[3].innerHTML = buf;
+                gd_inputFields[3].value = concepto.medida;
+
+
+
+
+
+            });
+
+
+        }
+
+
+
+
+
+        $("#i_selectFormaPago").on("change", function () {
+
+
+            if ($(this).prop("selectedIndex") == 2) {
+
+                $("#divFormaPago").html("<input class='c_input form-control' type='text' id='i_selectFormaPago'  />");
+
+            }
+        });
+
+        var conceptos_iva = false;
+        var gd_totales = $("#i_trTotales");
+        var gd_ret = $("#i_trRetenciones");
+
+        function hideShowMobileElements(show){
+
+            $.each(lj_mobElements,function(key,value){
+                if(show){
+                    value.show();
+                }else{value.hide();}
+            });
+        }
+        function updateTotals()
+        {
+            // alert("totals-..");
+            lf_subDescuento = 0;
+            if(parseFloat(porcentaje)>0)
+            {
+                lf_subDescuento = gf_subtotal - (gf_subtotal * porcentaje / 100);
+
+                gd_totales.html("<td>$" + gf_subtotal.toFixed(3) + "</td><td id='i_tdSubDescuento'>$" + lf_subDescuento.toFixed(3) + "</td><td>$" + gf_iva.toFixed(3) + "</td><td>$" + gf_total.toFixed(3) + "</td>");
+
+                /*$("#i_thSubDescuento").show();
+                $("#i_tdSubDescuento").show();
+                $("#i_divSubDescuento").show();*/
+                hideShowMobileElements(true);
+
+            } else {
+                gd_totales.html("<td>$" + gf_subtotal.toFixed(3) + "</td><td>$" + gf_iva.toFixed(3) + "</td><td>$" + gf_total.toFixed(3) + "</td>");
+                /*
+                $("#i_thSubDescuento").hide();
+                $("#i_tdSubDescuento").hide();
+                $("#i_divSubDescuento").hide();*/
+                hideShowMobileElements(false);
+
+
+                lf_subDescuento = gf_subtotal;
+            }
+            //var ld_tds = $("#i_divTotales td");
+
+            gf_iva = lf_subDescuento*0.16;
+
+
+
+            if(ret_iva==0 && ret_isr==0)
+            {
+                $("#i_rowRetenciones").hide();
+            } else {
+                $("#i_rowRetenciones").show();
+                var subtotal_descuento = gf_subtotal-(gf_subtotal*porcentaje/100);
+                var isr = parseFloat(ret_isr) * (subtotal_descuento * (g_ntasaISR / 100));
+
+                var iva_retenido =parseFloat(ret_iva)* gf_iva * (2 / 3);
+
+                gf_total = subtotal_descuento + gf_iva - iva_retenido - isr;
+                gf_iva = subtotal_descuento*0.16;
+                if(parseFloat(porcentaje)>0){
+                    gd_totales.html("<td>$" + gf_subtotal.toFixed(3) + "</td><td id='i_tdSubDescuento'>$" + lf_subDescuento.toFixed(3) + "</td><td>$" + gf_iva.toFixed(3) + "</td><td>$" + gf_total.toFixed(3) + "</td>");
+
+                    /*$("#i_thSubDescuento").show();
+                    $("#i_tdSubDescuento").show();
+                    $("#i_divSubDescuento").show();*/
+                    hideShowMobileElements(true);
+
+                }else{
+                    gd_totales.html("<td>$" + gf_subtotal.toFixed(3) + "</td><td>$" + gf_iva.toFixed(3) + "</td><td>$" + gf_total.toFixed(3) + "</td>");
+                    /* $("#i_thSubDescuento").hide();
+                    $("#i_tdSubDescuento").hide();
+                    $("#i_divSubDescuento").hide();
+                    */
+                    hideShowMobileElements(false);
+
+                }
+                gd_ret.html("<tr><td>$"+iva_retenido.toFixed(3)+"</td><td>$"+isr.toFixed(3)+"</td></tr>")
+
+
+
+
+            }
+
+            ld_tds[0].innerHTML = "$" + gf_subtotal.toFixed(3);
+            ld_tds[1].innerHTML="$"+lf_subDescuento.toFixed(3);
+            ld_tds[2].innerHTML="$"+gf_iva.toFixed(3);
+            ld_tds[3].innerHTML="$"+gf_total.toFixed(3);
+
+
+        }
+        $(".c_updateInputs").on("input", function () {
+
+            var id = $(this).attr("id");
+            if (id == "i_inputCantidadMob") {
+                var cantidad = this.value;
+                var precio = $("#i_inputPrecioMob").val();
+                if (precio.trim() != ""&& cantidad!="" ) {
+
+                    if (!isNaN(precio)&&!isNaN(cantidad)) {
+                        precio = parseFloat(precio);
+                        cantidad = parseFloat(cantidad);
+
+                        var importe = cantidad * precio;
+                        $("#i_inputImporteMob").val(importe.toFixed(3));
+                    }
+                }
+            }
+            if (id == "i_inputPrecioMob") {
+                var precio = this.value;
+                var cantidad = $("#i_inputCantidadMob").val();
+                if (precio.trim() != "" && cantidad != "") {
+
+                    if (!isNaN(precio) && !isNaN(cantidad)) {
+                        precio = parseFloat(precio);
+                        cantidad = parseFloat(cantidad);
+
+                        var importe = cantidad * precio;
+                        $("#i_inputImporteMob").val(importe.toFixed(3));
+                    }
+                }
+            }
+
+
+
+        });
+        function checkInputsMobile(rowInputs,rowNumbers){
+            var len = rowInputs.length; var i = 0;
+            for (; i < len; i++) {
+                if (rowInputs[i].value.trim() == "") {
+                    return false;
+                }
+            }
+            len = rowNumbers.length; i = 0;
+            for (; i < len; i++) {
+                if (isNaN(rowNumbers[i].value)) {
+                    return false;
+                } else {
+                    var n = parseFloat(rowNumbers[i].value);
+                    if (n <= 0) {
+                        return false;
+                    }
+                }
+            }
+
+
+            return true;
+        }
+        function get_lugaresExpedicion(){
+            $.post("php/getExpedicion.php",function(data){
+                try{
+
+                    var lj_lugares = JSON.parse(data);
+                    lj_lugares = lj_lugares.result;
+                    var len=lj_lugares.length;var i = 0;var buff =[];
+                    for(;i<len;i++){
+                        buff.push("<option value='"+lj_lugares[i].idexpedicion+"'>"+lj_lugares[i].domicilio+"</option>");
+                    }
+                    $("#i_selectLugares").html(buff.join(""));
+
+
+
+
+                }catch(err){
+
+                }
+            });
+        }
+        var gd_xsRowing = null;
+        var gd_conceptosAgregadosHideShow = null;
+        var gd_inputsMobile = null;
+        var  gd_trAtajos_mobile = null;
+        $(document).on("input", "#i_mobileAdd .bs-searchbox input", function () {
+            var element = $(this);
+            //    $(".table-responsive").animate({ scrollTop: $(document).height() }, 1000);
+
+            $.post("php/atajosPicker.php", { query: element.val() }, function (data) {
+                try {
+                    var lj_results = JSON.parse(data);
+
+                    var len = lj_results.result.length; var i = 0; var buf = [];
+
+                    //     buf.push("<select id='i_select' class='form-control c_input'>");
+
+                    for (; i < len; i++) {
+
+                        buf.push("<option value='" + lj_results.result[i].idatajo + "'>" + lj_results.result[i].descripcion.slice(0, 25) + "...</option>");
+
+
+
+                    }
+
+
+
+                    //   buf.push("</select>");
+
+
+
+
+                    //if (len == 1) {
+                    update_concepto_data_xs(lj_results.result[0].idatajo);
+
+
+
+                    gd_trAtajos_mobile.html(buf.join("")).selectpicker('refresh');
+
+                    gd_trAtajos_mobile.show();
+
+
+                } catch (err) {
+
+                }
+            });
+
+
+        });
+
+
+        function countLines(theArea) {
+            var theLines = theArea.value.replace((new RegExp(".{" + theArea.cols + "}", "g")), "\n").split("\n");
+            if (theLines[theLines.length - 1] == "") theLines.length--;
+            return theLines.length;
+        }
+
+        $(document).on("input", "textarea.c_config,textarea.c_mobileInps", function () {
+
+            var count = countLines(this);
+            $(this).attr("rows", count.toString());
+        });
+
+        var lj_mobElements = null;
+        ld_tds = null;
+        var gd_xsRowing = null;
+
+        $(document).ready(function () {
+
+            $("#i_modalFacturarPost").on('show.bs.modal', function () {
+                //alert('The modal is about to be shown.');
+                setTimeout(function(){$("body").addClass("modal-open");},500);
+            });
+            $("#i_modalFacturarPost").on('hidden.bs.modal', function () {
+                
+                //alert("saliendo de esta chingadera");
+                setTimeout(function(){$("body").removeClass("modal-open");},150);
+            });
+
+           
+           
+            ld_tds = $("#i_divTotales td");
+            gd_xsRowing = $("#i_xsRowing");
+
+
+            lj_mobElements = {"a":$("#i_thSubDescuento"),"b": $("#i_tdSubDescuento"),"c": $("#i_divSubDescuento")};
+
+            gd_xsRowing = $("#i_xsRowing");
+            gd_inputsMobile = $(".c_mobileInps");
+            gd_trAtajos_mobile =$("#i_trinputAtajosMobile");
+            gd_conceptosAgregadosHideShow = $("#i_tableConceptosAgregadosHideShow");
+
+            $("#i_btnRedirect").hide();
+            $("#i_divNoCuenta").hide();
+            $("#i_divPredial").hide();
+            gd_trAtajos.hide();
+            $("#i_divSubDescuento").hide();
+            $("#i_thSubDescuento").hide();
+            $("#i_tdSubDescuento").hide();
+            $(".alert").hide();
+            get_lugaresExpedicion();
+            //inicializacion
+
+
+            gd_enviarCorreosConfirmacion = $("#i_enviarCorreosConfirmacion");
+
+            gd_modalEnvioCorreo = $("#i_modalEnvioCorreo");
+
+            gd_botonAceptar = $("#i_botonAceptar");
+
+            gd_botonCancelar = $("#i_botonCancelar");
+
+            gd_botonTerminar = $("#i_botonTerminar");
+
+            gd_enviarCorreosExito = $("#i_enviarCorreosExito");
+
+            gd_enviarCorreosFallido = $("#i_enviarCorreosFallido");
+
+            gd_tableCorreosDefault = $("#i_tableCorreosDefault");
+
+            ga_mensajeExtra = [];
+
+            gd_modalCambiarMensaje = $("#i_modalCambiarMensaje");
+
+            gd_botonPlantillaMail = $("#i_btnAceptarPlantillaMail");
+
+            gd_inputCorreoMsg = $("#i_inputCorreoMsg");
+
+            gd_inputCorreoAsunto = $("#i_inputAsunto");
+
+            gd_contentModalEnviarCorreo = $("#i_contentModalEnviarCorreo");
+
+            gd_cubitoWaiting = $("#i_cubitoWaiting");
+
+            gd_botonModalEnviar = $("#i_botonModalEnviar");
+
+            gd_botonModalCancelar = $("#i_botonModalCancelar");
+
+            gd_botonModalTerminar = $("#i_botonModalTerminar");
+
+            gd_timbrarContent = $("#i_timbrarContent");
+
+            gd_cubitoWaitingTimbrar = $("#i_cubitoWaitingTimbrar");
+
+            //
+
+
+            var gn_idCliente = "<?php echo $_POST['id'];  ?>";
+            gn_folioFactura = "<?php  echo $_POST['folio']; ?>";
+            $.post("php/retencionesPendiente.php",{folio:gn_folioFactura}, function (data) {
+                try{
+
+                    var lj_ret = JSON.parse(data);
+                    // console.log(lj_ret);
+
+                    var tipo_factura = lj_ret.tipo;
+                    if (tipo_factura == '0') {
+                        ret_iva = 0;
+                        ret_isr = 0;
+                        g_ntasaISR = 0;
+                    } if (tipo_factura == '1') {
+
+                        ret_iva = lj_ret.retencion_IVA;
+                        ret_isr = lj_ret.retener_ISR;
+                        g_ntasaISR = lj_ret.retencion_ISR;
+                        $("#i_divPredial").show();
+
+                    }
+                    if (tipo_factura == '2') {
+                        ret_iva = lj_ret.retencion_IVA;
+                        ret_isr = lj_ret.retener_ISR;
+                        g_ntasaISR = lj_ret.retencion_ISR;
+                        //  $("#i_divPredial").show();
+                        $("#i_divPredial").hide();
+                    }
+                    $("#i_tasaRet").html("Retencion de ISR (" + g_ntasaISR+"%)");
+                }catch(err){
+                    console.log("Hubo un error al obtener las retencines");
+                }
+            });
+
+
+            $.post("php/getRetencionFactura.php", function (data) {
+
+                var lj_retenciones = JSON.parse(data);
+                lj_retenciones = lj_retenciones.result[0];
+
+
+                if (lj_retenciones.conceptos_iva == "1") {
+                    conceptos_iva = true;
+
+
+                }
+
+                if (lj_retenciones.retencion_IVA == "1") {
+                    $("#i_retenerIVA").prop("checked", true);
+                    $("#retenerIVA").val("1");
+
+                } else {
+                    $("#i_retenerIVA").prop("checked", false);
+                    $("#retenerIVA").val("0");
+
+                }
+                if (lj_retenciones.retener_ISR == "1") {
+                    $("#i_retenerISR").prop("checked", true);
+                    $("#retenerISR").val("1");
+                } else {
+                    $("#i_retenerISR").prop("checked", false);
+                    $("#retenerISR").val("0");
+
+                }
+
+
+
+            });
+            $.post("php/getClient.php", { id: gn_idCliente }, function (data) {
+                var obj = JSON.parse(data);
+                obj = obj.result[0];
+                var domicilio = obj.calle + " " + obj.noExterior + " " + obj.noInterior + " " + obj.colonia + " " + obj.municipio + " " + obj.estado;
+                var table_html = "<tr><td>" + obj.RFC + "</td><td>" + obj.email + "</td><td>" + domicilio + "</td><td>" + obj.telefono + "</td></tr>";
+                $("#i_tableCliente").html(table_html);
+                $("#i_nombreCliente").html(obj.nombre);
+
+            });
+            var folio ="<?php echo $_POST['folio']; ?>";
+            gn_folioFactura = folio;
+            $.post("php/getFacturaPendiente.php",{folio:folio,idCliente:gn_idCliente},function(data){
+                //   alert(data);
+                try{
+                    var lj_data = JSON.parse(data);
+                    var lj_datosConceptos = lj_data.result0;
+                    var lj_facturaParams = lj_data.result1[0];
+                    //  console.log(lj_facturaParams);
+                    //  console.log(lj_facturaParams);
+                    var ld_inputs = $(".c_facturaParams");
+                    //   console.log(lj_facturaParams);
+                    ld_inputs[1].value=lj_facturaParams.metodo_pago;
+                    ld_inputs[2].value=lj_facturaParams.forma_pago;
+                    ld_inputs[4].value=lj_facturaParams.descuento;
+                    if(lj_facturaParams.descuento.trim()!="")
+                        porcentaje = parseFloat(lj_facturaParams.descuento);
+
+
+                    var len = lj_datosConceptos.length;var i = 0;gf_subtotal=0;
+                    for(;i<len;i++){
+                        var lj_Concepto = {"noSerie":lj_datosConceptos[i].noSerie, id_concepto:lj_datosConceptos[i].id_concepto ,"descripcion": lj_datosConceptos[i].descripcion, "unidad": lj_datosConceptos[i].unidad, "cantidad": lj_datosConceptos[i].cantidad, "precio_unitario": lj_datosConceptos[i].precio_unitario, "importe": lj_datosConceptos[i].importe };
+                        gf_subtotal+= parseFloat(lj_datosConceptos[i].importe);
+                        ga_conceptos.push(lj_Concepto);
+
+                    }   update_table_conceptos();
+                    if(parseFloat(lj_facturaParams.descuento)>0){
+                        $("#i_btnDescuento").trigger("click");
+                    }
+
+                    // gf_subtotal = subtotal;
+                    gf_iva = gf_subtotal * 0.16;
+                    gf_total = gf_subtotal + gf_iva;
+                    updateTotals();
+
+                }catch(err){
+                    updateTotals();
+                }
+            });
+
+
+
+
+
+
+
+
+
+        });
+
+
+
+
+
+
+
+
+        $("#i_inputAtajos").keydown(function (e) {
+
+            if (e.keyCode == 40) {
+
+                var ld_inputAtajos =  $("#i_trinputAtajos");
+
+                var lj_inputAtajos = ld_inputAtajos[0];
+
+                var ln_index = lj_inputAtajos.selectedIndex;
+
+                ln_index++;
+
+                if (ln_index == ld_inputAtajos.children().length)
+
+                    ln_index = 0;
+
+
+
+                lj_inputAtajos.selectedIndex = ln_index;
+
+
+
+
+
+
+
+
+
+            }
+            if(e.keyCode==38)
+            {
+
+                var ld_inputAtajos = $("#i_trinputAtajos");
+
+                var lj_inputAtajos = ld_inputAtajos[0];
+
+                var ln_index = lj_inputAtajos.selectedIndex;
+
+                ln_index--;
+
+                if (ln_index < 0)
+
+                    ln_index = ld_inputAtajos.children().length-1;
+
+
+
+                lj_inputAtajos.selectedIndex = ln_index;
+
+
+
+
+
+
+
+
+
+
+
+
+
+            }
+
+        });
+
+        //
+        function modalDeConfirmacion() {
+            gn_idCliente = "<?php echo $_POST['id'];  ?>";
+
+            var ld_inputsParams = $(".c_facturaParams");
+            if(ld_inputsParams[0].value==""|| ld_inputsParams[1].value==""|| ld_inputsParams[2].value=="")
+            {
+                $("#i_modalErrorFactura").modal();
+            }else{
+                // $("#i_GuardarFactura").trigger("click");
+                var ld_params =$(".c_facturaParams");
+
+                var metodo_pago =ld_params[1].value;
+                var forma_pago = ld_params[2].value;
+                var descuento = porcentaje;
+                var lj_facturaParams = {metodo_pago:metodo_pago,forma_pago:forma_pago,descuento:descuento};
+
+
+                timbrar(parseInt(gn_idCliente), parseInt(gn_folioFactura));
+                
+            }
+
+
+        }
+
+
+        function redirect_user()
+        {
+            location.href="opcionesTimbrado.html?id="+gn_idCliente+"&folio="+gn_folioFactura;
+
+        }
+
+
+
+
+        function timbrar(Id, Folio) {
+            gn_folioFactura = Folio;
+            var NoCuenta = $("#i_checkeCuenta").val();
+            var predial =$("#i_inputPredial").val();
+            var modal_preview = $("#modalPreview");
+            modal_preview.modal("show");
+            var id_sucursal =$("#i_selectLugares").val();
+            gn_folioFactura = Folio;
+            var a = {noCuenta:NoCuenta,predial:predial ,ID: Id, FOLIO: Folio, EXPEDICION:id_sucursal };
+            $.post("Facturacion/TimbrarFactura.php", a, function (data, status) {
+                //   console.log(data);
+                try{
+                    modal_preview.modal("hide");
+                    var a_tmp = data.split(";");
+                    $("#i_modalFacturarPost").modal("show");
+                    //$("body").addClass("modal-open");
+
+                    if(a_tmp[0]=='1'){
+                        $("#i_respuesta").html(a_tmp[1]);
+                        $("#i_successTimbrado").show();
+                        $("#i_failTimbrado").hide();
+                        $("#btn_timbrar").remove();
+                        $("#headerTimbrar").html("La factura ya se ha timbrado¡");
+                        ga_conceptos= [];
+                        gf_iva = 0;gf_subtotal = 0;gf_total = 0;
+                        update_table_conceptos();
+                        $("#i_menuModificar").remove();
+                        $("#i_menuEnviar").remove();
+                        $("#i_menuEliminar").remove();
+                        $("#i_btnRedirect").show();
+
+
+
+
+                    }
+                    if(a_tmp[0]=='0'){
+                        $("#i_respuesta").html(a_tmp[1]);
+                        $("#i_failTimbrado").show();
+                        $("#i_successTimbrado").hide();
+
+                    }
+                }catch(err){
+                    $("#i_respuesta").html("Hubo un error inesperado al timbrar");
+                    $("#i_failTimbrado").show();
+                    $("#i_successTimbrado").hide();
+                }
+
+
+            });
+
+
+
+
+
+
+
+        }
+
+        //Funciones Timbrar
+
+
+
+        //Funciones Enviar
+
+        function agregar_correo() {
+
+            var ld_Tabla = $("#i_tableCorreosDefault");
+
+            var ls_correoNuevo = $("#i_inputCorreoNuevo").val();
+
+            if (parseInt(ls_correoNuevo.length) < parseInt(1)){
+
+                $("#i_modalNoCorreos").modal("show");
+
+                return;
+
+            }
+
+            else if (ls_correoNuevo.indexOf("@") < 0 && ls_correoNuevo.indexOf(".") < 0) {
+
+                $("#i_modalCorreoMalIngresado").modal("show");
+
+                return;
+
+            }
+
+            //MODIFICACIONES
+
+            if (parseInt(ld_Tabla.children().size()) === 0) {
+
+                ld_Tabla.prepend('<tr><td id="i_inputCorreo_0"><div>' + ls_correoNuevo + '</div></td><td> <button class="btn btn-default c_Accept" id="i_btnAgregarMensajeCorreo_0" onclick="agregar_mensaje(this)"><i class="fa fa-envelope" style = "font-size:23px;" aria-hidden="true"></i></button> <button class="btn btn-default c_Cancel" style = "margin-left:5%;" id="i_btnEliminarCorreo_0" onclick="eliminar_correo(this)"><i class="fa fa-trash" style = "font-size:23px;" aria-hidden="true"></i></button></td></tr>');
+
+                return;
+
+            }
+
+            var ld_ultimoBoton = $("#i_tableCorreosDefault tr:first").find("button:last");
+
+            var ln_nuevoId = parseInt(ld_ultimoBoton.attr("id")[ld_ultimoBoton.attr("id").length - 1]) + 1;
+
+            ld_Tabla.prepend('<tr><td id="i_inputCorreo_' + ln_nuevoId + '"><div>' + ls_correoNuevo + '</div></td><td><button class="btn btn-default c_Accept" id="i_btnAgregarMensajeCorreo_' + ln_nuevoId + '" onclick="agregar_mensaje(this)"><i class="fa fa-envelope" style = "font-size:23px;" aria-hidden="true"></i></button>  <button class="btn btn-default c_Cancel" style = "margin-left:5%;" id="i_btnEliminarCorreo_' + ln_nuevoId + '" onclick="eliminar_correo(this)"><i class="fa fa-trash" style = "font-size: 23px;" aria-hidden="true"></i></button></td></tr>');
+
+            //MODIFICACIONES
+
+        }
+
+
+
+        function eliminar_correo(me) {
+
+            var ls_id = me.id;
+
+            $("#" + ls_id).parent().parent().remove();
+
+
+
+            var la_id = ls_id.split("_");
+
+            var ln_id = la_id[la_id.length - 1];
+
+            delete ga_mensajeExtra[ln_id]
+
+        }
+
+
+
+        function enviar_correos() {
+
+            gd_botonModalEnviar.show();
+
+            gd_botonModalCancelar.show();
+
+            gd_botonModalTerminar.hide();
+
+            gd_cubitoWaiting.hide();
+
+            if (gd_tableCorreosDefault.children().size() === 0) {
+
+                $("#i_modalNoCorreos").modal("show");
+
+                return;
+
+            }
+
+
+
+            var correos = [];
+
+            var children = gd_tableCorreosDefault.children();
+
+            children.each(function () {
+
+                correos.push($(this).find("div").text());
+
+            });
+
+
+
+            var i = 0;
+
+            var size = correos.length;
+
+
+
+            var html = [];
+
+
+
+            html.push('<div class="table-responsive">' +
+
+               '<table class="table">' +
+
+                        '<thead>' +
+
+                                 '<tr>' +
+
+                                     '<td>Correo</td>' +
+
+                                     '<td>Status</td>' +
+
+                                 '</tr>' +
+
+                             '</thead>' +
+
+               '<tbody>');
+
+
+
+            for (i; i < size; i++)
+
+            {
+
+                html.push('<tr id = "Correo_' + i + '">' +
+
+                                    '<td>' + correos[i] + '</td>' +
+
+                                    '<td><i class="fa fa-question-circle" style = "font-size: 25px;" ></i></td>' +
+
+                           '</tr>');
+
+            }
+
+
+
+            html.push('</tbody>' +
+
+                         '</table>' +
+
+                        '</div>');
+
+
+
+            html = html.join("");
+
+            gd_enviarCorreosConfirmacion.empty();
+
+            gd_enviarCorreosConfirmacion.append(html);
+
+            gd_modalEnvioCorreo.modal("show");
+
+            gd_botonAceptar.show();
+
+            gd_botonCancelar.show();
+
+            gd_botonTerminar.hide();
+
+            gd_enviarCorreosExito.hide();
+
+            gd_enviarCorreosFallido.hide();
+
+            gd_enviarCorreosConfirmacion.show();
+
+
+
+        }
+
+
+
+        function enviar() {
+
+            var correos = [];
+
+            var children = gd_tableCorreosDefault.children();
+
+            children.each(function () {
+
+                var correo_id = [];
+
+                correo_id.push($(this).find("div").text());
+
+                correo_id.push($(this).find("p").text());
+
+
+
+
+
+                var la_id = $(this).find("td").attr("id").split("_");
+
+
+
+                var ln_id = la_id[parseInt(la_id.length) - 1];
+
+
+
+                if (ga_mensajeExtra[ln_id] === undefined) {
+
+                    correo_id.push("");
+
+                    correo_id.push("");
+
+                }
+
+                else {
+
+                    correo_id.push(ga_mensajeExtra[ln_id][0]);
+
+                    correo_id.push(ga_mensajeExtra[ln_id][1]);
+
+                }
+
+                correos.push(correo_id);
+
+            });
+
+
+
+            var folio = $("#i_divFolio").text();
+
+            var id = $("#i_divId").text(); //0: Pendiente 1: Timbrada 2: Cancelada
+
+
+
+            gd_contentModalEnviarCorreo.hide(500);
+
+            gd_cubitoWaiting.show(500);
+
+            $("#i_h3ModalMessageEnvioCorreo").text("Correos:");
+
+            $.post("php/enviarCorreosJAGS.php", { CORREOS: '{"Correos":' + JSON.stringify(correos) + '}', FOLIO: folio, ID: id, UITYPE: 0 }, function (data, status) {
+
+
+
+                var ls_dataarr = data.split("????");
+
+                var la_respuestaCorreos = JSON.parse(ls_dataarr[parseInt(ls_dataarr.length) - parseInt(1)]);
+
+                var i = 0;
+
+                var children = $("#i_enviarCorreosConfirmacion").children().children();
+
+                children.each(function () {
+
+                    var ld_symbol = $(this).find("i");
+
+                    ld_symbol.removeClass("fa fa-question-circle");
+
+
+
+                    if (parseInt(la_respuestaCorreos.Correos[i][1]) < parseInt(0)) {
+
+                        ld_symbol.addClass("fa fa-times-circle");
+
+                        ld_symbol.css("color", "red");
+
+                    }
+
+
+
+                    else {
+
+                        ld_symbol.addClass("fa fa-check-circle");
+
+                        ld_symbol.css("color", "rgb(76, 175, 80)");
+
+                    }
+
+                    i++;
+
+                });
+
+                gd_contentModalEnviarCorreo.show(500);
+
+                gd_cubitoWaiting.hide(500);
+
+
+
+                gd_botonModalEnviar.hide();
+
+                gd_botonModalCancelar.hide();
+
+                gd_botonModalTerminar.show();
+
+            });
+
+        }
+
+
+
+        function cargarCorreosDefault(idcliente) {
+
+            $("#i_tableCorreosDefault").load("php/cargarCorreosDefault.php", {ID: idcliente });
+
+        }
+
+
+
+        function agregar_mensaje(message)
+
+        {
+
+
+            gd_inputCorreoAsunto.val("");
+
+            gd_inputCorreoMsg.load("php/getMSJPenditeCorreo.php");
+
+            var la_agregarMsjId = $(message).attr("id").split("_");
+
+            var ln_id = parseInt(la_agregarMsjId[parseInt(la_agregarMsjId.length) - 1]);
+
+
+
+            gd_botonPlantillaMail.attr("value", ln_id);
+
+            gd_modalCambiarMensaje.modal("show");
+
+
+
+        }
+
+        function mensaje()
+
+        {
+
+            var la_asuntoMensaje = [];
+
+            var ln_correoMsgId = parseInt(gd_botonPlantillaMail.attr("value"));
+
+
+
+            la_asuntoMensaje.push(gd_inputCorreoAsunto.val());
+
+            la_asuntoMensaje.push(gd_inputCorreoMsg.val());
+
+
+
+            ga_mensajeExtra[ln_correoMsgId.toString()] = la_asuntoMensaje;
+
+
+
+            gd_modalCambiarMensaje.modal("hide");
+
+        }
+
+        //Funciones Enviar
+
+
+    </script>
+</body>
+
+</html> 
+
+

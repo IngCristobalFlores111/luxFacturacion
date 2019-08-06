@@ -1,0 +1,2978 @@
+﻿<!--Desarrollado por Luxline Solutions-->
+
+
+<html lang="en">
+    
+<head>  <!--HEAD-->
+    <title>Configuracion de Usuario</title>
+    
+    <!--MetaArea-->
+    <meta charset="utf-8"> <!--Caracteres Codificados-->
+    <meta name="viewport" content="width=device-width, initial-scale=1"> <!--Para Dispositivos Moviles habilita touch-zoom etc-->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <!--/MetaArea-->
+    
+    <!--CSS-->
+   
+    <link href="css/bootstrap.min.css" rel="stylesheet"><!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="css/style.css" type="text/css" />
+    <link rel="stylesheet" href="font-awesome/css/font-awesome.min.css">
+    <link rel="icon" href="img/luxline1.ico" type="image/x-icon">
+    
+   <!--/CSS-->
+
+    <style>
+        select option {
+            /*background-color: rgba(255,255,255,0.25);*/
+            border-color: rgba(0,0,0,0.25);
+            color: black;
+        }
+    </style>
+   
+
+
+
+</head> 
+
+<body> 
+<div id = "i_modalBlur">
+
+<nav class="navbar navbar-default">
+  <div class="container-fluid">
+    <div class = "row visible-xs ">
+      <img src="img/luxline.png" style = "height:8%;" id = "i_navBarLogo" alt="lux_logo">
+    </div>
+    <div class="navbar-header" style = "margin:1%;">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span> 
+      </button>
+      <img src="img/luxline.png" class = "visible-md visible-lg visible-sm" id = "i_navBarLogo" alt="lux_logo">
+    </div>
+    <div class="collapse navbar-collapse" id="myNavbar">
+        <ul class="nav navbar-nav" style = "margin:1%;" >
+      <li><a href="#"> Facturar</a></li>
+      <li><a href="#">Folios</a></li>
+      <li><a href="#">Ajustes</a></li>
+    </ul>
+        <ul class="nav navbar-nav navbar-right">
+      <li data-toggle= "modal"  data-target="#i_modalOpcionesUsuario"><a href="#"><span class="fa fa-user" style = "font-size:20px;" aria-hidden="true"></span></a></li>
+      <li data-toggle= "modal"  data-target="#i_modalCerrarSesion"><a href="#"><span class="fa fa-sign-out" style = "font-size:20px;" aria-hidden="true"></span></a></li>
+    </ul>
+    </div>
+  </div>
+</nav>
+
+ <div class = "container" id = "i_content"> 
+     
+     <ul class="nav nav-pills visible-lg visible-md visible-sm">
+
+         <li class="active"><a data-toggle="pill" href="#i_infoFiscal">Información Fiscal</a></li>
+
+         <li><a onclick="getConfigInfo()" data-toggle="pill" href="#i_confTimbrado">Configuración de timbrado</a></li>
+
+         <li><a onclick="loadEmailConfigInfo()" data-toggle="pill" href="#i_confEmail">Configuración de Email</a></li>
+         <li class="c_divUsers"><a   data-toggle="pill" href="#i_usersConfig">Configuración de Usuarios</a></li>
+
+     </ul> <!-- visible lg-md-sm -->
+     <ul class="nav nav-pills visible-xs">
+
+         <li class="active"><a data-toggle="pill" href="#i_infoFiscal">Info Fisc</a></li>
+
+         <li><a onclick="getConfigInfo()" data-toggle="pill" href="#i_confTimbrado">C. de Timb</a></li>
+
+         <li><a onclick="loadEmailConfigInfo()" data-toggle="pill" href="#i_confEmail">C. de Correo</a></li>
+         <li class="c_divUsers"><a data-toggle="pill" href="#i_usersConfig">C. Usuarios</a></li>
+
+     </ul> <!-- visible xs -->
+     
+     <div class="tab-content">
+
+         <div id="i_infoFiscal" class="tab-pane fade in active">
+ 
+          <h3 id="i_nombreUsuario" style = "margin-bottom : 4%;">Julian Alvarez Camarena</h3>
+        
+        <h4 style = "margin-bottom : 2%;">Información Basica</h4>
+        <hr>
+            
+
+            <div class="row c_inputForm">
+
+                <div class="col-sm-6">
+
+                    <label for="inputRFC">RFC</label>
+
+                    <input   id="inputRFC" type="text" class="form-control c_input" />
+
+                </div>
+
+                <div class="col-sm-6">
+
+                    <label for="inputTelefono">Telefono</label>
+
+                    <input class="form-control c_input" id="inputTelefono" type="text" />
+
+                </div>
+
+            </div>
+
+            <div class="row c_inputForm">
+
+                <div class="col-sm-6">
+
+                    <label for="inputCelular">Celular</label>
+
+                    <input id="inputCelular" type="text" class="form-control c_input" />
+
+                </div>
+
+                <div class="col-sm-6">
+
+                    <label for="inputEmail">Email</label>
+
+                    <input class="form-control c_input" id="inputEmail" type="text" />
+
+                </div>
+
+            </div>
+
+        <h4 style = "margin-bottom : 2%;">Domicilio Fiscal</h4>
+        <hr>
+            
+            <div class="row c_inputForm">
+
+                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+
+                    <label for="inputCalle">Calle</label>
+
+                    <input id="inputCalle" class="form-control c_input" type="text" />
+
+                </div>
+
+                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+
+                    <label for="inputColonia">Colonia</label>
+
+                    <input id="inputColonia" class="form-control c_input" type="text" />
+
+                </div>
+
+
+
+            </div>
+            
+            <div class="row c_inputForm">
+            
+              <div class = "col-lg-4 col-md-4 col-sm-4 col-xs-12">
+              
+                    <label for="inputCp">C.P</label>
+
+                    <input id="inputCp" class="form-control c_input" type="text"/> 
+              </div>
+                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-6">
+
+                    <label for="inputNoExt">No. Ext</label>
+
+                    <input id="inputNoExt" class="form-control c_input" type="text" />
+                </div> 
+                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-6">
+
+                    <label for="inputInt">No. Int</label>
+
+                    <input id="inputInt" class="form-control c_input" type="text" />
+                </div>  
+            </div>
+
+
+            <div class="row c_inputForm">
+
+             
+                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+
+                    <label for="inputLocalidad">Localidad</label>
+
+                    <input type="text" class="form-control c_input" id="inputLocalidad" />
+
+
+
+                </div>
+
+                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+
+                    <label for="inputMunicipio">Municipio</label>
+
+                    <input type="text" class="form-control c_input" id="inputMunicipio" />
+
+
+
+
+
+                </div>
+                
+                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+
+                    <label for="inputEstado">Estado</label>
+
+                    <input class="form-control c_input" id="inputEstado" type="text" />
+
+                </div>
+
+
+
+            </div>
+
+            <div class="row c_inputForm">
+
+
+
+                <div class="col-xs-6" style="padding-top:1%;">
+
+                    <button id="i_btnAceptar" class="btn btn-block c_Accept" >Aceptar</button>
+
+
+                </div>
+                
+                <div class="col-xs-6" style="padding-top:1%;">
+                
+                <button  id="i_btnUnDo" class="btn c_Undo btn-block" data-toggle="modal" data-target = "#i_modalDeshaceriNFO">Deshacer</button>
+
+                </div>
+
+            </div>        
+   
+            
+         </div> <!--i_infoFiscal -->
+
+         <div id="i_confTimbrado" class="tab-pane fade">
+
+             <div class = "c_marginTitle">
+                <h3 style = "display:inline;">Lugar de Expedición</h3><i style = "display:inline; margin-left:inherit;" class="fa fa-question-circle fa-2x contacticon" data-toggle="modal"  data-target = "#i_modalLugardeExpedicion"></i>
+              </div>
+             <hr>
+            
+              <div class="row c_marginElement">
+
+                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+
+                    <label for="inputCalle2">Calle</label>
+
+                    <input id="inputCalle2" class="form-control c_input" type="text" />
+
+                </div>
+
+                  <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+
+                      <label for="inputColonia2">Colonia</label>
+
+                      <input id="inputColonia2" class="form-control c_input" type="text" />
+
+                  </div>
+
+
+
+            </div>
+            
+              <div class="row c_marginElement">
+            
+              <div class = "col-sm-4 col-xs-6">
+              
+                    <label for="inputCP2">C.P</label>
+
+                    <input id="inputCP2" class="form-control c_input" type="text"/> 
+              </div>
+              <div class = "col-sm-4 col-xs-3">
+              
+                    <label for="inputExt2">No. Ext</label>
+
+                    <input id="inputExt2" class="form-control c_input" type="text"/> 
+              </div> 
+              <div class = "col-sm-4 col-xs-3">
+              
+                    <label for="inputInt2">No. Int</label>
+
+                    <input id="inputInt2" class="form-control c_input" type="text"/> 
+              </div>  
+            </div>
+
+              <div class="row c_marginElement">
+
+             
+                <div class="col-sm-4 col-xs-4">
+
+                    <label for="inputLocalidad2">Localidad</label>
+
+                    <input type="text" class="form-control c_input" id="inputLocalidad2" />
+
+
+
+                </div>
+
+                <div class="col-sm-4 col-xs-4">
+
+                    <label for="inputMunicipio2">Municipio</label>
+
+                    <input type="text" class="form-control c_input" id="inputMunicipio2" />
+
+
+
+
+
+                </div>
+                
+                <div class="col-sm-4 col-xs-4">
+
+                    <label for="inputEstado2">Estado</label>
+
+                    <input class="form-control c_input" id="inputEstado2"  type="text"/>
+
+                </div>
+
+
+
+            </div>
+
+              <div class="row c_marginElement">
+
+
+
+                <div class="col-lg-4 col-md-4 col-sm-6 col-xs-6" style="padding-top:1%;">
+
+                    <button id="i_btnAceptar2" class="btn btn-block c_Accept" data-toggle="modal"  data-target = "#i_modarAgregarLugardeExpedicion"></span>Agregar Sucursal</button>
+                   
+
+                </div>
+                
+                
+                  <div class="col-lg-4 col-md-4 col-sm-6 col-xs-6" style="padding-top:1%;">
+
+                      <button id="i_btnUnDo2" class="btn c_Undo btn-block c_Ajustes">Deshacer</button>
+
+                  </div>
+                
+                  <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12" style="padding-top:1%;">
+
+                      <button id="i_actualizarExpedicion" class="btn c_Undo btn-block c_AcceptModal" data-toggle="modal" data-target="#i_modalActualizarSucursal">Actualizar</button>
+
+                  </div>
+
+            </div>
+            
+              <div class="row c_marginElement">
+
+                 <div class="table-responsive">
+
+                     <table class="table table-bordered">
+
+                         <thead>
+
+                             <tr>
+
+                                 
+
+                                 <th class="col-xs-1">Actuales Sucursales</th>
+
+                                 <th class="col-xs-1">Opciones</th>
+
+                             </tr>
+
+                         </thead>
+
+                         <tbody id="i_tableLugares">
+
+                            
+                            
+
+
+
+                         </tbody>
+
+
+
+                     </table>
+
+
+                 </div>
+
+
+             </div>
+             <div class="c_marginTitle">
+                 <h3 style="display:inline;">Tipo de Factura</h3><i style="display:inline; margin-left:inherit;" class="fa fa-question-circle fa-2x contacticon" data-toggle="modal" data-target="#i_modalTipos"></i>
+             </div> <!-- /Titulo Retencion de Impuestos -->
+             <hr>
+             <div class="row c_marginElement">
+                 <div class="col-xs-12">
+                     <label class="radio-inline"><input class="c_configFact" type="radio" value="0" name="optradio">Productos</label>
+                     <label class="radio-inline"><input class ="c_configFact" type="radio" value="1" name="optradio">Arrendamiento</label>
+                     <label class="radio-inline"><input class ="c_configFact" type="radio" value="2" name="optradio">Honorarios</label>
+                     <button class="c_Accept btn btn-default c_noPriv" data-toggle="modal" data-target="#i_modTipos">Aceptar</button>
+
+                 </div>
+               
+             </div>
+
+                 <div class="c_marginTitle">
+                     <h3 style="display:inline;">Retención de Impuestos</h3><i style="display:inline; margin-left:inherit;" class="fa fa-question-circle fa-2x contacticon" data-toggle="modal" data-target="#i_modalRetenciondeImpuestos"></i>
+                 </div> <!-- /Titulo Retencion de Impuestos -->
+                 <hr>
+                 <div class="row c_marginElement">
+                     <div class="col-xs-12">
+                         <div class="checkbox">
+                             <h4><input class="c_configFact" id="i_chckISR" type="checkbox">Retener ISR</h4>
+                         </div>
+
+                     </div>
+
+                 </div>
+
+                 <div class="row c_marginElement">
+
+                     <div class="table-responsive">
+
+                         <table class="table table-bordered">
+
+                             <thead>
+
+                                 <tr>
+
+                                     <th class="col-xs-1"></th>
+
+                                     <th class="col-xs-1">IVA</th>
+
+                                     <th class="col-xs-1">ISR(%)</th>
+
+                                     <th class="col-xs-1"></th>
+
+                                 </tr>
+
+                             </thead>
+
+                             <tbody>
+
+                                 <tr>
+
+                                     <td>Tasa %</td>
+
+                                     <td><input type="checkbox" class="c_input form-control c_configFact" id="i_inputIVA" /></td>
+
+                                     <td>
+                                         <select class="form-control c_input c_configFact" id="i_inputISR">
+                                             <option>10</option>
+                                             <option>4.9</option>
+                                             <option>15</option>
+                                             <option>21</option>
+                                             <option>30</option>
+                                         </select>
+                                     </td>
+
+                                     <td><button id="i_btnActualizarTasas" class="btn btn-block c_Accept c_noPriv" data-toggle="modal" data-target="#i_modalAceptarRetencion">Aceptar</button>  </td>
+
+                                 </tr>
+
+                             </tbody>
+
+
+
+                         </table>
+
+
+                     </div>
+
+
+                 </div>
+
+                 <div class="c_marginTitle">
+                     <h3 style="display:inline;">Archivos de Autentificación de Timbrado</h3><i style="display:inline; margin-left:inherit;" class="fa fa-question-circle fa-2x contacticon" data-toggle="modal" data-target="#i_modalArchivos"></i>
+
+                 </div>
+                 <hr>
+
+                 <div class="row">
+
+                     <div class="col-sm-6">
+
+                         <div class="well c_background">
+
+                             <label id="i_labelKey" for="i_fileKey">Archivo .key</label>
+                             <form target="_blank" id="i_formKey" action="php/upload.php" method="post" enctype="multipart/form-data">
+                                 <input accept=".key" name="fileToUpload" type="file" id="i_fileKey" />
+                                 <input hidden type="text" value="key" name="tipo" />
+                             </form>
+                             <button id="i_btnkeyAccept" type="button" class="btn btn-default c_Accept c_noPriv" style="margin-top:4%;">Aceptar</button>
+
+                         </div>
+
+                     </div>
+
+                     <div class="col-sm-6">
+
+                         <div class="well c_background">
+
+                             <label id="i_labelCer" for="i_fileCer">Archivo .cer</label>
+                             <form target="_blank" id="i_formCer" action="php/upload.php" method="post" enctype="multipart/form-data">
+
+                                 <input accept=".cer" name="fileToUpload" type="file" id="i_fileCer" />
+                                 <input hidden type="text" value="cer" name="tipo" />
+                             </form>
+                             <button id="i_btnAcceptCer" type="button" class="btn btn-default c_Accept c_noPriv" style="margin-top:4%;">Aceptar</button>
+
+                         </div>
+
+                     </div>
+
+
+                 </div>
+
+             </div><!--i_confTimbrado -->
+           
+         <div id="i_confEmail" class="tab-pane fade">
+
+             <div class = "c_marginTitle">
+                <h3 style = "display:inline;">Correos Enviados Por Default</h3><i style = "display:inline; margin-left:inherit;" class="fa fa-question-circle fa-2x contacticon" data-toggle="modal"  data-target = "#i_modalCorreosDefault"></i>
+              </div>
+             <hr>
+
+             <div class="row">
+
+                
+
+                 <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+
+
+                     <div class="table-responsive table-responsiveCorreo">
+
+                         <table class="table table-bordered">
+
+                             <thead><tr><th>
+
+                                             <input placeholder="Correo Electrónico" type="text" id="i_inputSumarCorreo" class="form-control c_input" />
+                                    </th>
+                                    <th>
+                                            <button class="btn btn-block" id="i_btnSumarCorreo"><i class="fa fa-plus" style = "font-size:20px;" aria-hidden="true"></i></span></button> 
+
+                                  </th></tr></thead>
+
+                             <tbody id="i_tableCorreosDefault">
+
+
+
+                             </tbody>
+
+
+
+                         </table>
+
+                     </div><!-- table-responsive -->
+                     
+                     <button type="button" class="btn btn-default c_Accept" data-toggle="modal" data-target = "#i_modalGuardarCorreos">Guardar</button>
+                     
+                     
+                     
+
+                 </div>
+
+                 <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+
+                     <label for="i_inputEmail">Email</label>
+
+                     <input type="text" id="i_inputEmail" class="form-control c_input" />
+
+                     <label for="i_pass">Contraseña</label>
+
+                     <input type="password" id="i_pass" class="form-control c_input" />
+
+                     <label>Mostrar Contraseña</label>
+
+                     <input type="checkbox" id="i_checkPass" />
+                     
+                     <button type="button" class="btn btn-default c_modalDismiss c_Accept" data-toggle="modal" data-target = "#i_modalActualizarCorreo">Guardar</button>
+
+                 </div>
+
+
+
+             </div>
+
+            
+             <ul class="nav nav-pills">
+
+                 <li class="active"><a data-toggle="tab"  href="#i_seccionTimbrada">Timbrada</a></li>
+
+                 <li><a data-toggle="tab"  href="#i_seccionCancelada">Cancelada</a></li>
+
+                 <li><a data-toggle="tab"  href="#i_seccionPendiente">Pendiente</a></li>
+                 <li><i style="display:inline; margin-left:inherit;" class="fa fa-question-circle fa-2x contacticon" data-toggle="modal" data-target="#i_modalMensajes"></i></li>
+
+
+             </ul>
+
+             <div class="tab-content">
+
+                 <div id="i_seccionTimbrada" class="tab-pane fade in active">
+
+                    <h3>Factura Timbrada</h3>
+                    <hr>
+
+                     <div class="row c_marginElement">
+
+                         <div class="col-xs-12">
+
+                             <textarea id="i_taTimbradas" rows="3" class="form-control c_input"></textarea>
+                             
+                         </div>
+                         
+                    </div>
+                    
+                     <div class="row">
+
+                         <div class="col-xs-6 ">
+
+                             <button class="btn btn-primary btn-block c_Accept" data-toggle="modal"  data-target = "#i_modalActualizar"> Actualizar </button>
+                            
+                         </div>
+                        
+                         <div class="col-xs-6">
+
+                             <button class="btn btn-primary btn-block c_Undo" data-toggle="modal" data-target = "#i_modalDeshacer"> Deshacer </button>
+           
+                         </div>
+
+              </div> 
+
+                         </div> <!--/i_seccionTimbrada -->  
+
+                <div id="i_seccionCancelada" class="tab-pane fade">
+
+                     <h3>Factura Cancelada</h3>
+                    <hr>
+
+                    
+                    <div class="row c_marginElement">
+
+                         <div class="col-xs-12">
+
+                             <textarea id="i_taCancelada" rows="3" class="form-control c_input"> </textarea>
+                             
+                         </div>
+                    </div>
+                    
+                     <div class="row">
+
+                         <div class="col-xs-6 ">
+
+                             <button class="btn btn-primary btn-block c_Accept" data-toggle="modal"  data-target = "#i_modalActualizar"> Actualizar </button>
+                            
+                         </div>
+                        
+                         <div class="col-xs-6">
+
+                             <button class="btn btn-primary btn-block c_Undo"  onclick="$('#i_modalDeshacer').modal('show');"> Deshacer </button>
+           
+                         </div>
+                         
+                      </div>
+
+                 </div><!--/i_seccionCancelada -->
+
+                 <div id="i_seccionPendiente" class="tab-pane fade">
+
+                     <h3>Factura Pendiente</h3>
+                     <hr>
+
+    
+                     <div class="row c_marginElement">
+
+                         <div class="col-xs-12">
+
+                             <textarea id="i_taPendiente" rows="3" class="form-control c_input"></textarea>
+                             
+                         </div>
+                    </div>
+                    
+                     <div class="row">
+
+                         <div class="col-xs-6 ">
+
+                             <button class="btn btn-primary btn-block c_Accept" data-toggle="modal"  data-target = "#i_modalActualizar"> Actualizar </button>
+                            
+                         </div>
+                        
+                         <div class="col-xs-6">
+
+                             <button class="btn btn-primary btn-block c_Undo" data-toggle="modal" data-target = "#i_modalDeshacer" > Deshacer </button>
+           
+                         </div>
+                         
+                      </div>
+
+
+
+                 </div><!--/i_seccionCancelada -->
+
+             </div><!-- tab-content-->
+
+
+         </div><!--i_confEmail -->
+         <div id="i_usersConfig" class="tab-pane fade">
+             <div class="c_marginTitle">
+                 <h3 style="display:inline;">Configuración de Usuarios</h3><i style="display:inline; margin-left:inherit;" class="fa fa-question-circle fa-2x contacticon" data-toggle="modal" data-target="#i_modalUsersInfo"></i>
+             </div>
+            
+             <div class="row">
+                 <div class="col-xs-12">
+                     <button id="i_btnAgregarUsuario" class="btn btn-block c_Accept">Agregar Usuario</button>
+                 </div>
+             </div>
+             <div style="padding-top:22px;" class="row c_marginElement">
+                 <div class="table-responsive">
+                     <table class="table table-bordered">
+                         <thead>
+                             <tr>
+                                 <th>Nombre</th>
+                                 <th>Email</th>
+                                 <th>Privilegios</th>
+                                 <th>Opciones</th>
+                             </tr>
+                         </thead>
+                         <tbody id="i_tableUsuarios">
+
+                         </tbody>
+
+                     </table>
+
+                 </div>
+
+             </div>
+
+                
+
+
+             </div>
+
+         </div> <!--/tab-content -->
+
+
+     </div> <!--/Container--> 
+ 
+</div> <!-- /i_modalBlur --> 
+
+<!--ModalLoader -->
+<div class="modal fade" id="i_modalLoader" role="dialog">
+        
+    
+     <div class="sk-cube-grid">
+      <div class="sk-cube sk-cube1"></div>
+      <div class="sk-cube sk-cube2"></div>
+      <div class="sk-cube sk-cube3"></div>
+      <div class="sk-cube sk-cube4"></div>
+      <div class="sk-cube sk-cube5"></div>
+      <div class="sk-cube sk-cube6"></div>
+      <div class="sk-cube sk-cube7"></div>
+      <div class="sk-cube sk-cube8"></div>
+      <div class="sk-cube sk-cube9"></div>
+     </div>
+ 
+    
+</div><!--/ModalLoader -->
+    <div class="modal fade" id="i_modalUsersInfo" role="dialog">
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-6 col-sm-offset-3 text-center modal-box">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    <h2>Configuración de Usuarios</h2>
+                   <p>Aquí se pueden modificar los usuarios</p>
+                    <p>Asi como dar de alta usuarios nuevos</p>
+                    <h4>Privilegios</h4>
+                    <p>0 = No puede cambiar la configuración de la factura</p>
+                    <p>1 = Solo pude cambiar la configuración de la factura</p>
+                    <p>2 = Puede cambiar la configuración de la factura además de la información fiscal del emisor de facturas</p>
+                    <button type="button" class="btn btn-default c_modalDismiss c_Accept" data-dismiss="modal">Aceptar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+<!--ModalMessageRetenciondeImpuestos -->
+<div class="modal fade" id="i_modalRetenciondeImpuestos" role="dialog">
+           <div class="container">
+             <div class="row">
+              <div class="col-sm-6 col-sm-offset-3 text-center modal-box">
+              <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                  <h2>Retencion de Impuestos</h2>
+                  <p>Aqui se configura la cantidad de IVA e ISR que se retiene en cada factura</p>
+                 <p>Esta opción se puede habilitar o deshabilitar al momento de ingresar conceptos</p>
+                  <button type="button" class="btn btn-default c_modalDismiss c_Accept" data-dismiss="modal">Aceptar</button>
+             </div>
+            </div>
+           </div>
+        </div><!--/ModalMessageEnviadosPorDefault -->
+
+<!--ModalMessageAceptar i_modalDeshaceriNFO -->
+    <div class="modal fade" id="i_modalDeshaceriNFO" role="dialog">
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-6 col-sm-offset-3 text-center modal-box">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    <h3 class="h3Modal">¿Esta seguro que desea dehacer los cambios?</h3>
+                    <button onclick="location.reload();" type="button" class="btn btn-default c_AcceptModal c_modalDismiss" autofocus>Aceptar</button>
+                    <button type="button" class="btn btn-default c_Cancel c_modalDismiss" autofocus data-dismiss="modal">Cancelar</button>
+
+                </div>
+            </div>
+        </div>
+    </div>
+<div class="modal fade" id="i_modalAceptarRetencion" role="dialog">
+           <div class="container">
+             <div class="row">
+              <div class="col-sm-6 col-sm-offset-3 text-center modal-box">
+              <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                  
+                  <h3 id="i_headerRetencion" class = "h3Modal">¿Esta seguro que desea guardar los siguientes cambios?</h3>
+                  <div  id="i_alertGuardarRetencion" class="alert alert-success">
+                      <i class="fa fa-3x fa-check-circle" style="display:block;" aria-hidden="true"></i>
+                      <strong style="display:block;">Se ha agregado correctamente</strong>
+                  </div>
+                  <button id="i_btnAceptarRetencion" type="button" class="btn btn-default c_AcceptModal c_modalDismiss" autofocus>Aceptar</button>
+                  <button type="button" class="btn btn-default c_Cancel c_modalDismiss" autofocus data-dismiss="modal">Cancelar</button>
+                  
+             </div>
+            </div>
+           </div>
+        </div><!--/ModalMessageAceptar -->
+        
+<!--ModalMessageAgregarLugardeExpedición -->
+<div class="modal fade" id="i_modarAgregarLugardeExpedicion" role="dialog">
+           <div class="container">
+             <div class="row">
+              <div class="col-sm-6 col-sm-offset-3 text-center modal-box">
+              <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                  
+                  <h3 id="headerGuardarSuc" class = "h3Modal">¿Esta seguro que desea guardar el siguiente lugar de expedición?</h3>
+                  <label id="i_labelInfoGuardar"></label>
+                  <div class="alert alert-danger">
+                                 
+                                 <i class="fa fa-3x fa-times-circle" style = "display:block;" aria-hidden="true"></i>
+                                 <strong style = "display:block;" >No se ha agregado</strong>
+                    </div>
+                  <div id="i_alertGuardadoSuc" class="alert alert-success">
+                                 <i class="fa fa-3x fa-check-circle" style = "display:block;" aria-hidden="true"></i>
+                                 <strong style = "display:block;" >Se ha agregado correctamente</strong>
+                    </div>
+                
+                  <button id="i_btnguardarSuc" type="button" class="btn btn-default c_AcceptModal c_modalDismiss" autofocus>Aceptar</button>
+                  <button type="button" class="btn btn-default c_Cancel c_modalDismiss" autofocus data-dismiss="modal">Cancelar</button>
+                  
+             </div>
+            </div>
+           </div>
+        </div><!--/ModalMessageAceptar -->
+
+
+    <div class="modal fade" id="i_modalTipos" role="dialog">
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-6 col-sm-offset-3 text-center modal-box">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                   
+                    <h3>Tipos de Facturas</h3>
+                    <p>Aqui se definen que tipo de factura se afectuará</p>
+                    <p>Esta para establecer si se retenerá IVA o ISR</p>
+                    <button type="button" class="btn btn-default c_AcceptModal c_modalDismiss" autofocus data-dismiss="modal">Aceptar</button>
+
+                </div>
+            </div>
+        </div>
+    </div><!--/ModalMessageCorreosDefault data-dismiss="modal" -->
+
+<!--ModalMessageCorreosDefault -->
+<div class="modal fade" id="i_modalCorreosDefault" role="dialog">
+           <div class="container">
+             <div class="row">
+              <div class="col-sm-6 col-sm-offset-3 text-center modal-box">
+              <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                  <h2>Correos por Default</h2>
+                  <p>Aquí se asignan los correos por default</p>
+                  <p>Cada vez que se envian correos, se envian correos por default</p>
+                  <p>Los cuales no es necesario escibirlos cada vez que se vayan a enviar correos</p>
+                  <button type="button" class="btn btn-default c_AcceptModal c_modalDismiss" autofocus data-dismiss="modal">Aceptar</button>
+                  
+             </div>
+            </div>
+           </div>
+        </div><!--/ModalMessageCorreosDefault data-dismiss="modal" -->
+
+<!--ModalMessageAceptarSubir data-toggle="modal"  data-target = "#i_modal" -->
+<div class="modal fade" id="i_modalAceptarSubir" role="dialog">
+           <div class="container">
+             <div class="row">
+              <div class="col-sm-6 col-sm-offset-3 text-center modal-box">
+              <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                  <h3 id="i_headerSubirArchivo">¿Esta seguro que desea subir el siguiente archivo?</h3>
+                  <div id="i_alertSubirArchivo" class="alert alert-success">
+                      <i class="fa fa-3x fa-check-circle" style="display:block;" aria-hidden="true"></i>
+                      <strong style="display:block;">Se ha subido archivo exitosamente</strong>
+                  </div>
+                  <button id="i_btnSubirArchivo" type="button" class="btn btn-default c_modalDismiss c_Accept">Aceptar</button>
+                  
+                  
+             </div>
+            </div>
+           </div>
+        </div><!--/ModalMessageAceptarSubir -->
+
+<!--ModalMessageDeshacer data-toggle="modal"  data-target = "#i_modalDeshacer" -->
+    <div class="modal fade" id="i_modalDeshacer" role="dialog">
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-6 col-sm-offset-3 text-center modal-box">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    <h3>¿Esta seguro que desea deshacer los cambios realizados?</h3>
+                  
+                    <button id="i_btnUnDoEmail" type="button" class="btn btn-default c_AcceptModal c_modalDismiss" data-dismiss="modal" autofocus>Aceptar</button>
+                    <button type="button" class="btn btn-default c_Cancel c_modalDismiss" autofocus data-dismiss="modal">Cancelar</button>
+
+
+                </div>
+            </div>
+        </div>
+    </div><!--/ModalMessageDeshacer -->
+
+
+<div class="modal fade" id="i_modalActualizar1" role="dialog">
+           <div class="container">
+             <div class="row">
+              <div class="col-sm-6 col-sm-offset-3 text-center modal-box">
+              <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                  <h3 id="i_headerActualizar1">¿Esta seguro que desea deshacer los cambios realizados?</h3>
+                  <strong id="i_respuestaActualizar1"></strong>
+                  <div id="i_alertActualizar1" class="alert alert-success">
+                      <i class="fa fa-3x fa-check-circle" style="display:block;" aria-hidden="true"></i>
+                      <strong style="display:block;">Se ha agregado correctamente</strong>
+                  </div>
+                  <button id="i_btnActualizar1" type="button" class="btn btn-default c_AcceptModal c_modalDismiss" autofocus >Aceptar</button>
+                  <button type="button" class="btn btn-default c_Cancel c_modalDismiss" autofocus data-dismiss="modal">Cancelar</button>
+                  
+                  
+             </div>
+            </div>
+           </div>
+        </div><!--/ModalMessageDeshacer -->
+
+<!--ModalMessageActualizar data-toggle="modal"  data-target = "#i_modalActualizar" -->
+<div class="modal fade" id="i_modalActualizar" role="dialog">
+           <div class="container">
+             <div class="row">
+              <div class="col-sm-6 col-sm-offset-3 text-center modal-box">
+              <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                  <h3 id="i_headerMSJ">El siguiente mensaje se mostrara en todos los correos a menos que usted especifique lo contrario cuando genere un folio.</h3>
+                  <h3 id="i_headerinfoMSJ">¿Esta seguro que desea deshacer los cambios realizados?</h3>
+                  <div id="i_alertActualizarMSJUsuario" class="alert alert-success">
+                      <i class="fa fa-3x fa-check-circle" style="display:block;" aria-hidden="true"></i>
+                      <strong style="display:block;">Se ha actualizado correctamente</strong>
+                  </div>
+                  
+                  <button id="i_btnActualizarMSJ" type="button" class="btn btn-default c_AcceptModal c_modalDismiss">Aceptar</button>
+                  <button type="button" class="btn btn-default c_Cancel c_modalDismiss" autofocus data-dismiss="modal">Cancelar</button>
+                  
+                  
+             </div>
+            </div>
+           </div>
+        </div><!--/ModalMessageActualizar -->
+
+<!--ModalMessageActualizarCorreo data-toggle="modal"  data-target = "#i_modalActualizarCorreo" -->
+<div class="modal fade" id="i_modalActualizarCorreo" role="dialog">
+           <div class="container">
+             <div class="row">
+              <div class="col-sm-6 col-sm-offset-3 text-center modal-box">
+              <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                  <h3>¿Esta seguro que desea cambiar el correo por default para enviar a tus clientes?</h3>
+                  <div id="i_alertActualizarMailUsuario" class="alert alert-success">
+                      <i class="fa fa-3x fa-check-circle" style="display:block;" aria-hidden="true"></i>
+                      <strong style="display:block;">Se ha actualizado correctamente</strong>
+                  </div>
+                  
+                   <button id="i_btnActualizarMail" type="button" class="btn btn-default c_AcceptModal c_modalDismiss">Aceptar</button>
+                  <button type="button" class="btn btn-default c_Cancel c_modalDismiss" autofocus data-dismiss="modal">Cancelar</button>
+                  
+                  
+             </div>
+            </div>
+           </div>
+        </div><!--/ModalMessageActualizarCorreo -->
+
+<!--ModalCerrarSesion-->
+<div class="modal fade" id="i_modalCerrarSesion" role="dialog">
+           <div class="container">
+             <div class="row">
+              <div class="col-sm-6 col-sm-offset-3 text-center modal-box">
+              <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                  <h3 class = "h3Modal">¿Esta seguro que desea cerrar sesión?</h3>
+                  
+                    <button type="button" class="btn  c_modalDismiss c_AcceptModal" data-dismiss="modal" id="signout-button" autofocus>Aceptar</button>
+                    <button type="button" class="btn  c_modalDismiss c_Cancel" data-dismiss="modal">Cancelar</button>
+                  
+             </div>
+            </div>
+           </div>
+        </div><!--/ModalCerrarSesion -->
+
+<!--ModalOpcionesUsuario-->
+<div class="modal fade" id="i_modalOpcionesUsuario" role="dialog">
+           <div class="container">
+             <div class="row">
+              <div class="col-sm-6 col-sm-offset-3 text-center modal-box">
+              <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                  <h3 class = "h3Modal">Introduzca su contraseña personalizada para acceder</h3>
+                   
+                   <form role="form">
+                   <div class="form-group">
+                     <label for="pwd">Contraseña</label>
+                     <input type="password" class="form-control c_input" id="pwd">
+                     <label style = "margin: 3%;">Mostrar Contraseña</label>
+
+                     <input type="checkbox" id="i_checkPass" />
+                   </div>
+                   </form>
+                  
+                  
+                  
+                    <button type="button" class="btn  c_modalDismiss c_AcceptModal" data-dismiss="modal" autofocus>Acceder</button>
+                    <button type="button" class="btn  c_modalDismiss c_Cancel" data-dismiss="modal">Regresar</button>
+                  
+             </div>
+            </div>
+           </div>
+        </div><!--/ModalOpcionesUsuario-->
+        
+<!--ModalGuardarCorreos-->
+<div class="modal fade" id="i_modalGuardarCorreos" role="dialog">
+           <div class="container">
+             <div class="row">
+              <div class="col-sm-6 col-sm-offset-3 text-center modal-box">
+              <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                  <h3 class = "h3Modal">¿Seguro que desea guardar estos correos para enviar por default? </h3>
+                  
+                  
+                    <button id="i_btnGuardarCorreos" type="button" class="btn  c_modalDismiss c_AcceptModal" data-dismiss="modal" autofocus>Aceptar</button>
+                    <button type="button" class="btn  c_modalDismiss c_Cancel" data-dismiss="modal">Cancelar</button>
+                  
+             </div>
+            </div>
+           </div>
+        </div><!--/ModalGuardarCorreos-->
+
+<!--ModalLugardeExpedicion-->
+<div class="modal fade" id="i_modalLugardeExpedicion" role="dialog">
+           <div class="container">
+             <div class="row">
+              <div class="col-sm-6 col-sm-offset-3 text-center modal-box">
+              <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                   <h2>Lugar de Expedición</h2>
+                   <p>Aqui podemos agregar, editar, y eliminar lugares donde se puede expedir una factura.</p>
+                  
+                  
+                    <button type="button" class="btn  c_modalDismiss c_AcceptModal" data-dismiss="modal" autofocus>Aceptar</button>
+                    <button type="button" class="btn  c_modalDismiss c_Cancel" data-dismiss="modal">Cancelar</button>
+                  
+             </div>
+            </div>
+           </div>
+        </div><!--/ModalLugardeExpedicion-->
+
+    <div class="modal fade" id="i_modalMensajes" role="dialog">
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-6 col-sm-offset-3 text-center modal-box">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    <h2>Mensajes por default</h2>
+                    <p>Ingresa *nombre para rellenar nombre del clinete</p>
+                    <p>Ingresa *rfc para rellenar RFC del cliente</p>
+                    <p>Ingresa *monto para rellenar el monto total de la factura</p>
+                    <p>Ingresa *fecha para rellenar la fecha de timbrado</p>
+                    <p>Ingresa *minombre para rellenar su nombre</p>
+                    <p>Ingresa *mirfc para rellenar su RFC</p>
+                    <p>Ingresa *uuid para rellenar el uuid de la factura en cuestión</p>
+                    <button type="button" class="btn  c_modalDismiss c_AcceptModal" data-dismiss="modal" autofocus>Aceptar</button>
+                    <button type="button" class="btn  c_modalDismiss c_Cancel" data-dismiss="modal">Cancelar</button>
+
+                </div>
+            </div>
+        </div>
+    </div><!--/ModalLugardeExpedicion-->
+
+
+    <div class="modal fade" id="i_modalArchivos" role="dialog">
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-6 col-sm-offset-3 text-center modal-box">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    <h2>Establecer archivos de autentificación</h2>
+                    <p>Aqui puedes subir tus archivos .cer y .key </p>
+                    <p>Proporcionados por el SAT para que puedas emitir</p>
+                    <p>facturas electrónicas</p>
+                    <button type="button" class="btn  c_modalDismiss c_AcceptModal" data-dismiss="modal" autofocus>Aceptar</button>
+                    <button type="button" class="btn  c_modalDismiss c_Cancel" data-dismiss="modal">Cancelar</button>
+
+                </div>
+            </div>
+        </div>
+    </div><!--/ModalLugardeExpedicion-->
+        
+<!--ModalMessageEliminarSucursal-->
+<div class="modal fade" id="i_modalEliminarSucursal" role="dialog">
+           <div class="container">
+             <div class="row">
+              <div class="col-sm-6 col-sm-offset-3 text-center modal-box">
+              <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                  <h3 id = "i_headerEliminarSuc">¿Seguro que desea eliminar la sucursal?</h3>
+                  <p id="i_pInfoEliminarSuc">No podrá utilizar la siguiente sucursal en futuras facturas.</p>
+                  <button id="i_btnOkEliminarSuc" type="button" class="btn btn-default c_AcceptModal c_modalDismiss" autofocus>Aceptar</button>
+                  <button type="button" class="btn btn-default c_Cancel c_modalDismiss" autofocus data-dismiss="modal">Cancelar</button>
+                  
+                  
+             </div>
+            </div>
+           </div>
+        </div><!--/ModalMessageEliminarSucursal -->
+        
+<!--ModalActualizarSucursal-->
+    <!--ModalMessageEliminarSucursal-->
+    <div class="modal fade" id="i_modTipos" role="dialog">
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-6 col-sm-offset-3 text-center modal-box">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                   
+                    <h3>¿Seguro que desea cambiar el tipo de factura?</h3>
+                    <button id="i_btnTipoFactura" type="button" class="btn  c_modalDismiss c_AcceptModal" autofocus>Aceptar</button>
+
+                    <button type="button" class="btn btn-default c_Cancel c_modalDismiss" autofocus data-dismiss="modal">Cancelar</button>
+
+
+                </div>
+            </div>
+        </div>
+    </div><!--/ModalMessageEliminarSucursal -->
+
+    <div class="modal fade" id="i_modalEliminarUsuario" role="dialog">
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-6 col-sm-offset-3 text-center modal-box">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+
+                    <h3>¿Seguro que desea eliminar este usuario?</h3>
+                    <p>Este usuario ya no podrá usar el sistema</p>
+                    <button id="i_btnGoEliminarUsuario" type="button" class="btn  c_modalDismiss c_AcceptModal" autofocus>Aceptar</button>
+
+                    <button type="button" class="btn btn-default c_Cancel c_modalDismiss" autofocus data-dismiss="modal">Cancelar</button>
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="modal fade" id="i_modalActualizarUsuarioData" role="dialog">
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-6 col-sm-offset-3 text-center modal-box">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+
+                    <h3 id="i_headerActualizarUsuario">¿Seguro que desea Actualizar la información de este usuario?</h3>
+                    <div id="i_pAtualizarUsuario">Los cambios se ven reflejados inmediatamente en el sistema</div>
+                    <div id="i_alertActualizarUsuario" class="alert alert-success">
+                        <i class="fa fa-3x fa-check-circle" style="display:block;" aria-hidden="true"></i>
+                        <strong style="display:block;">Se ha actualizado el usuario exitosamente</strong>
+                    </div>
+                    
+                    <button id="i_btnGoActualizar" type="button" class="btn  c_modalDismiss c_AcceptModal" autofocus>Aceptar</button>
+
+                    <button type="button" class="btn btn-default c_Cancel c_modalDismiss" autofocus data-dismiss="modal">Cancelar</button>
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="i_modalAgregarUsuario" role="dialog">
+        <div class="container">
+            <div class="row" id="i_cubitoWaitingAgregarUsuario">
+                <div class="col-xs-12">
+                    <div class="sk-cube-grid">
+                        <div class="sk-cube sk-cube1"></div>
+                        <div class="sk-cube sk-cube2"></div>
+                        <div class="sk-cube sk-cube3"></div>
+                        <div class="sk-cube sk-cube4"></div>
+                        <div class="sk-cube sk-cube5"></div>
+                        <div class="sk-cube sk-cube6"></div>
+                        <div class="sk-cube sk-cube7"></div>
+                        <div class="sk-cube sk-cube8"></div>
+                        <div class="sk-cube sk-cube9"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="row" id="i_contentContainerAgregarUsuario">
+                <div class="col-sm-6 col-sm-offset-3 text-center modal-box">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+
+                    <img class="img-circle c_imgAddUser" id="i_imgAgregarUsuario"  src="" />
+                    <h3 id="i_headerAgregarUsuario" style="font-weight:bolder;">Agregar Usuario</h3>
+                    <div class="c_infocontainer" id="i_pAgregarUsuario">
+                        
+                    </div>
+                    <h4 id="i_footerAgregarUsuario" hidden>Asegurese que los datos anteriores son correctos antes de continuar</h4>
+
+                    <button id="i_btnGoAgregar" type="button" class="btn  c_modalDismiss c_AcceptModal" autofocus>Continuar</button>
+                    <button id="i_btnGoContinuar" type="button" class="btn  c_modalDismiss c_AcceptModal" hidden>Continuar</button>
+                    <button id="i_btnGoCancelar" type="button" class="btn btn-default c_Cancel c_modalDismiss" autofocus data-dismiss="modal">Cancelar</button>
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+<div class="modal fade" id="i_modalActualizarSucursal" role="dialog">
+           <div class="container">
+             <div class="row">
+              <div class="col-sm-6 col-sm-offset-3 text-center modal-box">
+              <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                   <h3 id = "i_headerActualizarSuc">¿Esta seguro que desea actualizar el siguiente lugar de expedición? </h3>
+                   <label id="i_labelFail"></label>
+                   <div id="i_alertNoActualizar" class="alert alert-danger">
+                                 
+                                 <i class="fa fa-3x fa-times-circle" style = "display:block;" aria-hidden="true"></i>
+                                 <strong style = "display:block;" >No se pudo actualizar</strong>
+                    </div>
+                  <div id="i_alertActualizarSuc" class="alert alert-success">
+                                 <i class="fa fa-3x fa-check-circle" style = "display:block;" aria-hidden="true"></i>
+                                 <strong style = "display:block;" >Se ha actualizado correctamente</strong>
+                    </div>
+                   
+                    <button id="i_btnActualizarLugar" type="button" class="btn  c_modalDismiss c_AcceptModal"  autofocus>Aceptar</button>
+                    <button type="button" class="btn  c_modalDismiss c_Cancel" data-dismiss="modal">Cancelar</button>
+                  
+             </div>
+            </div>
+           </div>
+        </div><!--/ModalActualizarSucursal-->
+        
+
+
+    <!-- jQuery -->
+    <script src="js/jquery.js"></script>
+
+    <!-- Bootstrap Core JavaScript -->
+    <script src="js/bootstrap.min.js"></script> 
+    
+    <!--/JS-->
+    <!--Google+ api-->
+    <script src="https://apis.google.com/js/api.js?onload=handleClientLoad"></script>
+    <!--Google+ api-->
+    <!--ApiLogIn-->
+
+    <script>
+        var ApiLogIn = function (btnSingIn, btnSignOut, msgContainer,phpLogin) {
+            //var test = 10; private variable
+            //var method = function(){} private method
+            //this.test = 10; public variable
+            //this.method = function(){} public method
+            var self = this;
+            var m_auth2 = null; // The Sign-In object.
+            var m_btnSignIn = btnSingIn;
+            var m_btnSignOut = btnSignOut;
+            var m_message = msgContainer;
+            var m_apiKey = 'accesssecurity-140019';
+            var m_clientId = "1043488027097-f77grlc3h5cli90m6c0b4urra6jmcakn.apps.googleusercontent.com";
+            var m_phpLogin = phpLogin;
+            // Enter one or more authorization scopes. Refer to the documentation for
+            // the API or https://developers.google.com/identity/protocols/googlescopes
+            // for details.
+            var m_scopes = 'profile https://www.googleapis.com/auth/userinfo.profile';
+            var m_cookie_policy = 'single_host_origin';
+
+
+            this.signIn = function () {
+                m_auth2.signIn();
+            }
+
+            this.logOut = function () {
+                var User = m_auth2.currentUser.get();
+                var l_RO = User.getAuthResponse();
+                var access_token = l_RO.access_token;
+
+                var location = (parseInt(screen.availWidth) / 2) - 290;
+                var revokeUrl = window.open('https://accounts.google.com/Logout', "Logout", "left=" + location + ",top=10 width=580,height=800");
+                revokeUrl.focus();
+                setTimeout(function () {
+                    revokeUrl.close();
+                }, 500);
+            }
+
+            var updateSigninStatus = function (isSignedIn) { //Callback function
+                if (isSignedIn) {
+                    //*****************googleUser**************
+                    //A GoogleUser object represents one user account.
+                    var User = m_auth2.currentUser.get()
+                    var profile = User.getBasicProfile();
+                    //*****************googleUser**************
+                    var user_id = profile.getId();
+
+                    //console.log('ID: ' + user_id); // Do not send to your backend! Use an ID token instead.
+                    //console.log('Name: ' + profile.getName());
+                    //console.log('Image URL: ' + profile.getImageUrl());
+                    //console.log('Email: ' + profile.getEmail());
+
+                    // The ID token you need to pass to your backend:
+                    var l_RO = User.getAuthResponse();
+
+                    var id_token = l_RO.id_token;
+                    //var access_token = l_RO.access_token;
+                    //var log_hint = l_RO.login_hint;
+                    //var scopes = l_RO.scope;
+                    //var expire_time = l_RO.expires_in;
+                    //var f_issued_at = l_RO.first_issued_at;
+                    //var expires_at = l_RO.expires_at;
+
+                    //console.log("ID Token: " + id_token);
+                    //console.log("Access Token: " + access_token);
+                    //console.log("Log Hint: " + log_hint);
+                    //console.log("Scopes: " + scopes);
+                    //console.log("Expire Time: " + expire_time);
+                    //console.log("f_issued_at: " + f_issued_at);
+                    //console.log("Expires at: " + expire_time);
+
+                    $.post(m_phpLogin, { ID_TOKEN: id_token }, function (data, status) {
+                        var indexer = parseInt(data);
+                        switch (indexer) {
+                            case 0:
+                                if (window.location.href === "http://www.luxline.com.mx") {
+                                    setTimeout(function () {
+                                        window.location.href = "http://www.luxline.com.mx/testLuxFact";
+                                    }, 1000);
+                                }
+
+                                if(m_btnSignIn !== null)
+                                    $(m_btnSignIn).hide();
+
+                                if(m_btnSignOut !== null)
+                                    $(m_btnSignOut).show();
+                                break;
+                            case -1:
+                                console.log("Token Invalido");
+                                break;
+                            case -2:
+                                console.log("Estampa de tiempo expirada");
+                                break;
+                            case -3:
+                                if(m_message !== null)
+                                    $(m_message).html("<h3>El usuario no existe en la base de datos. Ingrese a su cuenta de Google+ con un usuario válido.</h3>");
+                                else
+                                    console.log("El usuario no existe en la base de datos. Ingrese a su cuenta de Google+ con un usuario válido.");
+
+                                if (window.location.href !== "http://www.luxline.com.mx") {
+                                    setTimeout(function () {
+                                        window.location.href = "http://www.luxline.com.mx";
+                                    }, 1000);
+                                }
+
+
+                                if(m_btnSignOut !== null)
+                                    $(m_btnSignOut).hide();
+
+                                if(m_btnSignIn !== null)
+                                    $(m_btnSignIn).show();
+                                break;
+                            case -4:
+                                console.log("Hay inconsistencia en la base de datos");
+                                break;
+                            default:
+                                break;
+                        }
+                    });
+                }
+                else {
+                    if(m_message !== null)
+                        m_message.html("<h3>De click a Ingresar para comenzar</h3>")
+                    else
+                        console.log("De click a Ingresar para comenzar");
+
+                    if(m_btnSignIn !== null)
+                        $(m_btnSignIn).show();
+
+                    if(m_btnSignOut !== null)
+                        $(m_btnSignOut).hide();
+
+
+                    $.post("../Login/php/clearSession.php", {}, function () {
+                    if (window.location.href !== "http://www.luxline.com.mx") {
+                        setTimeout(function () {
+                            window.location.href = "http://www.luxline.com.mx";
+                        }, 1000);
+                    }
+                    });
+
+                }
+            }
+
+           this.initAuth = function () {
+                //make gapi calls
+                gapi.client.setApiKey(m_apiKey);
+                gapi.auth2.init({
+                    client_id: m_clientId,
+                    scope: m_scopes,
+                    cookie_policy: m_cookie_policy
+                }).then(function () {
+                    //Obtener instancia de autorización
+
+                    //****************auth2***************************************
+                    //auth 2 is a GoogleAuth object that is a singleton class that provides methods to allow
+                    //the user to sign in with a Google account, get the user's current
+                    //sign-in status, get specific data from the user's Google profile,
+                    //request additional scopes, and sign out from the current account.
+                    m_auth2 = gapi.auth2.getAuthInstance();
+                    //****************auth2***************************************
+
+                    //Víncular un cambio de estado a una función
+
+                    m_auth2.isSignedIn.listen(updateSigninStatus);
+
+                    //Checar el estado inicial, podría ya estar loggeado
+                    updateSigninStatus(m_auth2.isSignedIn.get());
+
+                    //Listen to signin states
+                    if(m_btnSignIn !== null)
+                        m_btnSignIn.addEventListener("click", self.signIn);
+
+                    if(m_btnSignOut !== null)
+                        m_btnSignOut.addEventListener("click", self.logOut);
+                });
+            }
+
+        };
+
+    </script>
+    <!--ApiLogIn-->
+
+    <script>
+        var go_ApiLogIn = null;
+        var authorizeButton = null;
+        var signoutButton = null;
+        var g_message = null;
+        var g_signOutBtn = null;
+        var g_signInBtn = null;
+        var gd_table_lugares = null;
+        var gd_configFact = null;
+        $(document).ready(function () {
+
+            g_message = null;
+            g_signInBtn = null;
+            g_signOutBtn = document.getElementById('signout-button');
+
+            go_ApiLogIn = new ApiLogIn(g_signInBtn, g_signOutBtn, g_message, "../Login/php/logInFacturacion.php");
+            gapi.load('client:auth2', go_ApiLogIn.initAuth);
+        });
+    </script>
+    
+
+
+    <script>
+        var gn_idUsuario = 0;
+        var ga_correos = [];
+        var gd_inputCorreo = null;
+        var gd_tableCorreos = null;
+        var gn_lugarSelected = 0;
+        var gd_tableUsuarios = null;
+        var gd_btnActualizarUsuario = null;
+        var gd_usrInputDoms = null;
+        var gd_btnAgregarUsuario = null;
+       
+        var gd_cubitoWaitingAgregarUsuario = null;
+        
+        function check_usrInputs() {
+            var output = [];
+            var radio_priv = $("[name=radioPriv]");
+            var radio_fail = true;
+            radio_priv.each(function (i, element) {
+                if ($(element).is(":checked")) {
+                    radio_fail = false;
+                   
+                }
+
+            });
+            if (radio_fail) {
+                output.push("Debes de seleccionar un privilegio para el usuario");
+
+            }
+
+            if (!validarEmail(gd_usrInputDoms[1].value)) {
+                output.push("Correo invalido");
+                var input_dom = $(gd_usrInputDoms[1]);
+                input_dom.css("background-color", "rgba(254, 110, 0, 0.498039)");
+                input_dom.val('');
+                input_dom.attr("placeholder", "Correo invalido");
+            } else {
+                var input_dom = $(gd_usrInputDoms[1]);
+                input_dom.css("background-color", "");
+                input_dom.attr("placeholder", "");
+
+            }
+            if (!validateName(gd_usrInputDoms[0].value)) {
+                output.push("Nombre invalido, solo letras alfabéticas");
+                var input_dom = $(gd_usrInputDoms[0]);
+                input_dom.css("background-color", "rgba(254, 110, 0, 0.498039)");
+                input_dom.val('');
+                input_dom.attr("placeholder", "Nombre invalido, solo letras alfabéticas");
+            } else {
+                var input_dom = $(gd_usrInputDoms[0]);
+                input_dom.css("background-color", "");
+                input_dom.attr("placeholder", "");
+            }
+            if (gd_usrInputDoms[5].value == '') {
+                output.push("Campo no puede ser vacio");
+                var input_dom = $(gd_usrInputDoms[5]);
+                input_dom.css("background-color", "rgba(254, 110, 0, 0.498039)");
+                input_dom.val('');
+                input_dom.attr("placeholder", "Campo no puede ser vacio");
+            } else {
+                var input_dom = $(gd_usrInputDoms[5]);
+                input_dom.css("background-color", "");
+                input_dom.attr("placeholder", "");
+
+            }
+            if (gd_usrInputDoms[8].value == '') {
+                output.push("Campo no puede ser vacio");
+                var input_dom = $(gd_usrInputDoms[8]);
+                input_dom.css("background-color", "rgba(254, 110, 0, 0.498039)");
+                input_dom.val('');
+                input_dom.attr("placeholder", "Campo no puede ser vacio");
+            } else {
+                var input_dom = $(gd_usrInputDoms[8]);
+                input_dom.css("background-color", "");
+                input_dom.attr("placeholder", "");
+
+            }
+            return output;
+        }
+
+
+        $("#i_btnGoContinuar").click(function () {
+            var profile = go_ApiLogIn.getUserProfile();
+            
+            var priv = '';
+            if ($(gd_usrInputDoms[2]).is(":checked")) {
+                priv = 0;
+            }
+            if ($(gd_usrInputDoms[3]).is(":checked")) {
+                priv = 1;
+            }
+            if ($(gd_usrInputDoms[4]).is(":checked")) {
+                priv = 2;
+            }
+
+            var lj_userData = { nombre: profile.getName(), email: profile.getEmail(), privilegio: priv };
+            var retener_iva = 0; var retener_isr = 0;
+            if ($(gd_usrInputDoms[6]).is(":checked")) {
+                retener_iva = 1;
+            }
+            if ($(gd_usrInputDoms[7]).is(":checked")) {
+                retener_isr = 1;
+            }
+            var tasa_isr = gd_usrInputDoms[8].value;
+            var lj_userConfig = { retencion_IVA: retener_iva, retener_ISR: retener_isr, retencion_ISR: tasa_isr };
+
+            $.post("php/agregarUsuario.php", {ID : profile.getId(), user_data: JSON.stringify(lj_userData), user_configData: JSON.stringify(lj_userConfig) }, function (data) {
+             //   console.log(data);
+                $("#i_alertAgregarUsuario").show();
+                $("#i_pAgregarUsuario").html("");
+                $("#i_headerAgregarUsuario").html("Usuario agregado exitosamente");
+                updateTableUsuarios();
+                gd_usrInputDoms.val('');
+                $("[name=radioPriv]")[0].checked = true;
+                $(gd_usrInputDoms[6]).prop("checked", false)
+                $(gd_usrInputDoms[7]).prop("checked", false)
+            });
+
+
+        });
+
+
+        $("#i_btnDesHacer").click(function () {
+            gd_usrInputDoms.val('');
+            $("[name=radioPriv]")[0].checked = true;
+            $(gd_usrInputDoms[6]).prop("checked", false)
+            $(gd_usrInputDoms[7]).prop("checked", false)
+            gd_btnActualizarUsuario.prop("disabled", true);
+            gd_btnAgregarUsuario.prop("disabled", false);
+
+        });
+
+        $("#i_btnActualizarUsuario").click(function () {
+            $("#i_alertActualizarUsuario").hide();
+            $("#i_headerActualizarUsuario").html("¿Seguro que desea actualizar usuario?");
+            $("#i_pAtualizarUsuario").html("La información se verá reflejada en el sistema inmediatamente");
+            $("#i_modalActualizarUsuarioData").modal("show");
+
+        });
+
+        $("#i_btnGoActualizar").click(function () {
+            var priv = 0;
+            if ($("#i_alertActualizarUsuario").is(":visible")) {
+                $("#i_modalActualizarUsuarioData").modal("hide");
+            } else {
+                if ($(gd_usrInputDoms[2]).is(":checked")) {
+                    priv = 0;
+                }
+                if ($(gd_usrInputDoms[3]).is(":checked")) {
+                    priv = 1;
+                }
+                if ($(gd_usrInputDoms[4]).is(":checked")) {
+                    priv = 2;
+                }
+                var usr_data = { nombre: gd_usrInputDoms[0].value, email: gd_usrInputDoms[1].value, privilegio: priv };
+                var retener_iva = 0;
+                var retener_isr = 0;
+                var chk_isr = 0;
+                var chk_iva = $(gd_usrInputDoms[6]);
+                var chk_isr = $(gd_usrInputDoms[7]);
+                if (chk_iva.is(":checked")) { retener_iva = 1; }
+                if (chk_isr.is(":checked")) { retener_isr = 1; }
+
+
+                var usr_config = { tipo_factura: gd_usrInputDoms[5].value, retencion_IVA: retener_iva, retener_ISR: retener_isr, retencion_ISR: gd_usrInputDoms[8].value };
+
+                $.post("php/actualizarUsrData.php", { usr_data: JSON.stringify(usr_data), usr_config: JSON.stringify(usr_config) }, function (data) {
+                   // console.log(data);
+                    gd_btnActualizarUsuario.prop("disabled", true);
+                    gd_btnAgregarUsuario.prop("disabled", false);
+                    $("#i_alertActualizarUsuario").show();
+                    $("#i_headerActualizarUsuario").html("Información Actualizada");
+                    $("#i_pAtualizarUsuario").html("");
+                    gd_usrInputDoms.val('');
+                    $("[name=radioPriv]")[0].checked = true;
+                    $(gd_usrInputDoms[6]).prop("checked", false)
+                    $(gd_usrInputDoms[7]).prop("checked", false)
+                    updateTableUsuarios();
+                });
+            }
+
+        });
+
+        $(document).on("click", ".c_actualizarUsuario", function () {
+            var email = this.value;
+            $.post("php/getUsuarioInfo.php", { email: email }, function (data) {
+
+                gd_usrInputDoms.css("background-color", "");
+                gd_usrInputDoms.attr("placeholder", "");
+                gd_btnActualizarUsuario.prop("disabled", false);
+                gd_btnAgregarUsuario.prop("disabled", true);
+                var lj_data = JSON.parse(data);
+                lj_data = lj_data.result[0];
+                //var gd_usrInputDoms = $(".c_userParams");
+                gd_usrInputDoms[0].value = lj_data.nombre;
+                gd_usrInputDoms[1].value = lj_data.email;
+                if (lj_data.privilegio == '0') {
+                    var radio = gd_usrInputDoms[2];
+                    $(radio).prop("checked", true)
+                }
+                if (lj_data.privilegio == '1') {
+                    var radio = gd_usrInputDoms[3];
+                    $(radio).prop("checked", true)
+                }
+                if (lj_data.privilegio == '2') {
+                    var radio = gd_usrInputDoms[4];
+                    $(radio).prop("checked", true)
+                }
+                var tipo_factura = lj_data.tipo_factura;
+
+                $(gd_usrInputDoms[5]).val(tipo_factura);
+                var ivaCheck = $(gd_usrInputDoms[6]);
+                var isrCheck = $(gd_usrInputDoms[7]);
+                var retener_iva = lj_data.retencion_IVA;
+                var retener_isr = lj_data.retener_ISR;
+                var tasa_isr = lj_data.retencion_ISR;
+              
+
+                if (retener_iva == '1') {
+
+                    ivaCheck.prop("checked", true);
+                } else {
+                    ivaCheck.prop("checked", false);
+
+                }
+                if (retener_isr == '1') {
+                    isrCheck.prop("checked", true);
+
+                } else {
+                    isrCheck.prop("checked", false);
+
+                }
+                gd_usrInputDoms[8].value = tasa_isr;
+
+
+
+            });
+
+        });
+
+        function updateTableUsuarios()
+        {
+            gd_tableUsuarios.load("php/getUsuariosTable.php");
+
+        }
+
+
+        $("#i_btnTipoFactura").click(function () {
+          var option_selected = $('input[name=optradio]:checked').val();
+          if (option_selected != undefined) {
+              $.post("php/actualizarTipoFactura.php", { option: option_selected }, function () {
+                  $("#i_modTipos").modal("hide");
+              });
+
+          }
+        });
+      
+        function validateTel(str)
+        {
+            str = str.trim();
+            var len = str.length; var i = 0;
+            for (; i < len; i++) {
+                if(isNaN(str[i]))
+                {
+                    if (str[i] != "-") {
+                        return false;
+                    }
+                }
+            }
+            return true;
+        }
+        
+
+        $("#i_btnUnDoEmail").click(function () {
+            loadEmailConfigInfo();
+
+        });
+
+
+        $("#i_btnUnDo2").click(function () {
+            $("#i_confTimbrado input[type=text]").val("");
+           // $("#i_btnAceptar2").prop("disabled", false);
+            //$("#i_actualizarExpedicion").prop("disabled", true);
+
+        });
+
+        
+        $("#i_btnActualizarTasas").click(function () {
+
+            $("#i_headerRetencion").html("¿Esta seguro que desea guardar los siguientes cambios?");
+        });
+
+            $("#i_btnAcceptCer").click(function () {
+                var file_name = $("#i_fileCer").val();
+                if (file_name.search(".cer") != -1) {
+                    $("#i_headerSubirArchivo").html("¿Seguro que desea subir este archivo?");
+                    $("#i_btnSubirArchivo").show();
+                } else {
+                    $("#i_headerSubirArchivo").html("El archivo debe de ser .cer<br> este archivo es invalido");
+                    $("#i_btnSubirArchivo").hide();
+                }
+                $("#i_modalAceptarSubir").modal("show");
+
+            });
+
+            $("#i_btnkeyAccept").click(function () {
+           
+                var file_name = $("#i_fileKey").val();
+                if (file_name.search(".key") != -1) {
+                    $("#i_headerSubirArchivo").html("¿Seguro que desea subir este archivo?");
+                    $("#i_btnSubirArchivo").show();
+                } else {
+                    $("#i_headerSubirArchivo").html("El archivo debe de ser .key<br> este archivo es invalido");
+                    $("#i_btnSubirArchivo").hide();
+                }
+                $("#i_modalAceptarSubir").modal("show");
+
+            }); 
+
+            $("#i_btnActualizarMSJ").click(function () {
+
+                var ta_domsTA = $("#i_confEmail textarea");
+
+                var msj_timbrada = ta_domsTA[0].value;
+                var msj_cancelada = ta_domsTA[1].value;
+                var msj_generada = ta_domsTA[2].value;
+                $.post("php/actualizarMsjCorreo.php", { timbr: msj_timbrada, canc: msj_cancelada, pend:msj_generada }, function (data) {
+                    var ld_alert = $("#i_alertActualizarMSJUsuario");
+                    ld_alert.show();
+                    var h = $("#i_headerinfoMSJ");
+                    h.html("");
+                    var headerMsj = $("#i_headerMSJ");
+                    headerMsj.html("Información actualizada");
+                    
+                    ld_alert.slideToggle(1500, function () {
+                        $(".alert").hide();
+                        $("#i_modalActualizar").modal("hide");
+                        headerMsj.html("Actualizar Información");
+
+                        h.html("El siguiente mensaje se mostrara en todos los correos a menos que usted especifique lo contrario cuando genere un folio.<br>¿Esta seguro que desea deshacer los cambios realizados?");
+
+
+                    });
+                
+
+                });
+
+            });
+
+            $("#i_btnActualizarMail").click(function () {
+
+                $.post("php/actualizarCorreoUsuario.php", { mail: $("#i_inputEmail").val(), pass: $("#i_pass").val() }, function (data) {
+                    var ld_alert = $("#i_alertActualizarMailUsuario");
+                    ld_alert.show();
+                    ld_alert.animate({ height: 'toggle' }, 1500, function () {
+                        $("#i_modalActualizarCorreo").modal("hide");
+                        $(".alert").hide();
+                   
+                    });
+
+
+                });
+            });
+            $("#i_btnGuardarCorreos").click(function () {
+            
+                $.post("php/actualizarEmailConf.php", { jsonCorreos: JSON.stringify(ga_correos) }, function (data) {
+
+                });
+            });
+            $("form").on("submit", function () {
+           
+                var ld_alert = $("#i_alertSubirArchivo");
+                ld_alert.show();
+                $("#i_headerSubirArchivo").html("Se ha subido el archivo");
+                ld_alert.animate({ height: 'toggle' }, 2000, function () {
+
+                    $("#i_modalAceptarSubir").modal("hide");
+                    ld_alert.hide();
+                    $("#i_headerSubirArchivo").html("¿Seguro que desea reemplazar este arvhivo?");
+
+                });
+
+
+            });
+
+            $("#i_btnSubirArchivo").click(function () {
+
+                if ($("#i_fileKey").val() != '') {
+                    $("#i_formKey").submit();
+                    setTimeout(function () { getConfigInfo(); }, 2500);
+                } if ($("#i_fileCer").val() != '') {
+                    $("#i_formCer").submit();
+                    setTimeout(function () { getConfigInfo(); }, 2500);
+
+
+                }
+
+
+            
+
+            });
+
+
+            $("#i_btnAceptarRetencion").click(function () {
+               
+
+                iva = 0;
+                if($("#i_inputIVA").prop("checked")){
+                    iva =1;
+                }
+                var retener_isr = 0;
+                if($("#i_chckISR").prop("checked"))
+                {
+                    retener_isr = 1;
+                }
+
+                var isr = $("#i_inputISR").val();
+                if(isr.trim()!=''){
+                    $.post("php/actualizarRetencion.php", {retenerISR:retener_isr, iva: iva, isr: isr }, function () {
+                        var ld_alert = $("#i_alertGuardarRetencion");
+                        ld_alert.show();
+                        $("#i_headerRetencion").html("Se han actualizado los datos");
+                        ld_alert.animate({height: 'toggle'}, 2500, function () {
+                            $("#i_modalAceptarRetencion").modal("hide");
+                            $(".alert").hide();
+                        });
+
+                    });
+                }
+            });
+
+            $("#i_btnAceptarArray").click(function () {
+                $.post("php/actualizarCorreosArray.php", { idCliente: gn_idUsuario, jsonCorreos: JSON.stringify(ga_correos) }, function (data) {
+                    $("#i_AlertactualizarArray").show();
+                    $("#i_headerConfMailArray").html("Información Actualizada");
+                });
+
+
+            });
+            $("#i_actualizarCorreosArray").click(function () {
+                $("#i_modalActualizarCorreosArray").modal();
+                $("#i_AlertactualizarArray").hide();
+                $("#i_headerConfMailArray").html("Desas Actualizar los correos enviado por default?");
+
+
+
+            });
+
+            $("body").keypress(function (event) {
+
+                if (event.keyCode == 13) {
+                    $(".modal").modal("hide");
+                }
+            });
+
+            function eliminarSucursal() {
+                $("#i_modalAcceptEliminarSuc").modal();
+
+            }
+            function goEliminarSuc() {
+                $.post("php/eliminarSucursal.php", { idLugar: gn_lugarSelected }, function (data) {
+                    $("#i_alertSuccEliminarSuc").show();
+                    getConfigInfo();
+
+                });
+
+            }
+
+
+            function undoMsj() {
+                loadEmailConfigInfo();
+                $("#i_modalDeshacer").modal("hide");
+
+
+            }
+            $("#i_btnAceptarMsj2").click(function () {
+                var ld_btn = $("#i_btnActualizarMsj");
+                if (ld_btn.val() == "1") {
+                    var ld_textAreas= $("#i_confEmail textarea");
+                    var msjTimbrads = ld_textAreas[0].value;
+                    var msjCancelada =  ld_textAreas[1].value;
+                    var msjPendiete =   ld_textAreas[2].value;
+                    //actualizarMsjCorreo.php
+                    $.post("php/actualizarMsjCorreo.php", { idCliente: gn_idUsuario, timbr: msjTimbrads, canc: msjCancelada, pend: msjPendiete }, function (data) {
+                        $("#i_modalCorreosDefault").modal("hide");
+                        ld_btn.val("0");
+                        $("#i_alertMsjs").show();
+                        $("html, body").animate({ scrollTop: $(document).height() }, 1000);
+
+                    });
+                }
+
+            });
+
+            $("#i_btnActualizarMsj").click(function () {
+                var ld_textAreas= $("#i_confEmail textarea");
+
+                var msjTimbrads = ld_textAreas[0].value;
+                var msjCancelada =ld_textAreas[1].value;
+                var msjPendiete = ld_textAreas[2].value;
+                if (msjTimbrads.trim() != '' && msjCancelada.trim() != '' && msjPendiete.trim() != '') {
+                    $(this).val("1");
+                    $("#i_modalCorreosDefault").modal();
+
+                }
+
+
+            });
+
+
+            $("#i_btnAceptarCorreosConf").click(function () {
+                if ($("#i_btnAceptarCorreoConf").val() == '1') {
+
+                    var correo = $("#i_inputEmail").val();
+                    var pass = $("#i_pass").val();
+                    //actualizarEmailConf.php
+
+                    $.post("php/actualizarEmailConf.php", { idCliente: gn_idUsuario, jsonCorreos: JSON.stringify(ga_correos), mail: correo, pass: pass }, function (data) {
+                        $("#i_btnAceptarCorreoConf").val("0");
+                        $("#i_alertActualizarMail").show();
+                        $("#i_headerConfMail").html("Información Actualizada");
+                    });
+                }
+            });
+
+            $("#i_btnAceptarCorreoConf").click(function () {
+
+                $(".alert").hide();
+                $("#i_headerConfMail").html("¿Seguro que deseas actualizar la información del correo electronico?");
+                $(".c_Accept").prop("autofocus", true);
+                var correo = $("#i_inputEmail").val();
+                var pass = $("#i_pass").val();
+                if (correo.trim() != '' && pass.trim() != '') {
+                    $(this).val("1");
+                    $("#i_modalActualizarCorreo").modal();
+                } else {
+                    $(this).val("0");
+
+                }
+
+
+            });
+
+            function loadEmailConfigInfo() {
+                $.post("php/getEmialConfig.php", function (data) {
+                    lj_result = JSON.parse(data);
+                    lj_correo = lj_result.result0[0];
+                    lj_correosDefault = lj_result.result1;
+                    $("#i_inputEmail").val(lj_correo.email);
+                    $("#i_pass").val(lj_correo.mail_pass);
+                    var len = lj_correosDefault.length; var i = 0; ga_correos = [];
+                    for (; i < len; i++) {
+                        ga_correos.push(lj_correosDefault[i].email);
+                    }
+
+                    lj_mensajes = lj_result.result2[0];
+
+                    var msj_timbrado = lj_mensajes.mensaje_timbrada;
+                    var msj_cancelado = lj_mensajes.mensaje_cancelada;
+                    var msj_pendiente = lj_mensajes.mensaje_generada;
+                    var ld_textAreas = $("#i_confEmail textarea");
+                     
+                    ld_textAreas[0].value =msj_timbrado;
+                    ld_textAreas[1].value =msj_cancelado;
+                    ld_textAreas[2].value =msj_pendiente;
+                    load_table_correos();
+
+
+
+                });
+
+
+            }
+
+            $("#i_btnFileCer").click(function () {
+                var d_btn = $(this);
+
+                if ($("#i_fileCer").val() != '') {
+                    $("#i_modalAceptarSubir").modal();
+                    d_btn.val("2");
+
+                }
+
+            });
+
+
+            $("#i_btnActualizarkey").click(function () {
+                var ld_btn = $("#i_btnFileKey");
+                if (ld_btn.val() == "1") {
+
+                    $("#i_formkey").submit();
+                    $("#i_modalAceptarSubir").modal("hide");
+                    $("#i_alertFileConf").show();
+                    var fileName = $("#i_fileKey").val();
+                    fileName = fileName.slice(12, fileName.length);
+                    $("#i_keyFileNmae").html("Archivo .key: " + fileName);
+                    $("#i_fileKey").val('');
+                    ld_btn.val("0");
+                    $("html, body").animate({ scrollTop: $(document).height() }, 1000);
+
+                }
+                var ld_btn2 = $("#i_btnFileCer");
+                if (ld_btn2.val() == "2") {
+                    $("#i_formCer").submit();
+                    $("#i_modalAceptarSubir").modal("hide");
+                    $("#i_alertFileConf").show();
+                    //
+                    var fileName = $("#i_fileCer").val();
+                    fileName = fileName.slice(12, fileName.length);
+                    $("#i_cerFileName").html("Archivo .cer:" + fileName);
+
+                    //
+                    $("#i_fileKey").val('');
+                    ld_btn2.val("0");
+                    $("html, body").animate({ scrollTop: $(document).height() }, 1000);
+
+
+
+                }
+                //  getConfigInfo();
+
+
+            });
+            $("#i_btnFileKey").click(function () {
+
+                var d_btn = $(this);
+
+                if ($("#i_fileKey").val() != '') {
+                    $("#i_modalAceptarSubir").modal();
+                    d_btn.val("1");
+
+                }
+
+            });
+
+
+            $("#i_aceptarRetencion").click(function () {
+
+                var iva = 0;
+                if($("#i_inputIVA").prop("checked")){iva = 1;}
+                var isr = $("#i_inputISR").val();
+                $.post("php/actualizarRetencion.php", { iva: iva, isr: isr, idCliente: gn_idUsuario }, function (data) {
+                    $("#i_alertRetencion").show();
+
+                });
+
+
+            });
+            function closeAllAlerts() {
+                $(".alert").hide();
+            }
+
+            $("#i_inputISR").on("input", function () {
+                var val = $(this).val();
+                val = val.trim();
+                if (val == "") { $(this).val(0); } else {
+
+                    var lf_isr = parseFloat(val);
+                    if (lf_isr < 0) {
+
+                        $(this).val(0);
+
+                    }
+                    if (lf_isr > 100) {
+                        $(this).val(100);
+
+                    }
+                }
+
+            });
+
+       
+            function setLugar(idLugar) {
+                gn_lugarSelected = idLugar;
+
+                $.post("php/setLugar.php", { idexpedicion: idLugar }, function (data) {
+                    var lj_lugar = JSON.parse(data);
+                    lj_lugar = lj_lugar.result[0];
+                    var ga_doms = $("#i_confTimbrado input[type=text]");
+
+                    ga_doms[0].value = lj_lugar.calle;
+                    ga_doms[1].value=lj_lugar.colonia;
+                    ga_doms[2].value=lj_lugar.codigoPostal;
+                    ga_doms[3].value=lj_lugar.noExt
+                    ga_doms[4].value=lj_lugar.noInt;
+                    ga_doms[5].value = lj_lugar.localidad;
+                    ga_doms[6].value=lj_lugar.municipio;
+                    ga_doms[7].value=lj_lugar.estado;
+
+                });
+
+            }
+            var gb_agregarSuc = false;
+            function agregarSucursal() {
+                gb_agregarSuc = true;
+                $("#i_confTimbrado input[type=text]:visible").val("");
+
+
+
+            }
+       
+        
+
+            $("#i_actualizarExpedicion").click(function () {
+
+                $("#i_headerActualizarSuc").html("¿Esta seguro de actualizar los datos de esta sucursal");
+                $(".alert").hide();
+                var ga_doms = $("#i_confTimbrado input[type=text]");
+                var len = ga_doms.length-2; var i = 0; var lm_fail =new Map();
+                for (; i < len; i++) {
+                    var field = ga_doms[i].id;
+                    field = field.slice(5, -1);
+                    field = field.toLowerCase();
+                    if (i > 2 && i < 5) {
+                        if (!validateAlphaOrNumericOrAlphaNumeric(ga_doms[i].value)) {
+                            var msj = "Solo se perimiten valores numéricos";
+                            lm_fail.set(field, msj);
+                            var ld_element = $(ga_doms[i]);
+                            ld_element.css("background-color", "rgba(254, 110, 0, 0.498039)");
+                            ld_element.attr("placeholder", msj);
+                            ld_element.val("");
+                        
+                        } else {
+                            var ld_element = $(ga_doms[i]);
+                            ld_element.css("background-color", "");
+                            ld_element.attr("placeholder", "");
+                        }
+                    } else {
+                        if (i == 2) {
+                            if(isNaN(ga_doms[i].value)){
+                                var ld_element = $(ga_doms[i]);
+                                var msj = "Debe de ser numérico";
+                                ld_element.css("background-color", "rgba(254, 110, 0, 0.498039)");
+                                ld_element.attr("placeholder", msj);
+                                ld_element.val("");
+                                lm_fail.set(field, msj);
+
+                            } else {
+                                if (ga_doms[i].value.length != 5) {
+                                    var ld_element = $(ga_doms[i]);
+                                    var msj = "Debe de ser de 5 digitos";
+                                    ld_element.css("background-color", "rgba(254, 110, 0, 0.498039)");
+                                    ld_element.attr("placeholder", msj);
+                                    ld_element.val("");
+                                    lm_fail.set(field, msj);
+                                } else {
+                                   var ld_element = $(ga_doms[i]);
+                                    ld_element.css("background-color", "");
+                                    ld_element.attr("placeholder", "");
+                                }
+
+                            }
+
+                        } else {
+
+                            if (!validateCalle(ga_doms[i].value)) {
+                                var msj = "Solo se permiten caracteres alfanuméricos para este campo";
+
+                                lm_fail.set(field, msj);
+                                var ld_element = $(ga_doms[i]);
+                                ld_element.css("background-color", "rgba(254, 110, 0, 0.498039)");
+                                ld_element.attr("placeholder", msj);
+                                ld_element.val("");
+
+                            } else {
+                                var ld_element = $(ga_doms[i]);
+                                ld_element.css("background-color", "");
+                                ld_element.attr("placeholder", "");
+
+                            }
+                        }
+
+
+                    }
+                }
+                
+                if (lm_fail.size > 0) {
+                    $("#i_headerActualizarSuc").html("Han habido algunos errores");
+                    var la_failed = [];
+                    lm_fail.forEach(function (value, key) {
+                        la_failed.push("<h4>*" + key + "</h4>");
+                        la_failed.push("<p>"+value+"</p>");
+
+                    });
+                    $("#i_labelFail").html(la_failed.join("<br>"));
+                    $("#i_btnActualizarLugar").hide();
+                } else {
+                    $("#i_labelFail").html("");
+                    $("#i_headerActualizarSuc").html("¿Esta seguro de actualizar los datos de esta sucursal?");
+
+                    $("#i_btnActualizarLugar").show();
+
+                }
+
+            });
+
+            $("#i_btnOkEliminarSuc").click(function () {
+               
+                    $.post("php/eliminarSucursal.php", { idLugar: this.value }, function (data) {
+                        $("#i_pInfoEliminarSuc").html("");
+                        $("#i_headerEliminarSuc").html("Sucursal ha sido eliminada");
+                        getConfigInfo();
+                        $("#i_modalEliminarSucursal").modal("hide");
+
+                    });
+                
+
+            });
+
+
+            $("#i_btnActualizarLugar").click(function () {
+        
+
+                var fail = [];
+                var ga_doms = $("#i_confTimbrado input[type=text]");
+                var len = ga_doms.length; var i = 0;
+                for (; i < len; i++) {
+                    if (ga_doms[i].id == 'inputCP2') {
+                        if (!isNaN(parseInt(ga_doms[i].value))) { fail.push("el codigo postal no es correcto"); }
+                    }
+                    else {
+                        if (!validateCalle(ga_doms[i].value)) { fail.push("el valor \"" + ga_doms[i].value + "\" no es correso"); }
+                    }
+
+                }
+                if (fail.length == 0) {
+                    $("#i_headerActualizarSuc").html("Se han encontrado errores");
+                    $("#i_labelFail").html(fail.join("<br>"));
+                    $("#i_modalActualizarSucursal").modal("show");
+                } else {
+
+                    var ga_doms = $("#i_confTimbrado input[type=text]");
+                    var lj_datoSuc = { calle: ga_doms[0].value, colonia: ga_doms[1].value, codigoPostal: ga_doms[2].value, noExt: ga_doms[3].value, noInt: ga_doms[4].value, localidad: ga_doms[5].value, municipio: ga_doms[6].value, estado: ga_doms[7].value };
+                    $.post("php/actualizarLugarExpedicion.php", { jDatos: JSON.stringify(lj_datoSuc), idlugar: gn_lugarSelected }, function (data) {
+                        var ld_alert = $("#i_alertActualizarSuc");
+                        ld_alert.show();
+                        $("#i_headerActualizarSuc").html("La sucursal ha sido actualizada");
+                        ld_alert.animate({height: 'toggle'}, 1500, function () {
+                            ga_doms.val("");
+                            getConfigInfo();
+                            $("#i_modalActualizarSucursal").modal("hide");
+                            $(".alert").hide();
+                            $("#i_actualizarExpedicion").prop("disabled", true);
+                         //   alert("Disabling--");
+                        });
+
+                        
+                    });
+                    $("#i_btnAceptar2").prop("disabled", false);
+
+                }
+           
+            });
+            function validateNoIntExt(str){
+    
+                if( /[^a-zA-Z0-9]/.test( str) ) {
+                    return false;
+                }
+                return true;     
+            }
+            function capitalizeFirstLetter(string) {
+                return string.charAt(0).toUpperCase() + string.slice(1);
+            }
+
+            $("#i_btnAceptar2").click(function () {
+                // actualziar
+                var ga_doms = $("#i_confTimbrado input[type=text]");
+                var lj_datoSuc = { calle: ga_doms[0].value, colonia: ga_doms[1].value, codigoPostal: ga_doms[2].value, noExt: ga_doms[3].value, noInt: ga_doms[4].value, localidad: ga_doms[5].value, municipio: ga_doms[6].value, estado: ga_doms[7].value };
+                var fail = new Map();
+                var count = 0; var a_indexFailed = [];
+                for (var i in lj_datoSuc) {
+                    i = i.trim();
+                    if (lj_datoSuc[i].trim() == "") {
+                        fail.set(i, "No pude estar vacio");
+                        var dom =  $(ga_doms[count]);
+                        dom.css("background-color", "rgba(254, 110, 0, 0.498039)");
+                        dom.attr("placeholder", "No puede estar vacio");
+
+                    } else {
+
+                        switch (i) {
+                            case "codigoPostal":
+                                if (isNaN(lj_datoSuc[i])) {
+                                    var msj = "Debe de ser numérico";
+                                    fail.set("Código Postal",msj);
+                                    var dom = $(ga_doms[2]);
+                                    dom.css("background-color", "rgba(254, 110, 0, 0.498039)");
+                                    dom.attr("placeholder", msj);
+                                } else {// si es numero verificar que sea de 5 digitos
+                                    if (lj_datoSuc[i].length != 5) {
+                                        var msj = "Debe de ser de 5 digitos";
+                                        fail.set("Codigo Postal",msj);
+                                        var dom = $(ga_doms[2]);
+                                        dom.css("background-color", "rgba(254, 110, 0, 0.498039)");
+                                        dom.attr("placeholder", msj);
+                                    } else {
+                                        var dom = $(ga_doms[count]);
+                                        dom.css("background-color", "");
+                                        dom.attr("placeholder", "");
+                                    }
+                                }
+                                break;
+
+                            case "noExt":
+                                if (!validateNoIntExt(lj_datoSuc[i])) {
+                                    var msj = "Número de exterior debe de ser alfanumérico";
+                                    fail.set("Número de exterior", msj);
+                                    var dom = $(ga_doms[3]);
+                                    dom.css("background-color", "rgba(254, 110, 0, 0.498039)");
+                                    dom.attr("placeholder", msj);
+
+                                } else {
+                                    var dom = $(ga_doms[count]);
+                                    dom.css("background-color", "");
+                                    dom.attr("placeholder", "");
+                                }
+
+
+                                break;
+                            case "noInt":
+                                if (!validateNoIntExt(lj_datoSuc[i])) {
+                                    var msj = "Número de interior debe de ser alfanumérico";
+                                    fail.set("Número de interior", msj);
+                                    var dom = $(ga_doms[4]);
+                                    dom.css("background-color", "rgba(254, 110, 0, 0.498039)");
+                                    dom.attr("placeholder", msj);
+                                } else {
+                                    var dom = $(ga_doms[count]);
+                                    dom.css("background-color", "");
+                                    dom.attr("placeholder", "");
+                                }
+
+                                break;
+                            default:
+                                if (!validateCalle(lj_datoSuc[i])) {
+
+                                    fail.set(i, "Solo letras alphabeticas");
+                                    a_indexFailed.push(count);
+
+
+                                } else {
+                                    var dom = $(ga_doms[count]);
+                                    dom.css("background-color", "");
+                                    dom.attr("placeholder", "");
+                                }
+
+
+
+
+                        }
+                    }
+                
+                    count++;
+                }
+                if(fail.size==0)
+                {
+                    $("#headerGuardarSuc").html("¿Seguro que desea agregar esta sucursal?");
+                    $("#i_labelInfoGuardar").html("");
+                    $("#i_btnguardarSuc").show();
+                    $(".alert").hide();
+                    ga_doms.css("background-color", "");
+                    ga_doms.attr("placeholder", "");
+                } else {
+                    var buf = [];
+
+                    fail.forEach(function (value, key) {
+                        buf.push("<h4>*" + key + "</h4>");
+                        buf.push("<p>" + value + "</p>");
+                    });
+                    var len = a_indexFailed.length; var i = 0;
+                    for (; i < len; i++) {
+                   
+                        var dom = $(ga_doms[a_indexFailed[i]]);
+                        dom.css("background-color", "rgba(254, 110, 0, 0.498039)");
+                        dom.attr("placeholder", "Solo letras alphabeticas");
+                    }
+
+                    $("#headerGuardarSuc").html("Hay algunos errores");
+                    $("#i_labelInfoGuardar").html(buf.join("<br>"));
+                    $("#i_btnguardarSuc").hide();
+                }
+
+
+
+            });
+
+            $("#i_btnguardarSuc").click(function () {
+                var ga_doms = $("#i_confTimbrado input[type=text]");
+                var lj_datoSuc = { calle: ga_doms[0].value, colonia: ga_doms[1].value, codigoPostal: ga_doms[2].value, noExt: ga_doms[3].value, noInt: ga_doms[4].value, localidad: ga_doms[5].value, municipio: ga_doms[6].value, estado: ga_doms[7].value };
+                $.post("php/agregarLugar.php", { lugar: JSON.stringify(lj_datoSuc) }, function (data) {
+                    //alert(data);
+                    $("#headerGuardarSuc").html("La informacion se actualizo");
+                    var ld_alert = $("#i_alertGuardadoSuc");
+                    ld_alert.show();
+                    ld_alert.animate({ height: "toggle" }, 2000, function () {
+                        ld_alert.hide();
+                        $("#i_modarAgregarLugardeExpedicion").modal("hide");
+                    });
+
+                    getConfigInfo();
+                    ga_doms.val(" ");
+
+                });
+
+            });
+
+            $(document).on("click", ".c_Ajustes", function () {
+                setLugar(this.value);
+                $("#i_btnActualizarLugar").val("");
+                $("#i_btnAceptar2").prop("disabled", true);
+                $("#i_actualizarExpedicion").prop("disabled", false);
+            });
+
+            $(document).on("click", ".c_Cancel", function () {
+                $("#i_btnOkEliminarSuc").val(this.value);
+                $("#i_pInfoEliminarSuc").html("No podrá utilizar la siguiente sucursal en futuras facturas.");
+                $("#i_headerEliminarSuc").html("¿Seguro que desea eliminar la sucursal?");
+                $("#i_btnGoEliminarUsuario").val(this.value);
+            });
+            $("#i_btnGoEliminarUsuario").click(function () {
+                var email = this.value;
+                $.post("php/eliminarUsuario.php", {email:email}, function (data) {
+                    updateTableUsuarios();
+                    $("#i_modalEliminarUsuario").modal("hide");
+                    
+
+                });
+
+
+
+            });
+            function getConfigInfo() {
+                $.post("php/getConfigInfo.php", function (data) {
+                    var tmp = data.split("%&/");
+                    var grant = tmp[1];
+                    var results = tmp[0];
+                    var lj_results = JSON.parse(results);
+                    var lj_lugares = lj_results.result0;
+                        var len = lj_lugares.length; var i = 0; var buf = [];
+                        for(;i<len;i++)
+                        {
+                            buf.push("<tr><td><p>"+lj_lugares[i].domicilio+"</p></td>")
+                            buf.push('<td><div class="btn-group-horizontal"> <button value="' + lj_lugares[i].idexpedicion + '" class="btn btn-default c_Cancel" data-toggle="modal"  data-target = "#i_modalEliminarSucursal"><i class="fa fa-trash" style = "font-size:20px;"aria-hidden="true"></i></button><button value="' + lj_lugares[i].idexpedicion + '" class="btn btn-default c_Ajustes" data-toggle="modal"  data-target = "#i_modal"><i class="fa fa-cog" style = "font-size:20px;"aria-hidden="true"></i></button></div> </td></tr> ');
+
+                        }
+                        gd_table_lugares.html(buf.join(""));
+                        var lj_confFactura = lj_results.result1[0];
+                    //gd_configFact
+                        var ret_iva = lj_confFactura.retencion_IVA;
+                        var ret_isr = lj_confFactura.retener_ISR;
+                        var tasa_isr = lj_confFactura.retencion_ISR;
+                        var tipo_fact = lj_confFactura.tipo_factura;
+                        switch (tipo_fact) {
+                            case "0":
+                                $(gd_configFact[0]).prop("checked", true);
+
+                                break;
+                            case "1":
+                                $(gd_configFact[1]).prop("checked", true);
+
+                                break;
+                            case "2":
+                                $(gd_configFact[2]).prop("checked", true);
+                                break;
+                        }
+                        if (ret_isr == "1") {
+                            $(gd_configFact[3]).prop("checked", true);
+
+                        }
+                        if (ret_iva == "1") {
+                            $(gd_configFact[4]).prop("checked", true);
+
+                        }
+                        gd_configFact[5].value = tasa_isr;
+                        var lj_keyCer = lj_results.result2[0];
+                        $("#i_labelKey").html(lj_keyCer.archivo_key);
+                        $("#i_labelCer").html(lj_keyCer.archivo_cer);
+                        if (grant == "0") {
+                            $(".c_noPriv").remove();
+                        }
+
+
+                });
+
+            }
+
+            function closeAlertActualizar() {
+                $("#i_alertActualizarUsuario").hide();
+
+            }
+
+            $(document).on("click", ".c_eliminarCorreo", function () {
+        
+                var mail = $(this).parent().parent().find("td").html();
+                update_tableCorreos(mail, -1);
+                $(this).parent().parent().empty();
+            });
+
+
+            function update_tableCorreos(mail,state)
+            {
+                mail = mail.trim();
+                if (state == 1) {
+                    ga_correos.push(mail);
+                    var html_prev = gd_tableCorreos.html();
+                    var tr ="<tr><td>" +mail + "</td><td>" + " <button class='btn btn-default c_eliminarCorreo'><i class='fa fa-trash' aria-hidden='true'></i></button></td> </tr>";
+                    var html_new = tr + html_prev;
+                    gd_tableCorreos.html(html_new);
+
+                }
+                if (state == -1) {
+                    var index = ga_correos.indexOf(mail);
+                    ga_correos.splice(index, 1);
+
+
+                }
+            }
+
+
+
+            $("#i_checkPass").on("click", function () {
+
+
+                if ($(this).prop("checked")) { $("#i_pass").prop("type", "text"); }
+                else { $("#i_pass").prop("type", "password"); }
+
+            });
+            function load_table_correos() {
+
+                var len = ga_correos.length; var i = 0; var buf = [];
+                $("#i_tableCorreosDefault").empty();
+                for (; i < len; i++) {
+
+                    buf.push("<tr><td>" + ga_correos[i] + "</td><td>" + " <button class='btn btn-default c_eliminarCorreo' id='" + i + "'><i class='fa fa-trash' aria-hidden='true'></i></button></td> </tr>");
+
+                }
+
+                gd_tableCorreos.html(buf.join(""));
+
+            }
+            function ValidateEmail(mail) {
+
+                if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(mail)) {
+
+                    return true;
+
+                }
+
+                return false;
+
+            }
+
+            function checkmail(mail) {
+
+                var len = ga_correos.length; var i = 0;
+
+                for (; i < len; i++) { if (ga_correos[i].indexOf(mail.toLowerCase()) == 0) { return false; } }
+
+                return true;
+
+
+
+            }
+            $("#i_btnSumarCorreo").click(function () {
+
+                var email = gd_inputCorreo.val();
+                email = email.trim();
+                if (ValidateEmail(email)) {
+                    if (checkmail(email)) {
+                        $("#i_inputSumarCorreo").val("");
+                        // ga_correos.push(email.trim());
+                        update_tableCorreos(email, 1);
+
+                    } else { alert("Correo ya existe"); }
+
+
+                }
+                else {
+
+                    alert("Correo invalido");
+
+                }
+
+            });
+            gn_nombreUsuario = '';
+            $(document).ready(function () {
+                gd_configFact = $(".c_configFact");
+                gd_table_lugares = $("#i_tableLugares");
+                gd_inputCorreo = $("#i_inputSumarCorreo");
+                gd_tableCorreos = $("#i_tableCorreosDefault");
+                gd_tableUsuarios = $("#i_tableUsuarios");
+                gd_btnActualizarUsuario = $("#i_btnActualizarUsuario");
+                gd_usrInputDoms = $(".c_userParams");
+                gd_btnAgregarUsuario = $("#i_btnAgregarUsuario");
+                gd_cubitoWaitingAgregarUsuario = $("#i_cubitoWaitingAgregarUsuario");
+                
+
+                gd_btnAgregarUsuario.click(function () {
+                    window.location.href = "AgregarNuevoUsuario.html";
+                });
+
+                $(".alert").hide();
+                updateTableUsuarios();
+
+                $.post("php/checkPriviliges.php", function (data) {
+                    if (data == '0') {
+                        $(".c_divUsers").remove();
+
+                    }
+                });
+
+
+                $.post("php/getUsuario.php", function (data) {
+                    //alert(data);
+                    if (data == "no")
+                    {
+                       // location.href = "default.html";
+
+                    }
+                    if (data == "denied") {
+
+                        var la_doms = $("#i_infoFiscal input");
+                        la_doms.val("Privilegios no suficientes");
+                        $("#i_infoFiscal button").remove();
+                    } else {
+                       
+                        var lj_cliente = JSON.parse(data).result[0];
+                        var la_doms = $("#i_infoFiscal input");
+                        var i = 0; $("#i_nombreUsuario").html(lj_cliente.nombre);
+                        delete lj_cliente.nombre;
+                        $.each(lj_cliente, function (key, value) {
+                            la_doms[i].value = value;
+                            i++;
+                        });
+                    }
+                  
+                    
+                });
+
+
+            });
+
+
+
+            $("#i_btnActualizar1").click(function () {
+
+                var ga_doms = $("#i_infoFiscal input");
+                var lj_jsonCliente = { RFC: ga_doms[0].value, telefono: ga_doms[1].value, celular: ga_doms[2].value, email: ga_doms[3].value, calle: ga_doms[4].value, colonia: ga_doms[5].value,CodigoPostal:ga_doms[6].value, noExterior: ga_doms[7].value, noInterior: ga_doms[8].value, localidad: ga_doms[9].value, municipio: ga_doms[10].value, estado: ga_doms[11].value };
+                $.post("php/actualizarUsuario.php", { jsonCliente: JSON.stringify(lj_jsonCliente) }, function (data) {
+                    var ld_alert = $("#i_alertActualizar1");
+                    ld_alert.show();
+                    $("#i_headerActualizar1").html("La información ha sido actualizada");
+                    ld_alert.animate({ height: 'toggle' }, 2000, function () {
+                        ld_alert.hide();
+                        $("#i_modalActualizar1").modal("hide");
+                    });
+
+                });
+
+            });
+    
+            $("#i_btnAceptar").click(function () {
+
+                var ld_elements = $("#i_infoFiscal input");
+                var RFC = ld_elements[0].value;
+                var telefono = ld_elements[1].value;
+                var celular = ld_elements[2].value;
+                var mail = ld_elements[3].value;
+                var calle = ld_elements[4].value;
+                var colonia = ld_elements[5].value;
+                var cp = ld_elements[6].value;
+                var noExt = ld_elements[7].value;
+                var noInt = ld_elements[8].value;
+                var localidad = ld_elements[9].value;
+                var municipio = ld_elements[10].value;
+                var estado = ld_elements[11].value;
+                var lm_output = new Map();
+                cp = cp.trim(); 
+          
+            
+                var res = validateRFC(RFC);
+                if (res == true) { } else { lm_output.set("RFC", res); }
+                if (!validarEmail(mail)) { lm_output.set("email", "Email invalido"); }
+                if (!validateTel(celular)) { lm_output.set("celular", "Celular invalido,se permiten solo numeros y el caracter '-'") }
+                if (!validateTel(telefono)) { lm_output.set("telefono", "Telefono invalido,se permite solo numeros y el caracter '-'") }
+
+                if (!validateCalle(calle)) { lm_output.set("calle","Calle invalida"); }
+                if (!validateCalle(colonia)) {lm_output.set("colonia","Colonia Invalida"); }
+                if (isNaN(cp)) { lm_output.set("Codigo Postal", "Código postal invalido, solo numeros son aceptados"); }
+                else {
+                    if (cp.length != 5) {
+                        lm_output.set("Codigo Postal", "Debe de ser de 5 digitos para ser valido");
+                    }
+
+                }
+                if (!validateAlphaOrNumericOrAlphaNumeric(noExt)) { lm_output.set("Numero de exterior","No. exterior invalido"); }
+                if (!validateAlphaOrNumericOrAlphaNumeric(noInt)) {lm_output.set("Numero de interior","No. interior invalido"); }
+                if (!validateCalle(localidad)) { lm_output.set("localidad","Localidad invalida,solo alfanumericos son aceptados"); }
+                if (!validateCalle(municipio)) { lm_output.set("municipio","Municipio invalido,solo alfanumericos son aceptados"); }
+                if (!validateCalle(estado)) { lm_output.set("estado","Estado invalido,solo letras sin numeros son aceptadas"); }
+                $("#i_alertActualizar1").hide();
+
+
+                if ( lm_output.size != 0)  {
+                    $("#i_headerActualizar1").html("Han habido algunos errores");
+                    var buf = [];
+                    lm_output.forEach(function (value, key) {
+                        buf.push("<h4>*" + key + "</h4>");
+                        buf.push("<p>"+value+"</p>");
+
+                    });
+
+                    $("#i_respuestaActualizar1").html(buf.join("<br>"));
+                    $("#i_btnActualizar1").hide();
+                    $("#i_modalActualizar1").modal();
+                
+                    $("#i_infoFiscal input").each(function (i, element) {
+                        var ls_id = element.id;
+                        var field = ls_id.slice(5, ls_id.length);
+                        field = field.toLowerCase();
+
+                        if(field=='cp'){field="Codigo Postal"}
+                        if (field == "rfc") { field = "RFC" }
+                        if (field == "noext") { field = "Numero de exterior" }
+                        if (field == "int") { field = "Numero de interior" }
+                        
+                        var val = lm_output.get(field);
+                        if(val!=undefined)
+                        {
+                            var ld_element = $(element);
+                            
+                            ld_element.css("background-color", "rgba(254, 110, 0, 0.498039)");
+                            ld_element.attr("placeholder", val);
+                            ld_element.val('');
+                        }
+                    
+
+                    });
+                    //$("#i_infoFiscal input").css("background-color", "rgba(254, 110, 0, 0.498039)");
+                    //$("#i_infoFiscal input").attr("placeholder","caca");
+
+
+
+                } else {
+                    ld_elements = $("#i_infoFiscal input");
+                    ld_elements.css("background-color", "");
+                    ld_elements.attr("placeholder", "");
+
+                    $("#i_headerActualizar1").html("¿Seguro que desea actualizar su información?");
+                    $("#i_respuestaActualizar1").html('');
+                    $("#i_btnActualizar1").show();
+                    $("#i_modalActualizar1").modal();
+
+                }
+
+            });
+
+           
+
+
+            function validateAlphaOrNumericOrAlphaNumeric(str) {
+                str = str.trim();
+                // Which allows Alphanumeric.
+                // Alpha
+                // Numbers
+                if (str == "") { return false;}
+                if (str.match(/^([0-9]|[a-z])+([0-9a-z]+)$/i))
+                    return true;
+                else
+                    return false;
+            }
+
+            // funciones de validacion
+            function validarEmail(mail) {
+                mail = mail.trim();
+                if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(mail)) {
+                    return true;
+                }
+                if (mail == "") { return false;}
+                return false;
+            }
+            function validateName(str) {
+                str = str.trim();
+                var reg = /^([a-z ñáéíóú]{2,60})$/i;
+                //Solo puede contener letras y espacios
+                if (reg.test(str))
+                    return true;
+
+                else
+                    return false;
+            }
+
+            function validateCalle(str) {
+                str = str.trim();
+                //Solo puede contener letras y espacios
+
+                if (/^([a-zñáéíóú.A-ZÑ.]+\s)*[a-zñáéíóú.A-ZÑ.]+$/.test(str))
+                    return true;
+
+                else
+                    return false;
+            }
+            function validateRFC(str) {
+                str = str.trim();
+
+                if (str.match(/^[a-zA-Z0-9.-]*$/)) {
+                    if (str.length === 12) { //Persona moral
+                        var Nombre = str.substr(0, 3);
+                        var Fecha = str.substr(3, 6);
+                        var Homoclave = str.substr(9, 3);
+
+                        if (!validateAlpha(Nombre))
+                            return "Los primeros 3 digitos del RFC tienen que ser letras del alfabeto para Personas Morales";
+
+
+                        if (!validateNumeric(Fecha))
+                            return "Los digitos del quinto al octavo del RFC estan conformados por la fecha de nacimiento y solo pueden ser valores numéricos";
+
+
+                        if (!validateAlphaOrNumericOrAlphaNumeric(Homoclave))
+                            return "Los últimos tres elementos del RFC solo pueden ser alphanuméricos, sin espacios ni caracteres que no se encuentren en el alfabeto";
+
+                        return true;
+                    }
+
+                    else if (str.length === 13) { //Personas fisicas
+                        var Nombre = str.substr(0, 4);
+                        var Fecha = str.substr(4, 6);
+                        var Homoclave = str.substr(10, 3);
+
+                        if (!validateAlpha(Nombre))
+                            return "Los primeros 4 digitos del RFC tienen que ser letras del alfabeto para Personas Fisicas";
+
+
+                        if (!validateNumeric(Fecha))
+                            return "Los digitos del quinto al octavo del RFC estan conformados por la fecha de nacimiento y solo pueden ser valores numéricos";
+
+
+                        if (!validateAlphaOrNumericOrAlphaNumeric(Homoclave))
+                            return "Los últimos tres elementos del RFC solo pueden ser alphanuméricos, sin espacios ni caracteres que no se encuentren en el alfabeto";
+
+
+                        return true;
+                    }
+                    else
+                        return "El RFC debe contener exactamente 14 elementos para personas fisicas y 13 para personas morales";
+
+                    return true;
+                }
+
+                else
+                    return "El RFC solo puede contener letras y números";
+            }
+
+            function validateNumeric(str) {
+                //  str = str.trim();
+                if (str === true || str === false)
+                    return false;
+
+                if (str === '')
+                    return false;
+
+                if (isNaN(str))
+                    return false;
+
+                else
+                    return true;
+            }
+
+            function validateAlpha(str) {
+                str = str.trim();
+                if (str.match(/[0-9]/i))
+                    return false;
+                else
+                    return true;
+            }
+            function validateAlphaNumeric(str) {
+                str = str.trim();
+                // Which allows only Alphanumeric.
+
+                //It doesn't allow:
+
+                // Only Alpha
+                // Only Numbers
+
+                if (str.match(/((^[0-9]+[a-z]+)|(^[a-z]+[0-9]+))+[0-9a-z]+$/i))
+                    return true;
+                else
+                    return false;
+            }
+
+    </script>
+       
+</body>
+
+</html> 
+
